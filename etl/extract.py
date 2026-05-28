@@ -3,15 +3,15 @@
 # Phase 3 — Extract
 # Downloads the Our World in Data COVID-19 CSV and returns a raw DataFrame.
 #
-# Data source : https://covid.ourworldindata.org/data/owid-covid-data.csv
+# Data source : https://catalog.ourworldindata.org/garden/covid/latest/compact/compact.csv
 # Licence     : Creative Commons BY 4.0
 
 import pandas as pd
 import requests
 from loguru import logger
 
-DATA_URL = "https://covid.ourworldindata.org/data/owid-covid-data.csv"
-LOCAL_PATH = "data/owid-covid-data.csv"
+DATA_URL = "https://catalog.ourworldindata.org/garden/covid/latest/compact/compact.csv"
+LOCAL_PATH = "data/owid_covid_compact.csv"
 
 
 def extract(use_local: bool = False) -> pd.DataFrame:
