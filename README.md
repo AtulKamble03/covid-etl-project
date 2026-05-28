@@ -177,3 +177,5 @@ All project documentation lives in [docs/](docs/) and is the source of truth dur
 | [docs/data-quality.md](docs/data-quality.md) | DQ rules and computed metrics |
 | [docs/architecture/hld.md](docs/architecture/hld.md) | High level system overview |
 | [docs/architecture/lld.md](docs/architecture/lld.md) | Physical schema and SSIS package structure |
+| [docs/testing.md](docs/testing.md) | 9 post-load verification checks and pass/fail template |
+| [sql/verification_queries.sql](sql/verification_queries.sql) | SQL queries to run in SSMS after every ETL load |

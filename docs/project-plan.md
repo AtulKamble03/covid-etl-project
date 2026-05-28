@@ -112,6 +112,8 @@ Design a star schema with 3 fact tables and 2 dimension tables.
 - [ ] Build dim_date (generate date dimension)
 - [ ] Implement data quality rules (reject table, error logging)
 - [ ] Test full package end-to-end
+- [ ] Run post-load verification queries (all 9 checks must pass)
+- [ ] Document verification results in pass/fail summary table
 
 ### Phase 4 — Analytics and Dashboard
 **Status: Not Started**
