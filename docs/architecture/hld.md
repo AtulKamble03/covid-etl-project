@@ -13,9 +13,33 @@ Four layers — source, ETL, storage, analytics.
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │  ETL — SSIS Package (Visual Studio)                             │
-│  • Validate rows (DQ rules — reject table for bad data)         │
-│  • Transform — split, rename, compute derived columns           │
-│  • Load — dimensions first, then facts                          │
+│                                                                 │
+│  Flow 1: compact CSV → dim_location                             │
+│    Filter aggregate rows (continent IS NULL)                    │
+│    Deduplicate → one row per country                            │
+│    Type cast → load                                             │
+│                                                                 │
+│  Flow 2: Generated → dim_date                                   │
+│    Generate all dates 2020-01-01 to today                       │
+│    Derive year / month / quarter / week / day_of_week           │
+│                                                                 │
+│  Flow 3: compact CSV → fact_covid_cases                         │
+│    DQ filter (null date, future date, null continent,           │
+│               negative cases/deaths) → reject table             │
+│    Type cast → Lookup location_id → Lookup date_id → load      │
+│                                                                 │
+│  Flow 4: vaccinations_global.csv → fact_vaccination             │
+│    DQ filter (null date, future date) → reject table            │
+│    Type cast → Lookup location_id (by name) → Lookup date_id   │
+│    → load                                                       │
+│                                                                 │
+│  Flow 5: hospital.csv → fact_hospitalization                    │
+│    DQ filter (null date, future date) → reject table            │
+│    Type cast → Lookup location_id (by ISO-3 code)              │
+│    → Lookup date_id → load                                      │
+│                                                                 │
+│  Flow 6: EXEC usp_verify_etl_load (post-load verification)     │
+│    9 checks → PASS continues / FAIL raises error                │
 └───────────────────────────────┬─────────────────────────────────┘
                                 │
                                 ▼
