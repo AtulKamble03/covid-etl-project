@@ -2,7 +2,41 @@
 
 After every SSIS package run, execute `sql/verification_queries.sql` in SSMS to confirm the data loaded correctly. All checks should pass before moving to analytics.
 
-> Physical queries: [sql/verification_queries.sql](../sql/verification_queries.sql)
+> Stored procedure: [sql/usp_verify_etl_load.sql](../sql/usp_verify_etl_load.sql)
+> Manual queries: [sql/verification_queries.sql](../sql/verification_queries.sql)
+
+---
+
+## How to Run
+
+**One-time setup — run once in SSMS before first package execution:**
+```sql
+-- Creates etl_verification_log table + stored procedure
+sqlcmd -S localhost -d covid_dw -i sql/usp_verify_etl_load.sql
+```
+Or open the file in SSMS and press F5.
+
+**After every SSIS run — SSIS calls this automatically as its last step:**
+```sql
+EXEC usp_verify_etl_load;
+```
+
+**To review verification history across all runs:**
+```sql
+SELECT * FROM etl_verification_log ORDER BY run_timestamp DESC;
+```
+
+---
+
+## How SSIS Uses the Stored Procedure
+
+Add an **Execute SQL Task** as the final step in the SSIS Control Flow:
+- Connection: your SQL Server connection
+- SQL Statement: `EXEC usp_verify_etl_load;`
+- On failure (RAISERROR): SSIS marks the package as **Failed** — alerts you immediately
+
+Critical checks that trigger RAISERROR and fail the package: **2, 3, 4, 7, 8**
+Non-critical checks (informational, logged but no failure): **1, 5, 6, 9**
 
 ---
 
