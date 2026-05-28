@@ -128,7 +128,7 @@ C# remains the right choice for production APIs and .NET enterprise apps.
 ## Dataset
 
 - **Source:** [Our World in Data — COVID-19](https://ourworldindata.org/covid-deaths)
-- **Direct CSV:** https://covid.ourworldindata.org/data/owid-covid-data.csv
+- **Direct CSV:** https://catalog.ourworldindata.org/garden/covid/latest/compact/compact.csv
 - **Licence:** Creative Commons BY 4.0
 - **Content:** Daily cases, deaths, vaccinations for 200+ countries from 2020–2023
 - **Size:** ~90MB, ~300,000 rows

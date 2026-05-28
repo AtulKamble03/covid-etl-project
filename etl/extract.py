@@ -11,7 +11,7 @@ import requests
 from loguru import logger
 
 DATA_URL = "https://catalog.ourworldindata.org/garden/covid/latest/compact/compact.csv"
-LOCAL_PATH = "data/compactdata.csv"
+LOCAL_PATH = "data/owid_covid_compact.csv"
 
 
 def extract(use_local: bool = False) -> pd.DataFrame:
