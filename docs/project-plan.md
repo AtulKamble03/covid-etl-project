@@ -33,6 +33,55 @@
 | Snowflake | Cloud data warehouse (Phase 5) | Free trial ($400 credits) |
 | Azure (optional) | Cloud deployment | $200 credits |
 
+## Business Requirements
+
+> Full Q&A detail: [docs/requirements.md](requirements.md) | Schema rationale: [docs/schema-design-rationale.md](schema-design-rationale.md)
+
+**Audience:** General public — anyone can view to understand COVID-19 situation in their area and where vaccination supply is needed.
+
+**Granularity:** Daily (country × day) with weekly and monthly roll-ups.
+**Slice by:** Country, Continent, Date, Month, Quarter.
+**Time period:** 2020-01-01 to 2026-05-10.
+
+### Report 1 — Weekly Continental Summary
+- Q: What is the week-over-week % change in new cases per continent?
+- Q: How many new hospitalizations occurred per continent this week?
+- Q: How many countries reported ICU admissions this week?
+
+### Report 2 — Geographic Map View
+- Q: How many total cases, deaths, and vaccinations per country?
+- Q: How does case density (cases per million) compare across continents?
+
+### Report 3 — Cases Over Time
+- Q: How many new cases in the last 7 days / 28 days per country?
+- Q: What is the total cumulative case count per country?
+- Q: Which countries were most affected by COVID-19?
+- Q: Did vaccination rollout reduce death rates over time?
+
+### Report 4 — Continental Aggregates
+- Q: How many total COVID-19 cases have been reported per continent?
+
+### Report 5 — Deaths
+- Q: How many new deaths in the last 7 days / 28 days per country?
+- Q: What is the total cumulative death count per country and continent?
+- Q: Which countries have the highest case fatality rate?
+
+### Report 6 — Vaccination
+- Q: What is the vaccination coverage % per country and continent?
+- Q: Which countries need vaccination supply prioritization?
+- Q: What is the 7-day rolling average of vaccinations per hundred people?
+- Q: What are the 6-month, 9-month, 12-month rolling vaccination trends?
+
+### Report 7 — Hospitalization and ICU
+- Q: How many patients are currently in hospital / ICU per country?
+- Q: How many new hospital admissions occurred this week?
+- Q: Which countries have the highest ICU occupancy per million?
+
+### Report 8 — Testing
+- Q: How many total tests have been conducted per country?
+- Q: What is the positivity rate (% of tests positive) per country?
+- Q: Which countries have the highest positivity rate?
+
 ## Project Phases
 
 ### Phase 1 — Explore the Dataset
