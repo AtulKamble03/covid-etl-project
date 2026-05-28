@@ -1,5 +1,284 @@
 # Low Level Design (LLD)
 
+## SSIS Control Flow — Overall Sequence
+
+Shows the order in which all tasks run inside the SSIS package. Each step must succeed before the next starts. Dimensions load before facts to satisfy foreign key constraints.
+
+```
+┌──────────────────────────────────────────────────┐
+│  STEP 1 — Load dim_date                          │
+│  Type: Script Task                               │
+│  Source: Generated (no CSV)                      │
+│  Generates all dates 2020-01-01 → today          │
+└───────────────────────┬──────────────────────────┘
+                        │ Success
+                        ▼
+┌──────────────────────────────────────────────────┐
+│  STEP 2 — Load dim_location                      │
+│  Type: Data Flow Task                            │
+│  Source: owid_covid_compact.csv                  │
+│  Filter → Deduplicate → Type Cast → Load         │
+└───────────────────────┬──────────────────────────┘
+                        │ Success
+                        ▼
+┌──────────────────────────────────────────────────┐
+│  STEP 3 — Load fact_covid_cases                  │
+│  Type: Data Flow Task                            │
+│  Source: owid_covid_compact.csv                  │
+│  DQ Filter → Type Cast → Lookup → Load           │
+└───────────────────────┬──────────────────────────┘
+                        │ Success
+                        ▼
+┌──────────────────────────────────────────────────┐
+│  STEP 4 — Load fact_vaccination                  │
+│  Type: Data Flow Task                            │
+│  Source: vaccinations_global.csv                 │
+│  DQ Filter → Type Cast → Lookup → Load           │
+└───────────────────────┬──────────────────────────┘
+                        │ Success
+                        ▼
+┌──────────────────────────────────────────────────┐
+│  STEP 5 — Load fact_hospitalization              │
+│  Type: Data Flow Task                            │
+│  Source: hospital.csv                            │
+│  DQ Filter → Type Cast → Lookup → Load           │
+└───────────────────────┬──────────────────────────┘
+                        │ Success
+                        ▼
+┌──────────────────────────────────────────────────┐
+│  STEP 6 — Post-Load Verification                 │
+│  Type: Execute SQL Task                          │
+│  EXEC usp_verify_etl_load                        │
+│  PASS → Package Complete  FAIL → Package Fails   │
+└──────────────────────────────────────────────────┘
+```
+
+---
+
+## Individual Data Flow Diagrams
+
+Each box is one SSIS component. The left path = good rows → warehouse. The right path = bad rows → reject table.
+
+---
+
+### Flow 1 — dim_location
+
+```
+  EXTRACT                TRANSFORM                          LOAD
+  ───────────────────────────────────────────────────────────────────
+  ┌──────────────┐
+  │ Flat File    │
+  │ Source       │  owid_covid_compact.csv (all columns)
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐     continent IS NULL?
+  │ Conditional  │──────── YES ──────────────────────▶ ┌─────────────────┐
+  │ Split        │                                      │ dq_rejected_rows│
+  │ (DQ-03)      │                                      └─────────────────┘
+  └──────┬───────┘
+         │ NO (continent has value = real country)
+         ▼
+  ┌──────────────┐
+  │ Sort +       │  Deduplicate — keep one row per country
+  │ Aggregate    │  (country metadata is same across all dates)
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐  population: float → BIGINT
+  │ Data         │  population_density, median_age,
+  │ Conversion   │  gdp_per_capita, life_expectancy,
+  │              │  diabetes_prevalence, etc: string → FLOAT
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐
+  │ OLE DB       │──────────────────────────────────▶ ┌─────────────────┐
+  │ Destination  │  Upsert by code (ISO-3)             │  dim_location   │
+  └──────────────┘                                     │  (SQL Server)   │
+                                                       └─────────────────┘
+```
+
+---
+
+### Flow 2 — dim_date
+
+```
+  GENERATE               TRANSFORM                          LOAD
+  ───────────────────────────────────────────────────────────────────
+  ┌──────────────┐
+  │ Script Task  │  Generates date series
+  │              │  2020-01-01 → today
+  │ (no CSV)     │  using recursive loop
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐  year     = YEAR(date)
+  │ Derived      │  month    = MONTH(date)
+  │ Column       │  month_name = DATENAME(month, date)
+  │              │  quarter  = 'Q' + DATEPART(quarter, date)
+  │              │  week_number = DATEPART(iso_week, date)
+  │              │  day_of_week = DATENAME(weekday, date)
+  │              │  is_weekend  = 1 if Sat/Sun else 0
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐
+  │ OLE DB       │──────────────────────────────────▶ ┌─────────────────┐
+  │ Destination  │  Truncate + reload every run        │  dim_date       │
+  └──────────────┘                                     │  (SQL Server)   │
+                                                       └─────────────────┘
+```
+
+---
+
+### Flow 3 — fact_covid_cases
+
+```
+  EXTRACT                TRANSFORM                          LOAD
+  ───────────────────────────────────────────────────────────────────
+  ┌──────────────┐
+  │ Flat File    │
+  │ Source       │  owid_covid_compact.csv
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐  date: string → DATE
+  │ Data         │  new_cases, total_cases,
+  │ Conversion   │  new_deaths, total_deaths,
+  │              │  and all other metrics: string → FLOAT
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐  DQ-01: date IS NULL     ──┐
+  │ Conditional  │  DQ-02: date > today     ──┤──▶ ┌─────────────────┐
+  │ Split        │  DQ-03: continent IS NULL──┤    │ dq_rejected_rows│
+  │ (5 DQ rules) │  DQ-04: new_cases < 0   ──┤    └─────────────────┘
+  │              │  DQ-05: new_deaths < 0  ──┘
+  └──────┬───────┘
+         │ PASS (all 5 rules satisfied)
+         ▼
+  ┌──────────────┐  Input : country (string)
+  │ Lookup       │  Table : dim_location
+  │ location_id  │  Match : country = country
+  │              │  Output: location_id (INT)
+  │              │  No match → dq_rejected_rows
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐  Input : date (DATE)
+  │ Lookup       │  Table : dim_date
+  │ date_id      │  Match : date = date
+  │              │  Output: date_id (INT)
+  │              │  No match → dq_rejected_rows
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐
+  │ OLE DB       │──────────────────────────────────▶ ┌─────────────────┐
+  │ Destination  │                                     │fact_covid_cases │
+  └──────────────┘                                     │  (SQL Server)   │
+                                                       └─────────────────┘
+```
+
+---
+
+### Flow 4 — fact_vaccination
+
+```
+  EXTRACT                TRANSFORM                          LOAD
+  ───────────────────────────────────────────────────────────────────
+  ┌──────────────┐
+  │ Flat File    │
+  │ Source       │  vaccinations_global.csv
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐  date: string → DATE
+  │ Data         │  all vaccination metrics:
+  │ Conversion   │  string → FLOAT
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐  DQ-01: date IS NULL  ──┐
+  │ Conditional  │  DQ-02: date > today  ──┴──▶ ┌─────────────────┐
+  │ Split        │                               │ dq_rejected_rows│
+  │ (2 DQ rules) │                               └─────────────────┘
+  └──────┬───────┘
+         │ PASS
+         ▼
+  ┌──────────────┐  Input : country (string)
+  │ Lookup       │  Table : dim_location        ⚠ No ISO code in
+  │ location_id  │  Match : country = country     this file — name
+  │              │  Output: location_id (INT)     match only
+  │              │  No match → dq_rejected_rows
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐  Input : date (DATE)
+  │ Lookup       │  Table : dim_date
+  │ date_id      │  Match : date = date
+  │              │  Output: date_id (INT)
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐
+  │ OLE DB       │──────────────────────────────────▶ ┌─────────────────┐
+  │ Destination  │                                     │fact_vaccination │
+  └──────────────┘                                     │  (SQL Server)   │
+                                                       └─────────────────┘
+```
+
+---
+
+### Flow 5 — fact_hospitalization
+
+```
+  EXTRACT                TRANSFORM                          LOAD
+  ───────────────────────────────────────────────────────────────────
+  ┌──────────────┐
+  │ Flat File    │
+  │ Source       │  hospital.csv
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐  date: string → DATE
+  │ Data         │  all hospital/ICU metrics:
+  │ Conversion   │  string → FLOAT
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐  DQ-01: date IS NULL  ──┐
+  │ Conditional  │  DQ-02: date > today  ──┴──▶ ┌─────────────────┐
+  │ Split        │                               │ dq_rejected_rows│
+  │ (2 DQ rules) │                               └─────────────────┘
+  └──────┬───────┘
+         │ PASS
+         ▼
+  ┌──────────────┐  Input : country_code (ISO-3)
+  │ Lookup       │  Table : dim_location        ✅ ISO-3 code match
+  │ location_id  │  Match : country_code = code   more reliable than
+  │              │  Output: location_id (INT)     name matching
+  │              │  No match → dq_rejected_rows
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐  Input : date (DATE)
+  │ Lookup       │  Table : dim_date
+  │ date_id      │  Match : date = date
+  │              │  Output: date_id (INT)
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────┐
+  │ OLE DB       │──────────────────────────────────▶ ┌──────────────────────┐
+  │ Destination  │                                     │fact_hospitalization  │
+  └──────────────┘                                     │  (SQL Server)        │
+                                                       └──────────────────────┘
+```
+
+---
+
 ## Star Schema
 
 ```
