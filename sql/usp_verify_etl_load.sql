@@ -188,18 +188,19 @@ BEGIN
     -- --------------------------------------------------------
     -- CHECK 8 — Date Coverage Check
     -- --------------------------------------------------------
-    SET @failures = (
-        WITH date_series AS (
-            SELECT CAST('2020-01-01' AS DATE) AS expected_date
-            UNION ALL
-            SELECT DATEADD(DAY, 1, expected_date)
-            FROM date_series
-            WHERE expected_date < CAST(GETDATE() AS DATE)
-        )
-        SELECT COUNT(*) FROM date_series ds
-        WHERE NOT EXISTS (SELECT 1 FROM dim_date d WHERE d.date = ds.expected_date)
-        OPTION (MAXRECURSION 3000)
-    );
+    -- CTE cannot be used inside SET @var = (subquery) in SQL Server.
+    -- Use SELECT @var = ... directly from the CTE instead.
+    ;WITH date_series AS (
+        SELECT CAST('2020-01-01' AS DATE) AS expected_date
+        UNION ALL
+        SELECT DATEADD(DAY, 1, expected_date)
+        FROM date_series
+        WHERE expected_date < CAST(GETDATE() AS DATE)
+    )
+    SELECT @failures = COUNT(*)
+    FROM date_series ds
+    WHERE NOT EXISTS (SELECT 1 FROM dim_date d WHERE d.date = ds.expected_date)
+    OPTION (MAXRECURSION 3000);
 
     INSERT INTO #results VALUES (
         8, 'Date Coverage Check',
