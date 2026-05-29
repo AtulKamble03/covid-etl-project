@@ -98,14 +98,12 @@
 | Write LLD — full SSIS data flows (8 steps per fact flow), field lineage | ✅ |
 | Complete design review — 15 gaps identified and fixed | ✅ |
 
-**Next action:** Run `sql/create_tables.sql` in SSMS to physically create the schema in SQL Server.
-
 ---
 
 ### Phase 3 — Build the SSIS ETL Package
-**Status: 🔲 Not Started**
+**Status: 🔧 In Progress**
 
-**Pre-requisite:** Phase 2 DDL run in SSMS — database and tables must exist before building SSIS.
+**Pre-requisite:** ✅ Met — `covid_dw` database created, all 7 tables verified, stored procedure deployed.
 
 #### 3.1 — Setup
 | Task | Done? |
