@@ -38,8 +38,8 @@ A personal learning project to build an end-to-end ETL pipeline using the Our Wo
 | File | Source | Size | Purpose |
 |------|--------|------|---------|
 | `owid_covid_compact.csv` | [OWID Compact CSV](https://catalog.ourworldindata.org/garden/covid/latest/compact/compact.csv) | ~164MB, 589k rows | Cases, deaths, country metadata |
-| `hospital.csv` | [OWID Hospital](https://catalog.ourworldindata.org/garden/covid/latest/hospital/hospital.csv) | — | Hospitalization & ICU occupancy |
-| `vaccinations_global.csv` | [OWID Vaccinations](https://catalog.ourworldindata.org/garden/covid/latest/vaccinations_global/vaccinations_global.csv) | — | Vaccination metrics and rolling averages |
+| `hospital.csv` | [OWID Hospital](https://catalog.ourworldindata.org/garden/covid/latest/hospital/hospital.csv) | ~2.4MB | Hospitalization & ICU occupancy |
+| `vaccinations_global.csv` | [OWID Vaccinations](https://catalog.ourworldindata.org/garden/covid/latest/vaccinations_global/vaccinations_global.csv) | ~63MB | Vaccination metrics and rolling averages |
 
 All files go in the `data/` folder. The `data/` folder is excluded from Git — never commit raw data files.
 
@@ -61,27 +61,18 @@ covid-etl-project/
 │   ├── requirements.md              # 8 business reports as Q&A
 │   ├── schema-design-rationale.md   # Kimball method — requirements → schema
 │   ├── data-quality.md              # 8 DQ rules + computed metrics
+│   ├── testing.md                   # 9 post-load verification checks
 │   └── architecture/
 │       ├── hld.md                   # High Level Design — 4-layer overview
 │       └── lld.md                   # Low Level Design — tables, columns, SSIS structure
 │
 ├── sql/
 │   ├── create_tables.sql            # Phase 2 — SQL Server DDL (star schema)
-│   └── analytical_queries.sql       # Phase 4 — analytics SQL for 8 reports
+│   ├── analytical_queries.sql       # Phase 4 — analytics SQL for 8 reports
+│   ├── verification_queries.sql     # Post-load verification queries (run in SSMS)
+│   └── usp_verify_etl_load.sql      # Stored procedure — called by SSIS as final step
 │
-├── ssis/                            # Phase 3 — SSIS package (Visual Studio project)
-│
-├── etl/                             # Python scripts (Phase 1 exploration only)
-│   ├── extract.py                   # Load CSV into pandas DataFrame
-│   ├── transform.py                 # Clean and reshape data
-│   ├── load.py                      # Write to database
-│   └── pipeline.py                  # Orchestrate all steps
-│
-├── notebooks/
-│   └── 01_explore.ipynb             # Phase 1 — dataset exploration
-│
-└── tests/
-    └── test_transform.py            # Unit tests for transform logic
+└── ssis/                            # Phase 3 — SSIS package (Visual Studio project)
 ```
 
 ---
@@ -151,23 +142,9 @@ cd covid-etl-project
 
 ---
 
-## Why SSIS and not Python?
-
-SSIS is the right choice for this project because:
-
-- **Native Microsoft stack** — fits Veradigm's SQL Server environment
-- **Visual data flow designer** — drag-drop ETL in Visual Studio, no code needed for standard transforms
-- **Built-in error handling** — conditional split, reject rows, error outputs without manual try/except
-- **SQL Server Agent scheduling** — built-in job scheduler, no Airflow or Task Scheduler needed
-- **Snowflake migration** — ODBC connector available for Phase 5 with minimal changes
-
-Python remains the right choice for data science, Jupyter exploration, and Python-first ecosystems like Airflow and dbt.
-
----
-
 ## Documentation
 
-All project documentation lives in [docs/](docs/) and is the source of truth during development. Confluence is updated at the end of each major phase.
+All project documentation lives in [docs/](docs/) and is the source of truth during development.
 
 | Doc | Purpose |
 |-----|---------|

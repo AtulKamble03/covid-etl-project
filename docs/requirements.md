@@ -6,6 +6,8 @@
 **Goal:** Inform people about the COVID-19 situation in their area and identify where vaccination supply is needed
 **Design principle:** Simple, visual, no technical jargon
 
+**Data compliance:** This warehouse processes country-level aggregate data published by Our World in Data under Creative Commons BY 4.0. No individual-level or personal data is stored at any stage. GDPR does not apply — there are no data subjects, no PII, and no processing of personal information. Data can be used freely for personal and internal learning purposes.
+
 ## Scope
 
 **Time period:** 2020-01-01 to 2026-05-10 (full dataset)
@@ -93,3 +95,20 @@
 - Age of deaths / age of new admissions — OWID does not publish case/death data by age group
 - Vaccination reactions / adverse events — not in OWID data
 - WHO region groupings — using geographic continents only
+
+---
+
+## Report-to-Transformation Traceability
+
+Maps each business report to the warehouse tables, source files, and ETL decisions that support it. Use this when a report requirement changes — to identify which part of the ETL or schema needs to change with it.
+
+| Report | Tables Required | Source Files | Key ETL Decisions |
+|---|---|---|---|
+| **Report 1** — Weekly Continental Summary | `fact_covid_cases`, `fact_hospitalization`, `dim_date`, `dim_location` | compact CSV, hospital.csv | `week_number` derived in dim_date; `continent` from dim_location (DQ-03 ensures no aggregates); hospitalization data is ~93% null — only countries that report are included |
+| **Report 2** — Geographic Map View | `fact_covid_cases`, `fact_vaccination`, `dim_location` | compact CSV, vaccinations_global.csv | `country`, `continent`, `population`, `gdp_per_capita`, `median_age` stored in dim_location; `total_cases`, `total_vaccinations` are cumulative columns from OWID — pass-through |
+| **Report 3** — Cases Over Time | `fact_covid_cases`, `fact_vaccination`, `dim_date`, `dim_location` | compact CSV, vaccinations_global.csv | `new_cases_smoothed` (7-day) and `new_cases_per_million` are OWID pre-computed; 28-day and weekly totals computed at query time |
+| **Report 4** — Continental Aggregates | `fact_covid_cases`, `dim_location` | compact CSV | Continental rollup is a query-time GROUP BY on `continent` — no ETL aggregation |
+| **Report 5** — Deaths | `fact_covid_cases`, `dim_date`, `dim_location` | compact CSV | `new_deaths_smoothed`, `total_deaths`, `new_deaths_per_million` are OWID pre-computed; CFR computed at query time as `total_deaths / NULLIF(total_cases, 0)` |
+| **Report 6** — Vaccination | `fact_vaccination`, `dim_location`, `dim_date` | vaccinations_global.csv | `rolling_vaccinations_6m/9m/12m`, `people_vaccinated_per_hundred`, `total_boosters_per_hundred` are OWID pre-computed; location joined by country name (name-match risk — 10% reject threshold applies) |
+| **Report 7** — Hospitalization & ICU | `fact_hospitalization`, `dim_location`, `dim_date` | hospital.csv | All occupancy and admission columns are OWID pre-computed; ~93% null — filter `WHERE col IS NOT NULL` in queries; location joined by ISO-3 code (reliable) |
+| **Report 8** — Testing | `fact_covid_cases`, `dim_location`, `dim_date` | compact CSV | `new_tests_smoothed`, `positive_rate`, `tests_per_case` are 82% null — note this in report UI; hard boundary DQ-09 rejects `positive_rate > 1` |

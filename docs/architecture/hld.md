@@ -73,3 +73,7 @@ Four layers — source, ETL, storage, analytics.
 - **Dimensions load first:** Foreign key integrity — `dim_location` and `dim_date` must exist before fact rows are inserted.
 - **Reject table:** Bad rows are never silently dropped — they go to `dq_rejected_rows` with reason codes.
 - **Grain:** Lowest level is country × day. All weekly/monthly aggregates are computed at query time.
+- **No ETL-level aggregation:** The ETL loads data at the lowest grain (country × day) only. All weekly, monthly, and continental rollups are computed at query time. This preserves full granularity and keeps the warehouse flexible for any future aggregation requirement.
+- **OWID pre-computed fields are pass-through:** Smoothed averages, per-million rates, and per-hundred percentages already exist in the source CSVs. SSIS casts and loads them — it does not re-derive them.
+- **Idempotency:** The package is safe to re-run. Fact tables are truncated before each load; dim_date is truncated and regenerated; dim_location uses upsert. Running the package twice on the same source files produces the same result with no duplicates.
+- **Full load strategy:** All three fact tables use truncate + full reload on every run. OWID publishes historical corrections, so a full reload ensures the warehouse always reflects the current state of the source files. Incremental load is not used — at 589k rows, full reload is fast enough and simpler to maintain.

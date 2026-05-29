@@ -154,21 +154,19 @@ BEGIN
     -- --------------------------------------------------------
     -- CHECK 6 — DQ Reject Audit (informational)
     -- --------------------------------------------------------
+    DECLARE @run_start     DATETIME2 = CAST(GETDATE() AS DATE);
+
     DECLARE @rejected_rows INT = (
         SELECT COUNT(*) FROM dq_rejected_rows
-        WHERE load_timestamp >= CAST(GETDATE() AS DATE)
+        WHERE load_timestamp >= @run_start
     );
 
-    SET @notes = CONCAT('Rows rejected in this run: ', @rejected_rows,
-        CASE WHEN @rejected_rows > 1000 THEN ' — HIGH rejection count, investigate source data' ELSE '' END
+    SET @notes = CONCAT(
+        'Total rows rejected in this run: ', @rejected_rows,
+        ' (includes all rules across all source files)'
     );
 
-    INSERT INTO #results VALUES (
-        6, 'DQ Reject Audit',
-        CASE WHEN @rejected_rows > 1000 THEN 'FAIL' ELSE 'PASS' END,
-        @rejected_rows,
-        @notes
-    );
+    INSERT INTO #results VALUES (6, 'DQ Reject Audit', 'PASS', @rejected_rows, @notes);
 
     -- --------------------------------------------------------
     -- CHECK 7 — Negative Value Check
@@ -235,6 +233,139 @@ BEGIN
     );
 
     -- --------------------------------------------------------
+    -- CHECK 10 — Rejection Threshold Check (critical)
+    -- Fails the package if unexpected rejects exceed the
+    -- acceptable % per source file. DQ-03 rejects are excluded
+    -- from fact_covid_cases as they are expected aggregate removals.
+    -- Thresholds: 5% for compact + hospital, 10% for vaccinations.
+    -- --------------------------------------------------------
+    DECLARE @reject_threshold_fail BIT = 0;
+    DECLARE @reject_threshold_notes NVARCHAR(500) = '';
+
+    -- fact_covid_cases (owid_covid_compact.csv) — 5% threshold, exclude DQ-03
+    DECLARE @cases_loaded   INT   = (SELECT COUNT(*) FROM dbo.fact_covid_cases);
+    DECLARE @cases_rejected INT   = (SELECT COUNT(*) FROM dbo.dq_rejected_rows
+                                     WHERE source_file = 'owid_covid_compact.csv'
+                                       AND rule_id <> 'DQ-03'
+                                       AND load_timestamp >= @run_start);
+    DECLARE @cases_pct      FLOAT = CAST(@cases_rejected AS FLOAT) / NULLIF(@cases_loaded + @cases_rejected, 0);
+
+    IF @cases_pct > 0.05
+    BEGIN
+        SET @reject_threshold_fail = 1;
+        SET @reject_threshold_notes = CONCAT(@reject_threshold_notes,
+            'fact_covid_cases: ', FORMAT(@cases_pct * 100, 'N1'), '% rejected (threshold 5%). ');
+    END;
+
+    -- fact_vaccination (vaccinations_global.csv) — 10% threshold
+    DECLARE @vacc_loaded    INT   = (SELECT COUNT(*) FROM dbo.fact_vaccination);
+    DECLARE @vacc_rejected  INT   = (SELECT COUNT(*) FROM dbo.dq_rejected_rows
+                                     WHERE source_file = 'vaccinations_global.csv'
+                                       AND load_timestamp >= @run_start);
+    DECLARE @vacc_pct       FLOAT = CAST(@vacc_rejected AS FLOAT) / NULLIF(@vacc_loaded + @vacc_rejected, 0);
+
+    IF @vacc_pct > 0.10
+    BEGIN
+        SET @reject_threshold_fail = 1;
+        SET @reject_threshold_notes = CONCAT(@reject_threshold_notes,
+            'fact_vaccination: ', FORMAT(@vacc_pct * 100, 'N1'), '% rejected (threshold 10%). ');
+    END;
+
+    -- fact_hospitalization (hospital.csv) — 5% threshold
+    DECLARE @hosp_loaded    INT   = (SELECT COUNT(*) FROM dbo.fact_hospitalization);
+    DECLARE @hosp_rejected  INT   = (SELECT COUNT(*) FROM dbo.dq_rejected_rows
+                                     WHERE source_file = 'hospital.csv'
+                                       AND load_timestamp >= @run_start);
+    DECLARE @hosp_pct       FLOAT = CAST(@hosp_rejected AS FLOAT) / NULLIF(@hosp_loaded + @hosp_rejected, 0);
+
+    IF @hosp_pct > 0.05
+    BEGIN
+        SET @reject_threshold_fail = 1;
+        SET @reject_threshold_notes = CONCAT(@reject_threshold_notes,
+            'fact_hospitalization: ', FORMAT(@hosp_pct * 100, 'N1'), '% rejected (threshold 5%). ');
+    END;
+
+    IF LEN(@reject_threshold_notes) = 0
+        SET @reject_threshold_notes = CONCAT(
+            'fact_covid_cases=', FORMAT(ISNULL(@cases_pct,0)*100,'N1'), '% | ',
+            'fact_vaccination=', FORMAT(ISNULL(@vacc_pct,0)*100,'N1'),  '% | ',
+            'fact_hospitalization=', FORMAT(ISNULL(@hosp_pct,0)*100,'N1'), '%'
+        );
+
+    INSERT INTO #results VALUES (
+        10, 'Rejection Threshold Check',
+        CASE WHEN @reject_threshold_fail = 1 THEN 'FAIL' ELSE 'PASS' END,
+        @cases_rejected + @vacc_rejected + @hosp_rejected,
+        @reject_threshold_notes
+    );
+
+    -- --------------------------------------------------------
+    -- CHECK 11 — Soft Outlier Detection (informational)
+    -- Flags statistically unusual values for human review.
+    -- Does not fail the package — OWID backlog corrections can
+    -- produce legitimate single-day spikes.
+    -- --------------------------------------------------------
+    DECLARE @ol_notes NVARCHAR(500) = '';
+    DECLARE @ol_count INT = 0;
+
+    -- OL-01: single-day case spike > 1,000,000
+    DECLARE @spike_count INT = (
+        SELECT COUNT(*) FROM dbo.fact_covid_cases WHERE new_cases > 1000000
+    );
+    IF @spike_count > 0
+    BEGIN
+        SET @ol_count += @spike_count;
+        SET @ol_notes = CONCAT(@ol_notes, 'OL-01: ', @spike_count, ' country-days with new_cases > 1M. ');
+    END;
+
+    -- OL-02: reproduction rate > 15
+    DECLARE @rt_count INT = (
+        SELECT COUNT(*) FROM dbo.fact_covid_cases WHERE reproduction_rate > 15
+    );
+    IF @rt_count > 0
+    BEGIN
+        SET @ol_count += @rt_count;
+        SET @ol_notes = CONCAT(@ol_notes, 'OL-02: ', @rt_count, ' rows with reproduction_rate > 15. ');
+    END;
+
+    -- OL-03: logical inconsistency — people_vaccinated < people_fully_vaccinated
+    DECLARE @vacc_logic_count INT = (
+        SELECT COUNT(*) FROM dbo.fact_vaccination
+        WHERE people_vaccinated IS NOT NULL
+          AND people_fully_vaccinated IS NOT NULL
+          AND people_vaccinated < people_fully_vaccinated
+    );
+    IF @vacc_logic_count > 0
+    BEGIN
+        SET @ol_count += @vacc_logic_count;
+        SET @ol_notes = CONCAT(@ol_notes, 'OL-03: ', @vacc_logic_count, ' rows where fully_vaccinated > vaccinated. ');
+    END;
+
+    -- OL-04: new_cases > population (joined via dim_location)
+    DECLARE @pop_exceed_count INT = (
+        SELECT COUNT(*)
+        FROM dbo.fact_covid_cases f
+        JOIN dbo.dim_location l ON l.location_id = f.location_id
+        WHERE f.new_cases IS NOT NULL
+          AND l.population IS NOT NULL
+          AND f.new_cases > l.population
+    );
+    IF @pop_exceed_count > 0
+    BEGIN
+        SET @ol_count += @pop_exceed_count;
+        SET @ol_notes = CONCAT(@ol_notes, 'OL-04: ', @pop_exceed_count, ' rows where new_cases > country population. ');
+    END;
+
+    IF LEN(@ol_notes) = 0 SET @ol_notes = 'No outliers detected.';
+
+    INSERT INTO #results VALUES (
+        11, 'Soft Outlier Detection',
+        'PASS',  -- never fails the package — informational only
+        @ol_count,
+        @ol_notes
+    );
+
+    -- --------------------------------------------------------
     -- Log all results to persistent history table
     -- --------------------------------------------------------
     INSERT INTO etl_verification_log (check_id, check_name, status, failure_count, notes)
@@ -256,18 +387,18 @@ BEGIN
     -- --------------------------------------------------------
     -- Raise error if any critical check failed
     -- SSIS Execute SQL Task will catch this and fail the package
-    -- Critical checks: 2, 3, 4, 7, 8 (data integrity issues)
+    -- Critical checks: 2, 3, 4, 7, 8, 10 (data integrity issues)
     -- --------------------------------------------------------
     IF EXISTS (
         SELECT 1 FROM #results
         WHERE status = 'FAIL'
-          AND check_id IN (2, 3, 4, 7, 8)
+          AND check_id IN (2, 3, 4, 7, 8, 10)
     )
     BEGIN
         DECLARE @failed_checks NVARCHAR(500);
         SELECT @failed_checks = STRING_AGG(check_name, ', ')
         FROM #results
-        WHERE status = 'FAIL' AND check_id IN (2, 3, 4, 7, 8);
+        WHERE status = 'FAIL' AND check_id IN (2, 3, 4, 7, 8, 10);
 
         RAISERROR('ETL verification FAILED. Critical checks failed: %s', 16, 1, @failed_checks);
     END;
