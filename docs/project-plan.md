@@ -111,7 +111,7 @@
 | Run `sql/create_tables.sql` in SSMS — create `covid_dw` database and all tables | ✅ |
 | Run `sql/usp_verify_etl_load.sql` in SSMS — deploy stored procedure | ✅ |
 | Create new SSIS project in Visual Studio — save as `ssis/covid_etl.dtsx` | ✅ |
-| Configure Flat File Connection Manager for each CSV (`data/` folder path) | 🔲 |
+| Configure Flat File Connection Manager for each CSV (`data/` folder path) | ✅ |
 | Configure OLE DB Connection Manager for SQL Server (`covid_dw`) — use MSOLEDBSQL provider | ✅ |
 
 #### 3.2 — Build dim_date (Flow 1)
