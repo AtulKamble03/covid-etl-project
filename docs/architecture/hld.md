@@ -23,23 +23,20 @@ Four layers — source, ETL, storage, analytics.
 │    Generate all dates 2020-01-01 to today                       │
 │    Derive year / month / quarter / week / day_of_week           │
 │                                                                 │
-│  Flow 3: compact CSV → fact_covid_cases                         │
-│    DQ filter (null date, future date, null continent,           │
-│               negative cases/deaths) → reject table             │
-│    Type cast → Lookup location_id → Lookup date_id → load      │
+│  ── Flows 3, 4, 5 run IN PARALLEL after dim_location loads ──  │
 │                                                                 │
-│  Flow 4: vaccinations_global.csv → fact_vaccination             │
-│    DQ filter (null date, future date) → reject table            │
-│    Type cast → Lookup location_id (by name) → Lookup date_id   │
-│    → load                                                       │
+│  Flow 3: compact CSV → fact_covid_cases          [PARALLEL]    │
+│    DQ filter → Type cast → Lookup ids → load                   │
 │                                                                 │
-│  Flow 5: hospital.csv → fact_hospitalization                    │
-│    DQ filter (null date, future date) → reject table            │
-│    Type cast → Lookup location_id (by ISO-3 code)              │
-│    → Lookup date_id → load                                      │
+│  Flow 4: vaccinations_global.csv → fact_vaccination [PARALLEL] │
+│    DQ filter → Type cast → Lookup ids → load                   │
+│                                                                 │
+│  Flow 5: hospital.csv → fact_hospitalization     [PARALLEL]    │
+│    DQ filter → Type cast → Lookup ids → load                   │
 │                                                                 │
 │  Flow 6: EXEC usp_verify_etl_load (post-load verification)     │
-│    9 checks → PASS continues / FAIL raises error                │
+│    Waits for all 3 parallel branches (AND precedence)           │
+│    11 checks → PASS continues / FAIL raises error               │
 └───────────────────────────────┬─────────────────────────────────┘
                                 │
                                 ▼
@@ -77,3 +74,4 @@ Four layers — source, ETL, storage, analytics.
 - **OWID pre-computed fields are pass-through:** Smoothed averages, per-million rates, and per-hundred percentages already exist in the source CSVs. SSIS casts and loads them — it does not re-derive them.
 - **Idempotency:** The package is safe to re-run. Fact tables are truncated before each load; dim_date is truncated and regenerated; dim_location uses upsert. Running the package twice on the same source files produces the same result with no duplicates.
 - **Full load strategy:** All three fact tables use truncate + full reload on every run. OWID publishes historical corrections, so a full reload ensures the warehouse always reflects the current state of the source files. Incremental load is not used — at 589k rows, full reload is fast enough and simpler to maintain.
+- **Parallel fact loading:** Dimension flows (dim_date, dim_location) run serially because facts have FK dependencies on them. The three fact flows run in parallel after dim_location completes — they are independent of each other (different sources, different target tables). SSIS re-synchronises before post-load verification using AND precedence constraints, reducing total fact load time by ~66% vs serial.

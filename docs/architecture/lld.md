@@ -2,62 +2,59 @@
 
 ## SSIS Control Flow — Overall Sequence
 
-Shows the order in which all tasks run inside the SSIS package. Each step must succeed before the next starts. Dimensions load before facts to satisfy foreign key constraints.
+Two execution patterns are used deliberately:
+
+- **Serial** — Steps 1 and 2 (dimensions). dim_date and dim_location must exist before any fact table loads. Foreign key constraints enforce this order.
+- **Parallel** — Steps 3, 4, 5 (fact tables). Once dimensions are loaded, all three fact flows run simultaneously. They read different source files, write to different tables, and have no dependency on each other. This reduces total load time by ~66% compared to running them serially.
+- **Re-synchronize** — Step 6 (verification). Three green arrows converge into usp_verify_etl_load. SSIS uses AND logic — the verification task does not start until all three parallel branches have completed successfully.
 
 ```
 ┌──────────────────────────────────────────────────┐
-│  STEP 1 — Load dim_date                          │
-│  Type: Script Task                               │
-│  Source: Generated (no CSV)                      │
-│  Generates all dates 2020-01-01 → today          │
+│  STEP 1 — Load dim_date          [SERIAL]        │
+│  Type: Execute SQL + Script Task                 │
+│  Truncate → generate 2020-01-01 to today         │
 └───────────────────────┬──────────────────────────┘
                         │ Success
                         ▼
 ┌──────────────────────────────────────────────────┐
-│  STEP 2 — Load dim_location                      │
+│  STEP 2 — Load dim_location      [SERIAL]        │
 │  Type: Data Flow Task                            │
 │  Source: owid_covid_compact.csv                  │
-│  Filter → Deduplicate → Type Cast → Load         │
-└───────────────────────┬──────────────────────────┘
-                        │ Success
-                        ▼
+│  Filter → Deduplicate → Type Cast → Upsert       │
+└──────┬─────────────────┬──────────────┬──────────┘
+       │ Success         │ Success      │ Success
+       ▼                 ▼              ▼
+┌────────────┐    ┌────────────┐  ┌────────────┐
+│  STEP 3    │    │  STEP 4    │  │  STEP 5    │
+│  fact_     │    │  fact_     │  │  fact_     │
+│  covid_    │    │  vaccination│  │  hospital- │
+│  cases     │    │            │  │  ization   │
+│            │    │            │  │            │
+│  [PARALLEL]│    │  [PARALLEL]│  │  [PARALLEL]│
+│            │    │            │  │            │
+│  3a TRUNC  │    │  4a TRUNC  │  │  5a TRUNC  │
+│  3b LOAD   │    │  4b LOAD   │  │  5b LOAD   │
+│  3c LOG    │    │  4c LOG    │  │  5c LOG    │
+└─────┬──────┘    └──────┬─────┘  └──────┬─────┘
+      │ Success          │ Success        │ Success
+      └──────────────────┴────────────────┘
+                         │ All 3 must succeed (AND)
+                         ▼
 ┌──────────────────────────────────────────────────┐
-│  STEP 3 — Truncate + Load fact_covid_cases       │
-│  3a. Execute SQL Task: TRUNCATE TABLE            │
-│      fact_covid_cases                            │
-│  3b. Data Flow Task:                             │
-│      Source: owid_covid_compact.csv              │
-│      DQ Filter → Type Cast → Lookup → INSERT    │
-└───────────────────────┬──────────────────────────┘
-                        │ Success
-                        ▼
-┌──────────────────────────────────────────────────┐
-│  STEP 4 — Truncate + Load fact_vaccination       │
-│  4a. Execute SQL Task: TRUNCATE TABLE            │
-│      fact_vaccination                            │
-│  4b. Data Flow Task:                             │
-│      Source: vaccinations_global.csv             │
-│      DQ Filter → Type Cast → Lookup → INSERT    │
-└───────────────────────┬──────────────────────────┘
-                        │ Success
-                        ▼
-┌──────────────────────────────────────────────────┐
-│  STEP 5 — Truncate + Load fact_hospitalization   │
-│  5a. Execute SQL Task: TRUNCATE TABLE            │
-│      fact_hospitalization                        │
-│  5b. Data Flow Task:                             │
-│      Source: hospital.csv                        │
-│      DQ Filter → Type Cast → Lookup → INSERT    │
-└───────────────────────┬──────────────────────────┘
-                        │ Success
-                        ▼
-┌──────────────────────────────────────────────────┐
-│  STEP 6 — Post-Load Verification                 │
+│  STEP 6 — Post-Load Verification  [SERIAL]       │
 │  Type: Execute SQL Task                          │
 │  EXEC usp_verify_etl_load                        │
-│  PASS → Package Complete  FAIL → Package Fails   │
+│  11 checks → PASS continues / FAIL raises error  │
 └──────────────────────────────────────────────────┘
 ```
+
+### How to implement parallel execution in SSIS
+
+In the Control Flow canvas:
+1. From `Load dim_location`, draw **three separate green arrows** — one to each of the three fact flow starting tasks (Truncate fact_covid_cases, Truncate fact_vaccination, Truncate fact_hospitalization)
+2. SSIS will run all three branches simultaneously once dim_location completes
+3. From the **last task of each branch** (the Log counts tasks 3c, 4c, 5c), draw green arrows **into** `usp_verify_etl_load`
+4. SSIS uses AND precedence by default — verification waits for all three incoming arrows to be green before starting
 
 ---
 
@@ -714,17 +711,28 @@ Place a Row Count component on the good-row path just before the OLE DB Destinat
 ```
 covid_etl.dtsx
 ├── Control Flow
-│   ├── 1.  Load dim_date              (Script Task — generate dates, truncate+reload)
-│   ├── 2.  Load dim_location          (Data Flow — compact CSV, upsert by ISO-3)
+│   │
+│   │   ◄── SERIAL ──►
+│   ├── 1.  Load dim_date        (Execute SQL + Script Task — truncate + generate dates)
+│   │         ↓ Success
+│   ├── 2.  Load dim_location    (Data Flow — compact CSV, upsert by ISO-3)
+│   │         ↓ Success (3 arrows out — triggers all three parallel branches)
+│   │
+│   │   ◄────────────────── PARALLEL ──────────────────►
 │   ├── 3a. Truncate fact_covid_cases  (Execute SQL Task)
 │   ├── 3b. Load fact_covid_cases      (Data Flow — compact CSV)
-│   ├── 3c. Log run counts             (Execute SQL Task — INSERT into etl_run_log)
+│   ├── 3c. Log run counts             (Execute SQL Task → etl_run_log)
+│   │
 │   ├── 4a. Truncate fact_vaccination  (Execute SQL Task)
 │   ├── 4b. Load fact_vaccination      (Data Flow — vaccinations_global.csv)
-│   ├── 4c. Log run counts             (Execute SQL Task — INSERT into etl_run_log)
+│   ├── 4c. Log run counts             (Execute SQL Task → etl_run_log)
+│   │
 │   ├── 5a. Truncate fact_hosp         (Execute SQL Task)
 │   ├── 5b. Load fact_hospitalization  (Data Flow — hospital.csv)
-│   ├── 5c. Log run counts             (Execute SQL Task — INSERT into etl_run_log)
+│   ├── 5c. Log run counts             (Execute SQL Task → etl_run_log)
+│   │         ↓ All 3 branches must succeed (AND precedence)
+│   │
+│   │   ◄── SERIAL ──►
 │   └── 6.  Post-Load Verification     (Execute SQL Task — usp_verify_etl_load)
 │
 └── Each fact Data Flow contains

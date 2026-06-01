@@ -132,7 +132,9 @@
 | Add Data Conversion — population (float→BIGINT), all others (string→FLOAT), configure cast error → redirect | 🔲 |
 | Add OLE DB Destination → `dim_location` (IF NOT EXISTS upsert by `code`) | 🔲 |
 
-#### 3.4 — Build fact_covid_cases (Flow 3)
+> **Execution model:** Flows 3, 4, 5 run in PARALLEL after dim_location completes. In SSIS Control Flow, draw one green arrow from `Load dim_location` to each of the three Truncate tasks (3a, 4a, 5a). Draw green arrows from each Log task (3c, 4c, 5c) into `usp_verify_etl_load` — SSIS AND precedence waits for all three before running verification.
+
+#### 3.4 — Build fact_covid_cases (Flow 3) [PARALLEL branch 1]
 | Task | Done? |
 |---|---|
 | Add Execute SQL Task (3a) — `TRUNCATE TABLE fact_covid_cases` | 🔲 |
@@ -147,7 +149,7 @@
 | Step 8: Add OLE DB Destination → `fact_covid_cases` (Fast Load, partitioned) + OLE DB Destination → `dq_rejected_rows` | 🔲 |
 | Add Execute SQL Task (3c) — INSERT into `etl_run_log` using row count variables | 🔲 |
 
-#### 3.5 — Build fact_vaccination (Flow 4)
+#### 3.5 — Build fact_vaccination (Flow 4) [PARALLEL branch 2]
 | Task | Done? |
 |---|---|
 | Add Execute SQL Task (4a) — `TRUNCATE TABLE fact_vaccination` | 🔲 |
@@ -162,7 +164,7 @@
 | Step 8: OLE DB Destination → `fact_vaccination` + OLE DB Destination → `dq_rejected_rows` | 🔲 |
 | Add Execute SQL Task (4c) — INSERT into `etl_run_log` | 🔲 |
 
-#### 3.6 — Build fact_hospitalization (Flow 5)
+#### 3.6 — Build fact_hospitalization (Flow 5) [PARALLEL branch 3]
 | Task | Done? |
 |---|---|
 | Add Execute SQL Task (5a) — `TRUNCATE TABLE fact_hospitalization` | 🔲 |
@@ -177,7 +179,17 @@
 | Step 8: OLE DB Destination → `fact_hospitalization` + OLE DB Destination → `dq_rejected_rows` | 🔲 |
 | Add Execute SQL Task (5c) — INSERT into `etl_run_log` | 🔲 |
 
-#### 3.7 — Post-Load Verification (Flow 6)
+#### 3.7 — Wire parallel branches + Post-Load Verification (Flow 6)
+| Task | Done? |
+|---|---|
+| Draw green arrow from `Load dim_location` → `Truncate fact_covid_cases` (3a) | 🔲 |
+| Draw green arrow from `Load dim_location` → `Truncate fact_vaccination` (4a) | 🔲 |
+| Draw green arrow from `Load dim_location` → `Truncate fact_hospitalization` (5a) | 🔲 |
+| Draw green arrow from `Log counts (3c)` → `usp_verify_etl_load` | 🔲 |
+| Draw green arrow from `Log counts (4c)` → `usp_verify_etl_load` | 🔲 |
+| Draw green arrow from `Log counts (5c)` → `usp_verify_etl_load` | 🔲 |
+
+#### 3.8 — Post-Load Verification
 | Task | Done? |
 |---|---|
 | Add Execute SQL Task (Step 6) — `EXEC usp_verify_etl_load` | 🔲 |
