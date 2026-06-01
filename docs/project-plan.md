@@ -131,9 +131,12 @@
 | Add Conditional Split — filter `continent IS NULL` (DQ-03) → `Reject_Aggregates` | ✅ |
 | Add Sort — sort by `code` ASC, enable "Remove rows with duplicate sort values" | ✅ |
 | Add Data Conversion — population (→DT_I8), all others (→DT_R8 double-precision float) | ✅ |
-| Add OLE DB Destination → `dbo.dim_location`, map converted columns | 🔲 |
-| Add OLE DB Destination → `dbo.dq_rejected_rows` for reject path | 🔲 |
-| Run and verify — check row count in dim_location in SSMS | 🔲 |
+| Add Derived Column — 8 expressions handling empty string → NULL before type cast | ✅ |
+| Add OLE DB Destination → `dbo.dim_location`, map `_conv` columns + pass-through strings | ✅ |
+| Add Execute SQL Task (Delete dim_location) before Data Flow — DELETE not TRUNCATE | ✅ |
+| Fix: code column VARCHAR(10) not CHAR(3) — OWID_KOS and OWID_TRS are 8-char codes | ✅ |
+| Fix: country/continent VARCHAR not NVARCHAR — DT_STR compatible, no unicode conversion needed | ✅ |
+| Run and verify — 248 rows in dim_location ✅ | ✅ |
 
 > **Execution model:** Flows 3, 4, 5 run in PARALLEL after dim_location completes. In SSIS Control Flow, draw one green arrow from `Load dim_location` to each of the three Truncate tasks (3a, 4a, 5a). Draw green arrows from each Log task (3c, 4c, 5c) into `usp_verify_etl_load` — SSIS AND precedence waits for all three before running verification.
 
