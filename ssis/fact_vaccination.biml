@@ -1,0 +1,192 @@
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       CONNECTION MANAGERS
+       Update the OLE DB connection string if your SQL Server instance
+       name is different from PG04CRRX.
+  ═══════════════════════════════════════════════════════════════ -->
+  <Connections>
+
+    <FlatFileConnection
+      Name="FF_Vaccinations_Biml"
+      FilePath="C:\Personal Workspace\covid-etl-project\data\vaccinations_global.csv"
+      ColumnNamesInFirstDataRow="true"
+      CodePage="1252"
+      Format="Delimited"
+      RowDelimiter="CRLF"
+      TextQualifier="&quot;">
+      <Columns>
+        <Column Name="country"                                              DataType="String" Length="100" Delimiter="Comma" />
+        <Column Name="date"                                                 DataType="Date"               Delimiter="Comma" />
+        <Column Name="total_vaccinations"                                   DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="people_vaccinated"                                    DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="people_fully_vaccinated"                             DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="total_boosters"                                       DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="daily_vaccinations"                                   DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="daily_vaccinations_smoothed"                         DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="daily_people_vaccinated_smoothed"                    DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="total_vaccinations_per_hundred"                      DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="people_vaccinated_per_hundred"                       DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="people_fully_vaccinated_per_hundred"                DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="total_boosters_per_hundred"                          DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="daily_people_vaccinated_smoothed_per_hundred"        DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="daily_vaccinations_smoothed_per_million"             DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="people_unvaccinated"                                 DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="share_of_boosters"                                   DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="total_vaccinations_interpolated"                     DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="people_vaccinated_interpolated"                      DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="people_fully_vaccinated_interpolated"                DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="total_boosters_interpolated"                         DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="total_vaccinations_no_boosters_interpolated"         DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="total_vaccinations_no_boosters_per_hundred_interpolated" DataType="String" Length="50" Delimiter="Comma" />
+        <Column Name="rolling_vaccinations_6m"                             DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="rolling_vaccinations_6m_per_hundred"                 DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="rolling_vaccinations_9m"                             DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="rolling_vaccinations_9m_per_hundred"                 DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="rolling_vaccinations_12m"                            DataType="String" Length="50"  Delimiter="Comma" />
+        <Column Name="rolling_vaccinations_12m_per_hundred"                DataType="String" Length="50"  Delimiter="CRLF" />
+      </Columns>
+    </FlatFileConnection>
+
+    <OleDbConnection
+      Name="covid_dw_biml"
+      ConnectionString="Provider=MSOLEDBSQL;Data Source=PG04CRRX;Initial Catalog=covid_dw;Integrated Security=SSPI;" />
+
+  </Connections>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       PACKAGE
+  ═══════════════════════════════════════════════════════════════ -->
+  <Packages>
+    <Package Name="fact_vaccination_load" ConstraintMode="Linear">
+
+      <Tasks>
+
+        <!-- ── Step 1: Truncate the fact table ── -->
+        <ExecuteSQL Name="Truncate fact_vaccination" ConnectionName="covid_dw_biml">
+          <DirectInput>TRUNCATE TABLE dbo.fact_vaccination;</DirectInput>
+        </ExecuteSQL>
+
+
+        <!-- ── Step 2: Data Flow ── -->
+        <Dataflow Name="Load fact_vaccination">
+
+          <Transformations>
+
+            <!-- SOURCE -->
+            <FlatFileSource Name="Flat File Source" ConnectionName="FF_Vaccinations_Biml" />
+
+
+            <!-- SORT — dedup on (country, date) -->
+            <Sort Name="Sort" EliminateDuplicates="true">
+              <InputPath OutputPathName="Flat File Source.Output" />
+              <Columns>
+                <Column SourceColumn="country" SortOrder="1" />
+                <Column SourceColumn="date"    SortOrder="2" />
+              </Columns>
+            </Sort>
+
+
+            <!-- DERIVED COLUMN — date pass-through + record_year + 12 metric conversions -->
+            <DerivedColumns Name="Derived Column">
+              <InputPath OutputPathName="Sort.Output" />
+              <Columns>
+                <!-- date is already Date type from FlatFile — just rename for clarity -->
+                <Column Name="date_conv"         DataType="Date">date</Column>
+                <Column Name="record_year"        DataType="Int16">(DT_I2)YEAR(date)</Column>
+
+                <!-- Nullable float conversions — empty string → NULL -->
+                <Column Name="total_vacc_conv"    DataType="Double">total_vaccinations == "" ? NULL(DT_R8) : (DT_R8)total_vaccinations</Column>
+                <Column Name="people_vacc_conv"   DataType="Double">people_vaccinated == "" ? NULL(DT_R8) : (DT_R8)people_vaccinated</Column>
+                <Column Name="fully_vacc_conv"    DataType="Double">people_fully_vaccinated == "" ? NULL(DT_R8) : (DT_R8)people_fully_vaccinated</Column>
+                <Column Name="boosters_conv"      DataType="Double">total_boosters == "" ? NULL(DT_R8) : (DT_R8)total_boosters</Column>
+                <Column Name="daily_sm_conv"      DataType="Double">daily_vaccinations_smoothed == "" ? NULL(DT_R8) : (DT_R8)daily_vaccinations_smoothed</Column>
+                <Column Name="vacc_hun_conv"      DataType="Double">people_vaccinated_per_hundred == "" ? NULL(DT_R8) : (DT_R8)people_vaccinated_per_hundred</Column>
+                <Column Name="fully_hun_conv"     DataType="Double">people_fully_vaccinated_per_hundred == "" ? NULL(DT_R8) : (DT_R8)people_fully_vaccinated_per_hundred</Column>
+                <Column Name="boost_hun_conv"     DataType="Double">total_boosters_per_hundred == "" ? NULL(DT_R8) : (DT_R8)total_boosters_per_hundred</Column>
+                <Column Name="unvacc_conv"        DataType="Double">people_unvaccinated == "" ? NULL(DT_R8) : (DT_R8)people_unvaccinated</Column>
+                <Column Name="roll_6m_conv"       DataType="Double">rolling_vaccinations_6m == "" ? NULL(DT_R8) : (DT_R8)rolling_vaccinations_6m</Column>
+                <Column Name="roll_9m_conv"       DataType="Double">rolling_vaccinations_9m == "" ? NULL(DT_R8) : (DT_R8)rolling_vaccinations_9m</Column>
+                <Column Name="roll_12m_conv"      DataType="Double">rolling_vaccinations_12m == "" ? NULL(DT_R8) : (DT_R8)rolling_vaccinations_12m</Column>
+              </Columns>
+            </DerivedColumns>
+
+
+            <!-- CONDITIONAL SPLIT — DQ-01 and DQ-02 only (no continent column) -->
+            <ConditionalSplit Name="Conditional Split">
+              <InputPath OutputPathName="Derived Column.Output" />
+              <OutputPaths>
+                <OutputPath Name="Reject_NullDate">
+                  <Expression>ISNULL(date_conv)</Expression>
+                </OutputPath>
+                <OutputPath Name="Reject_FutureDate">
+                  <Expression>date_conv > (DT_DBDATE)GETDATE()</Expression>
+                </OutputPath>
+                <!-- Default output = Good_Rows (no explicit entry needed) -->
+              </OutputPaths>
+            </ConditionalSplit>
+
+
+            <!-- LOOKUP 1 — resolve location_id from dim_location -->
+            <Lookup Name="Lookup location_id"
+                    OleDbConnectionName="covid_dw_biml"
+                    NoMatchBehavior="RedirectRowsToNoMatchOutput">
+              <InputPath OutputPathName="Conditional Split.Default" />
+              <DirectInput>SELECT location_id, country FROM dbo.dim_location</DirectInput>
+              <Inputs>
+                <Column SourceColumn="country" TargetColumn="country" />
+              </Inputs>
+              <Outputs>
+                <Column SourceColumn="location_id" TargetColumn="location_id" />
+              </Outputs>
+            </Lookup>
+
+
+            <!-- LOOKUP 2 — resolve date_id from dim_date -->
+            <Lookup Name="Lookup date_id"
+                    OleDbConnectionName="covid_dw_biml"
+                    NoMatchBehavior="RedirectRowsToNoMatchOutput">
+              <InputPath OutputPathName="Lookup location_id.Match" />
+              <DirectInput>SELECT date_id, CAST(date AS DATETIME) AS date FROM dbo.dim_date</DirectInput>
+              <Inputs>
+                <Column SourceColumn="date_conv" TargetColumn="date" />
+              </Inputs>
+              <Outputs>
+                <Column SourceColumn="date_id" TargetColumn="date_id" />
+              </Outputs>
+            </Lookup>
+
+
+            <!-- OLE DB DESTINATION — fact_vaccination -->
+            <OleDbDestination Name="OLE DB Destination" ConnectionName="covid_dw_biml">
+              <InputPath OutputPathName="Lookup date_id.Match" />
+              <ExternalTableOutput Table="dbo.fact_vaccination">
+                <Columns>
+                  <Column SourceColumn="record_year"   TargetColumn="record_year" />
+                  <Column SourceColumn="location_id"   TargetColumn="location_id" />
+                  <Column SourceColumn="date_id"       TargetColumn="date_id" />
+                  <Column SourceColumn="total_vacc_conv"  TargetColumn="total_vaccinations" />
+                  <Column SourceColumn="people_vacc_conv" TargetColumn="people_vaccinated" />
+                  <Column SourceColumn="fully_vacc_conv"  TargetColumn="people_fully_vaccinated" />
+                  <Column SourceColumn="boosters_conv"    TargetColumn="total_boosters" />
+                  <Column SourceColumn="daily_sm_conv"    TargetColumn="daily_vaccinations_smoothed" />
+                  <Column SourceColumn="vacc_hun_conv"    TargetColumn="people_vaccinated_per_hundred" />
+                  <Column SourceColumn="fully_hun_conv"   TargetColumn="people_fully_vaccinated_per_hundred" />
+                  <Column SourceColumn="boost_hun_conv"   TargetColumn="total_boosters_per_hundred" />
+                  <Column SourceColumn="unvacc_conv"      TargetColumn="people_unvaccinated" />
+                  <Column SourceColumn="roll_6m_conv"     TargetColumn="rolling_vaccinations_6m" />
+                  <Column SourceColumn="roll_9m_conv"     TargetColumn="rolling_vaccinations_9m" />
+                  <Column SourceColumn="roll_12m_conv"    TargetColumn="rolling_vaccinations_12m" />
+                </Columns>
+              </ExternalTableOutput>
+            </OleDbDestination>
+
+          </Transformations>
+        </Dataflow>
+
+      </Tasks>
+    </Package>
+  </Packages>
+
+</Biml>
