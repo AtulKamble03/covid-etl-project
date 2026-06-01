@@ -8,6 +8,7 @@ ssis/**/bin/
 ssis/**/obj/
 ssis/**/*.bak
 ssis/**/*.dtproj.user
+ssis/**/.vs/
 
 # VS Code
 .vscode/
