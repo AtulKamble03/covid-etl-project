@@ -158,17 +158,17 @@
 #### 3.5 — Build fact_vaccination (Flow 4) [PARALLEL branch 2]
 | Task | Done? |
 |---|---|
-| Add Execute SQL Task (4a) — `TRUNCATE TABLE fact_vaccination` | 🔲 |
-| Add Data Flow Task (4b) — source: `vaccinations_global.csv` | 🔲 |
-| Step 1: Row Count + Sort on (country, date), enable dedup | 🔲 |
-| Step 2: Data Conversion (string→DATE, string→FLOAT), cast error → redirect (DQ-CAST) | 🔲 |
-| Step 3: Derived Column — `record_year = YEAR([date])` | 🔲 |
-| Step 4: Conditional Split — DQ-01, DQ-02 only (no continent column in this file) | 🔲 |
-| Step 5: Lookup `country` → `dim_location.country` → `location_id`, no-match → dq_rejected_rows | 🔲 |
-| Step 6: Lookup `date` → `dim_date.date` → `date_id`, no-match → dq_rejected_rows | 🔲 |
-| Step 7: Row Count Loaded + Row Count Rejected | 🔲 |
-| Step 8: OLE DB Destination → `fact_vaccination` + OLE DB Destination → `dq_rejected_rows` | 🔲 |
-| Add Execute SQL Task (4c) — INSERT into `etl_run_log` | 🔲 |
+| Add Execute SQL Task (4a) — `TRUNCATE TABLE fact_vaccination` | ✅ |
+| Add Data Flow Task (4b) — source: `vaccinations_global.csv` | ✅ |
+| Set Text Qualifier `"` and date=DT_DBDATE in FF_Vaccinations | ✅ |
+| Derived Column: date pass-through, `(DT_I2)YEAR([date])` → record_year, 12 metric null-safe conversions | ✅ |
+| No Conditional Split needed — no empty dates, no future dates in vaccination CSV | ✅ |
+| Lookup location_id → dim_location (country name join) | ✅ |
+| date_id computed via DATEDIFF in Derived Column (VS 2022 Lookup dialog bug workaround) | ✅ |
+| Fix: dim_date Script Task updated to use IDENTITY_INSERT with explicit date_id (1,2,3...) | ✅ |
+| Fix: Added DBCC CHECKIDENT → changed to IDENTITY INSERT approach for reliable reseeding | ✅ |
+| Fix: Added `Truncate All Facts` as first Control Flow task — clears facts before dims are deleted | ✅ |
+| Verify — 197,657 rows loaded into fact_vaccination ✅ | ✅ |
 
 #### 3.6 — Build fact_hospitalization (Flow 5) [PARALLEL branch 3]
 | Task | Done? |
