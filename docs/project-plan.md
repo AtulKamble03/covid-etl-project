@@ -126,11 +126,14 @@
 #### 3.3 — Build dim_location (Flow 2)
 | Task | Done? |
 |---|---|
-| Add Data Flow Task — source: `owid_covid_compact.csv` | 🔲 |
-| Add Conditional Split — filter `continent IS NULL` (DQ-03) | 🔲 |
-| Add Sort + Aggregate — deduplicate to one row per country | 🔲 |
-| Add Data Conversion — population (float→BIGINT), all others (string→FLOAT), configure cast error → redirect | 🔲 |
-| Add OLE DB Destination → `dim_location` (IF NOT EXISTS upsert by `code`) | 🔲 |
+| Add Data Flow Task to Control Flow, connect from `Generate dim_date` | ✅ |
+| Add Flat File Source → `FF_CompactCSV` | ✅ |
+| Add Conditional Split — filter `continent IS NULL` (DQ-03) → `Reject_Aggregates` | 🔲 |
+| Add Sort — sort by `iso_code` ASC, enable "Remove rows with duplicate sort values" | 🔲 |
+| Add Data Conversion — population (→DT_I8), all others (→DT_R8 float) | 🔲 |
+| Add OLE DB Destination → `dbo.dim_location`, map converted columns | 🔲 |
+| Add OLE DB Destination → `dbo.dq_rejected_rows` for reject path | 🔲 |
+| Run and verify — check row count in dim_location in SSMS | 🔲 |
 
 > **Execution model:** Flows 3, 4, 5 run in PARALLEL after dim_location completes. In SSIS Control Flow, draw one green arrow from `Load dim_location` to each of the three Truncate tasks (3a, 4a, 5a). Draw green arrows from each Log task (3c, 4c, 5c) into `usp_verify_etl_load` — SSIS AND precedence waits for all three before running verification.
 
