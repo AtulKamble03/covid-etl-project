@@ -505,73 +505,80 @@ SELECT date INTO staging FROM date_series OPTION (MAXRECURSION 3000);
 **Step 1 — Row Count (Extracted) + Deduplication (Sort)**
 Place a Row Count component immediately after the Flat File Source and store the count in the package variable `@[User::RowsExtracted]`. Then sort on (`country`, `date`) ascending with "Remove rows with duplicate sort values" enabled. If two rows share the same country + date, the first row in sort order is kept. A UNIQUE constraint on (`location_id`, `date_id`) in the database acts as a second-line safety net.
 
-**Step 2 — Data Conversion (type casting)**
+**Step 2 — Derived Column (all type conversions + record_year)**
 
-| Source Column | From Type | To Type |
+No Data Conversion component is used. A single Derived Column handles all conversions with explicit empty-string → NULL handling (learned from dim_location: Data Conversion fails on empty strings from CSV).
+
+| Output Column | Expression | Target SQL Type |
 |---|---|---|
-| `date` | String | DATE |
-| All numeric columns | String / float64 | FLOAT |
+| `date_conv` | `[date] == "" ? NULL(DT_DBDATE) : (DT_DBDATE)[date]` | DATE |
+| `record_year` | `[date] == "" ? (DT_I2)0 : (DT_I2)YEAR((DT_DBDATE)[date])` | SMALLINT — partition key |
+| `new_cases_conv` | `[new_cases] == "" ? NULL(DT_R8) : (DT_R8)[new_cases]` | FLOAT |
+| `total_cases_conv` | `[total_cases] == "" ? NULL(DT_R8) : (DT_R8)[total_cases]` | FLOAT |
+| `new_cases_sm_conv` | `[new_cases_smoothed] == "" ? NULL(DT_R8) : (DT_R8)[new_cases_smoothed]` | FLOAT |
+| `new_cases_pm_conv` | `[new_cases_per_million] == "" ? NULL(DT_R8) : (DT_R8)[new_cases_per_million]` | FLOAT |
+| `new_deaths_conv` | `[new_deaths] == "" ? NULL(DT_R8) : (DT_R8)[new_deaths]` | FLOAT |
+| `total_deaths_conv` | `[total_deaths] == "" ? NULL(DT_R8) : (DT_R8)[total_deaths]` | FLOAT |
+| `new_deaths_sm_conv` | `[new_deaths_smoothed] == "" ? NULL(DT_R8) : (DT_R8)[new_deaths_smoothed]` | FLOAT |
+| `new_deaths_pm_conv` | `[new_deaths_per_million] == "" ? NULL(DT_R8) : (DT_R8)[new_deaths_per_million]` | FLOAT |
+| `repro_rate_conv` | `[reproduction_rate] == "" ? NULL(DT_R8) : (DT_R8)[reproduction_rate]` | FLOAT |
+| `stringency_conv` | `[stringency_index] == "" ? NULL(DT_R8) : (DT_R8)[stringency_index]` | FLOAT |
+| `tests_sm_conv` | `[new_tests_smoothed] == "" ? NULL(DT_R8) : (DT_R8)[new_tests_smoothed]` | FLOAT |
+| `pos_rate_conv` | `[positive_rate] == "" ? NULL(DT_R8) : (DT_R8)[positive_rate]` | FLOAT |
+| `tests_per_case_conv` | `[tests_per_case] == "" ? NULL(DT_R8) : (DT_R8)[tests_per_case]` | FLOAT |
 
-> **Cast failure handling:** Set Error and Truncation on every column to "Redirect row". Rows that fail any cast (e.g., `"N/A"` or `"#ERROR"` in a numeric column, or a malformed date string) are redirected to `dq_rejected_rows` with rule ID `DQ-CAST`. Data Conversion runs before the DQ Filter so that all subsequent comparisons (`date > GETDATE()`, `new_cases < 0`) operate on correctly typed values — not raw strings.
+> `country` and `continent` are DT_STR and map directly to VARCHAR columns — no conversion needed.
 
-**Step 3 — Derived Column (record_year)**
+**Step 3 — DQ Filter (Conditional Split)**
 
-| Output Column | Expression | Data Type | Purpose |
+Conditions operate on the typed `_conv` columns from Step 2. NULL comparisons (`NULL < 0`, `NULL > 1`) return false in SSIS — no `ISNULL` wrapper needed for value comparisons.
+
+| Output Name | Order | Expression | DQ Rule |
 |---|---|---|---|
-| `record_year` | `YEAR([date])` | `DT_I2` (2-byte signed int = SMALLINT) | Partition key — routes row to the correct year partition in SQL Server |
+| `Reject_NullDate` | 1 | `ISNULL([date_conv])` | DQ-01 |
+| `Reject_FutureDate` | 2 | `[date_conv] > (DT_DBDATE)GETDATE()` | DQ-02 |
+| `Reject_NullContinent` | 3 | `ISNULL([continent])` | DQ-03 |
+| `Reject_NegCases` | 4 | `[new_cases_conv] < 0` | DQ-04 |
+| `Reject_NegDeaths` | 5 | `[new_deaths_conv] < 0` | DQ-05 |
+| `Reject_BadPosRate` | 6 | `[pos_rate_conv] > 1` | DQ-09 |
+| `Reject_BadStringency` | 7 | `[stringency_conv] > 100` | DQ-10 |
+| `Good_Rows` | default | all other rows | |
 
-> This step runs after Data Conversion so `[date]` is already a typed `DATE` value. `record_year` is passed through to the OLE DB Destination alongside all other fact columns.
-
-**Step 4 — DQ Filter (Conditional Split)**
-
-| Condition | Action | DQ Rule |
-|---|---|---|
-| `date IS NULL` | → dq_rejected_rows | DQ-01 |
-| `date > GETDATE()` | → dq_rejected_rows | DQ-02 |
-| `continent IS NULL` | → dq_rejected_rows | DQ-03 |
-| `new_cases < 0` | → dq_rejected_rows | DQ-04 |
-| `new_deaths < 0` | → dq_rejected_rows | DQ-05 |
-| `positive_rate > 1` | → dq_rejected_rows | DQ-09 |
-| `stringency_index > 100` | → dq_rejected_rows | DQ-10 |
-| All other rows | → continue to next step | |
-
-> DQ-09 and DQ-10 are hard boundary checks on physically impossible values. They run here — after Data Conversion — so comparisons operate on typed FLOAT values. Null values in `positive_rate` and `stringency_index` pass through (null is valid; only values that exist and exceed the boundary are rejected).
-
-**Step 5 — Lookup: resolve location_id**
+**Step 4 — Lookup: resolve location_id**
 
 | Lookup Input | Lookup Table | Match Column | Output |
 |---|---|---|---|
 | `country` | dim_location | `country` | `location_id` |
 | No match | → dq_rejected_rows with note "country not found in dim_location" | | |
 
-**Step 6 — Lookup: resolve date_id**
+**Step 5 — Lookup: resolve date_id**
 
 | Lookup Input | Lookup Table | Match Column | Output |
 |---|---|---|---|
-| `date` | dim_date | `date` | `date_id` |
+| `date_conv` | dim_date | `date` | `date_id` |
 | No match | → dq_rejected_rows with note "date not found in dim_date" | | |
 
-**Step 7 — Column Mapping (source → target)**
+**Step 6 — Column Mapping (source → target)**
 
-| Source Column (CSV) | Target Column (fact_covid_cases) | Notes |
+| Input Column | Target Column (fact_covid_cases) | Notes |
 |---|---|---|
-| *(derived)* | `record_year` | Partition key — from Derived Column step |
+| `record_year` | `record_year` | Partition key — from Derived Column |
 | *(lookup result)* | `location_id` | FK from dim_location |
 | *(lookup result)* | `date_id` | FK from dim_date |
-| `new_cases` | `new_cases` | |
-| `total_cases` | `total_cases` | |
-| `new_cases_smoothed` | `new_cases_smoothed` | 7-day smoothed, pre-computed by OWID |
-| `new_cases_per_million` | `new_cases_per_million` | |
-| `new_deaths` | `new_deaths` | |
-| `total_deaths` | `total_deaths` | |
-| `new_deaths_smoothed` | `new_deaths_smoothed` | |
-| `new_deaths_per_million` | `new_deaths_per_million` | |
-| `reproduction_rate` | `reproduction_rate` | Nullable |
-| `stringency_index` | `stringency_index` | Nullable |
-| `new_tests_smoothed` | `new_tests_smoothed` | Nullable (82% null) |
-| `positive_rate` | `positive_rate` | Nullable (82% null) |
-| `tests_per_case` | `tests_per_case` | Nullable |
-| `country`, `continent`, `code` + all others | *(dropped)* | Used only for lookups and DQ, not stored in fact |
+| `new_cases_conv` | `new_cases` | |
+| `total_cases_conv` | `total_cases` | |
+| `new_cases_sm_conv` | `new_cases_smoothed` | OWID pre-computed |
+| `new_cases_pm_conv` | `new_cases_per_million` | OWID pre-computed |
+| `new_deaths_conv` | `new_deaths` | |
+| `total_deaths_conv` | `total_deaths` | |
+| `new_deaths_sm_conv` | `new_deaths_smoothed` | OWID pre-computed |
+| `new_deaths_pm_conv` | `new_deaths_per_million` | OWID pre-computed |
+| `repro_rate_conv` | `reproduction_rate` | Nullable |
+| `stringency_conv` | `stringency_index` | Nullable |
+| `tests_sm_conv` | `new_tests_smoothed` | Nullable (82% null) |
+| `pos_rate_conv` | `positive_rate` | Nullable (82% null) |
+| `tests_per_case_conv` | `tests_per_case` | Nullable |
+| `country`, `continent`, `code` + all others | *(dropped)* | Used for lookups and DQ only |
 
 > **Null policy:** All metric columns (`new_cases`, `total_cases`, `new_deaths`, etc.) pass through as NULL when the source value is missing. NULL means the country did not report that day — it is never replaced with zero. See `docs/data-quality.md` for the full per-column null policy.
 
