@@ -117,10 +117,11 @@
 #### 3.2 — Build dim_date (Flow 1)
 | Task | Done? |
 |---|---|
-| Add Script Task to Control Flow | 🔲 |
-| Write C# script to generate dates 2020-01-01 → today using recursive loop | 🔲 |
-| Add Derived Column to compute year, month, month_name, quarter, week_number, day_of_week, is_weekend | 🔲 |
-| Add OLE DB Destination → `dim_date` (truncate + reload) | 🔲 |
+| Add Execute SQL Task — `TRUNCATE TABLE dbo.dim_date` | ✅ |
+| Add Script Task — C# generates dates 2020-01-01 → today, inserts into dim_date | ✅ |
+| Fix: use hardcoded ADO.NET connection string (OLE DB string not compatible with SqlConnection) | ✅ |
+| Fix: replace ISOWeek.GetWeekOfYear() with Calendar.GetWeekOfYear() (.NET Framework compat) | ✅ |
+| Run and verify — both tasks green, package finished: Success | ✅ |
 
 #### 3.3 — Build dim_location (Flow 2)
 | Task | Done? |
