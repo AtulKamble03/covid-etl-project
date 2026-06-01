@@ -143,17 +143,17 @@
 #### 3.4 — Build fact_covid_cases (Flow 3) [PARALLEL branch 1]
 | Task | Done? |
 |---|---|
-| Add Execute SQL Task (3a) — `TRUNCATE TABLE fact_covid_cases` | 🔲 |
-| Add Data Flow Task (3b) — source: `owid_covid_compact.csv` | 🔲 |
-| Step 1: Add Row Count → `@[User::RowsExtracted]` + Sort on (country, date), enable dedup | 🔲 |
-| Step 2: Add Data Conversion (string→DATE, string→FLOAT), set error output → redirect, rule = DQ-CAST | 🔲 |
-| Step 3: Add Derived Column — `YEAR([date])` → `record_year` (DT_I2) | 🔲 |
-| Step 4: Add Conditional Split — DQ-01 (null date), DQ-02 (future date), DQ-03 (null continent), DQ-04 (negative cases), DQ-05 (negative deaths), DQ-09 (positive_rate > 1), DQ-10 (stringency_index > 100) | 🔲 |
-| Step 5: Add Lookup — `country` → `dim_location.country` → output `location_id`, no-match → dq_rejected_rows | 🔲 |
-| Step 6: Add Lookup — `date` → `dim_date.date` → output `date_id`, no-match → dq_rejected_rows | 🔲 |
-| Step 7: Add Row Count → `@[User::RowsLoaded]` (good path) + Row Count → `@[User::RowsRejected]` (reject path) | 🔲 |
-| Step 8: Add OLE DB Destination → `fact_covid_cases` (Fast Load, partitioned) + OLE DB Destination → `dq_rejected_rows` | 🔲 |
-| Add Execute SQL Task (3c) — INSERT into `etl_run_log` using row count variables | 🔲 |
+| Add Execute SQL Task (3a) — `TRUNCATE TABLE fact_covid_cases` | ✅ |
+| Add Data Flow Task (3b) — source: `owid_covid_compact.csv` | ✅ |
+| Set Text Qualifier to `"` in FF_CompactCSV — fixes rows with commas in country names | ✅ |
+| Set `date` column to DT_DBDATE in FF_CompactCSV — avoids cast failure in Derived Column | ✅ |
+| Step 1: Sort on (country, date), enable dedup | ✅ |
+| Step 2: Derived Column — `[date]` pass-through, `(DT_I2)YEAR([date])` → record_year, 13 numeric columns with `""?NULL(DT_R8):(DT_R8)` pattern | ✅ |
+| Step 3: Conditional Split — 7 DQ rules with ISNULL guards on nullable columns | ✅ |
+| Step 4: Lookup location_id (dim_location, join on country) | ✅ |
+| Step 5: Lookup date_id (dim_date, SQL query with CAST(date AS DATETIME)) | ✅ |
+| Step 6: OLE DB Destination → `fact_covid_cases` | ✅ |
+| Verify — 484,751 rows loaded, all 7 partitions populated (2020-2026+) | ✅ |
 
 #### 3.5 — Build fact_vaccination (Flow 4) [PARALLEL branch 2]
 | Task | Done? |
