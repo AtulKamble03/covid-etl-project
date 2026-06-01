@@ -852,20 +852,20 @@ Defines how each table is loaded on every package run, and whether the package i
 | Table | Load Mode | Idempotent | Notes |
 |---|---|---|---|
 | `dim_date` | DELETE + full reload | Yes | Generated fresh every run. DELETE used instead of TRUNCATE — TRUNCATE is blocked by FK constraints from fact tables even when empty |
-| `dim_location` | DELETE + upsert — clear then INSERT if ISO-3 code not found | Yes | DELETE used instead of TRUNCATE for same FK constraint reason |
+| `dim_location` | DELETE + full reload | Yes | DELETE then INSERT all 248 rows. DELETE used instead of TRUNCATE — fact tables hold FK references to this table |
 | `fact_covid_cases` | Truncate + full reload | Yes | Execute SQL Task truncates before Data Flow inserts |
 | `fact_vaccination` | Truncate + full reload | Yes | Execute SQL Task truncates before Data Flow inserts |
 | `fact_hospitalization` | Truncate + full reload | Yes | Execute SQL Task truncates before Data Flow inserts |
 
 **Rejection threshold:** The post-load verification (Step 6 — usp_verify_etl_load) includes a threshold check per source file. If unexpected rejects exceed 5% for fact_covid_cases or fact_hospitalization, or 10% for fact_vaccination, the procedure raises an error and fails the package. DQ-03 rejects (aggregate row removal) are excluded from the threshold — they are expected. See `docs/data-quality.md` for thresholds and the full SQL implementation.
 
-**Late arriving data:** Because all three fact tables are truncated and fully reloaded on every run, OWID historical corrections are automatically reflected on the next package execution — no special handling required. The only exception is `dim_location` (SCD Type 1 upsert) — see `docs/data-quality.md` for the manual workaround if country metadata needs updating.
+**Late arriving data:** Because all tables use DELETE or TRUNCATE + full reload on every run, OWID historical corrections are automatically reflected on the next package execution — no special handling required.
 
 **Deduplication rule:** If the source CSV contains two rows for the same country + date, the SSIS Sort component (Step 1 of each fact flow) removes the duplicate before any DQ check or lookup runs. The first row in ascending (country, date) sort order is kept. A UNIQUE constraint on (`location_id`, `date_id`) in each fact table enforces this at the database level as a safety net — any row that bypasses the Sort step will fail at insert and be routed to `dq_rejected_rows`.
 
-**Re-run safety:** The package can be re-run against the same CSV files without risk of duplicate rows. The truncate step on each fact table and the upsert on dim_location ensure the warehouse always reflects the current state of the source files.
+**Re-run safety:** The package is safe to re-run. dim_date and dim_location are cleared with DELETE before each load. Fact tables use TRUNCATE before each load. Running the package twice on the same CSVs produces the same result with no duplicates.
 
-**SCD Type for dim_location:** Type 1 — no history is kept. Country metadata (population, GDP, etc.) is treated as current-state only. If OWID updates a country's population figure, the existing row in dim_location is not updated unless the row is manually cleared and the package is re-run with a full reload mode. This is an accepted trade-off for a learning project.
+**dim_location load strategy note:** The original design specified SCD Type 1 upsert (insert if not exists, skip if exists). During implementation, this was changed to DELETE + full reload for simplicity and idempotency. All 248 country rows are deleted and re-inserted on every run. This is equivalent for a full-refresh pipeline where the source is always the complete current dataset.
 
 ---
 
