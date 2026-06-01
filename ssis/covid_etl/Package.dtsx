@@ -11,8 +11,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package"
   DTS:PackageType="5"
-  DTS:VersionBuild="82"
-  DTS:VersionGUID="{55EAD105-9ED0-4F52-8FF4-65FC2B46304C}">
+  DTS:VersionBuild="88"
+  DTS:VersionGUID="{BB95C411-0EF6-4759-BEC6-1E6B6E4C6136}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -596,7 +596,7 @@
           DTS:HeaderRowDelimiter="_x000D__x000A_"
           DTS:ColumnNamesInFirstDataRow="True"
           DTS:RowDelimiter=""
-          DTS:TextQualifier="_x003C_none_x003E_"
+          DTS:TextQualifier="_x0022_"
           DTS:CodePage="1252"
           DTS:ConnectionString="C:\Personal Workspace\covid-etl-project\data\hospital.csv">
           <DTS:FlatFileColumns>
@@ -607,7 +607,7 @@
               DTS:DataType="129"
               DTS:TextQualified="True"
               DTS:ObjectName="country"
-              DTS:DTSID="{FB5557BB-08B9-4B65-BCB5-A5A942ADBF50}"
+              DTS:DTSID="{0742888F-AFBD-44BF-A853-4DDD820FC003}"
               DTS:CreationName="" />
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
@@ -616,16 +616,15 @@
               DTS:DataType="129"
               DTS:TextQualified="True"
               DTS:ObjectName="country_code"
-              DTS:DTSID="{9476CE3C-7F54-478A-B6E0-568BC239C182}"
+              DTS:DTSID="{BB3C5D7B-01C1-451A-B6FF-491ADE52D8B2}"
               DTS:CreationName="" />
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
               DTS:ColumnDelimiter="_x002C_"
-              DTS:MaximumWidth="50"
-              DTS:DataType="129"
+              DTS:DataType="133"
               DTS:TextQualified="True"
               DTS:ObjectName="date"
-              DTS:DTSID="{296B44FF-BD74-4C45-B366-A00CBEF32238}"
+              DTS:DTSID="{D532087D-499F-4505-9872-1C84B5351B35}"
               DTS:CreationName="" />
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
@@ -634,7 +633,7 @@
               DTS:DataType="129"
               DTS:TextQualified="True"
               DTS:ObjectName="daily_occupancy_icu"
-              DTS:DTSID="{7180425C-B641-4A88-85E1-68FFDC38ED57}"
+              DTS:DTSID="{47449075-495E-461A-A92D-7A4475BCA7BA}"
               DTS:CreationName="" />
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
@@ -643,7 +642,7 @@
               DTS:DataType="129"
               DTS:TextQualified="True"
               DTS:ObjectName="daily_occupancy_icu_per_1m"
-              DTS:DTSID="{3A9A651D-AA1E-4E7B-B6A4-DDA6485BADE6}"
+              DTS:DTSID="{B3AD8E73-F5AD-42A3-B4D2-9084321E7CB0}"
               DTS:CreationName="" />
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
@@ -652,7 +651,7 @@
               DTS:DataType="129"
               DTS:TextQualified="True"
               DTS:ObjectName="daily_occupancy_hosp"
-              DTS:DTSID="{8FEA1B83-23D6-40CA-8AC1-A7590DAE1DB7}"
+              DTS:DTSID="{8A5B9009-6BFD-4723-9D07-1CA940FD776E}"
               DTS:CreationName="" />
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
@@ -661,7 +660,7 @@
               DTS:DataType="129"
               DTS:TextQualified="True"
               DTS:ObjectName="daily_occupancy_hosp_per_1m"
-              DTS:DTSID="{5FC87C96-B61E-4E77-884B-314ED8545261}"
+              DTS:DTSID="{534DFC93-4F07-480B-B26A-FD39BB7B9772}"
               DTS:CreationName="" />
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
@@ -670,7 +669,7 @@
               DTS:DataType="129"
               DTS:TextQualified="True"
               DTS:ObjectName="weekly_admissions_icu"
-              DTS:DTSID="{E1EBF68E-2DEE-4079-A428-93B5245A2ACF}"
+              DTS:DTSID="{044D52BD-45E4-4B43-A27A-1DA98F89833F}"
               DTS:CreationName="" />
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
@@ -679,7 +678,7 @@
               DTS:DataType="129"
               DTS:TextQualified="True"
               DTS:ObjectName="weekly_admissions_icu_per_1m"
-              DTS:DTSID="{8C141FF8-AE2E-434F-87EB-A08100D29C1A}"
+              DTS:DTSID="{537D5938-F2CE-43A9-86EE-59B569F79E12}"
               DTS:CreationName="" />
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
@@ -688,7 +687,7 @@
               DTS:DataType="129"
               DTS:TextQualified="True"
               DTS:ObjectName="weekly_admissions_hosp"
-              DTS:DTSID="{40D0FE2F-CD51-4786-ADC0-0AF73C9E84DB}"
+              DTS:DTSID="{C4873C16-277B-4074-9CB7-D18BF88E55DB}"
               DTS:CreationName="" />
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
@@ -697,7 +696,7 @@
               DTS:DataType="129"
               DTS:TextQualified="True"
               DTS:ObjectName="weekly_admissions_hosp_per_1m"
-              DTS:DTSID="{0D0CD670-B5AC-42AE-8AB5-59C16FDDBA68}"
+              DTS:DTSID="{D89FF73E-A155-4006-ABE5-5F7D016A9219}"
               DTS:CreationName="" />
           </DTS:FlatFileColumns>
         </DTS:ConnectionManager>
@@ -11295,6 +11294,1547 @@ where [refTable].[date] = ?</property>
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
+      DTS:refId="Package\Load fact_hospitalization"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{7D83EDD1-8447-4E85-96E7-7FD74943329A}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load fact_hospitalization"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Load fact_hospitalization\Derived Column"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="Derived Column"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Load fact_hospitalization\Derived Column.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Inputs[Derived Column Input].Columns[date]"
+                      cachedDataType="dbDate"
+                      cachedName="date"
+                      cachedSortKeyPosition="2"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[date]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Inputs[Derived Column Input].Columns[daily_occupancy_icu]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="daily_occupancy_icu"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_icu]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Inputs[Derived Column Input].Columns[daily_occupancy_icu_per_1m]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="daily_occupancy_icu_per_1m"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_icu_per_1m]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Inputs[Derived Column Input].Columns[daily_occupancy_hosp]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="daily_occupancy_hosp"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_hosp]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Inputs[Derived Column Input].Columns[daily_occupancy_hosp_per_1m]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="daily_occupancy_hosp_per_1m"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_hosp_per_1m]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Inputs[Derived Column Input].Columns[weekly_admissions_icu]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="weekly_admissions_icu"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_icu]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Inputs[Derived Column Input].Columns[weekly_admissions_icu_per_1m]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="weekly_admissions_icu_per_1m"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_icu_per_1m]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Inputs[Derived Column Input].Columns[weekly_admissions_hosp]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="weekly_admissions_hosp"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_hosp]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Inputs[Derived Column Input].Columns[weekly_admissions_hosp_per_1m]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="weekly_admissions_hosp_per_1m"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_hosp_per_1m]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\Load fact_hospitalization\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[date_conv]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[date_conv]"
+                      name="date_conv"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[date]}</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">date</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[record_year]"
+                      dataType="i2"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[record_year]"
+                      name="record_year"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">(DT_I2)[YEAR](#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[date]})</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">(DT_I2)YEAR(date)</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[date_id_conv]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[date_id_conv]"
+                      name="date_id_conv"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">[DATEDIFF]("day",(DT_DBTIMESTAMP)"2020-01-01",(DT_DBTIMESTAMP)#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[date]}) + 1</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">DATEDIFF("day",(DT_DBTIMESTAMP)"2020-01-01",(DT_DBTIMESTAMP)date) + 1</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[occ_icu_conv]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[occ_icu_conv]"
+                      name="occ_icu_conv"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_icu]} == "" ? NULL(DT_R8) : (DT_R8)#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_icu]}</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">daily_occupancy_icu == "" ? NULL(DT_R8) : (DT_R8)daily_occupancy_icu</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[occ_icu_pm_conv]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[occ_icu_pm_conv]"
+                      name="occ_icu_pm_conv"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_icu_per_1m]} == "" ? NULL(DT_R8) : (DT_R8)#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_icu_per_1m]}</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">daily_occupancy_icu_per_1m == "" ? NULL(DT_R8) : (DT_R8)daily_occupancy_icu_per_1m</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[occ_hosp_conv]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[occ_hosp_conv]"
+                      name="occ_hosp_conv"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_hosp]} == "" ? NULL(DT_R8) : (DT_R8)#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_hosp]}</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">daily_occupancy_hosp == "" ? NULL(DT_R8) : (DT_R8)daily_occupancy_hosp</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[occ_hosp_pm_conv]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[occ_hosp_pm_conv]"
+                      name="occ_hosp_pm_conv"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_hosp_per_1m]} == "" ? NULL(DT_R8) : (DT_R8)#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_hosp_per_1m]}</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">daily_occupancy_hosp_per_1m == "" ? NULL(DT_R8) : (DT_R8)daily_occupancy_hosp_per_1m</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[adm_icu_conv]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[adm_icu_conv]"
+                      name="adm_icu_conv"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_icu]} == "" ? NULL(DT_R8) : (DT_R8)#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_icu]}</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">weekly_admissions_icu == "" ? NULL(DT_R8) : (DT_R8)weekly_admissions_icu</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[adm_icu_pm_conv]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[adm_icu_pm_conv]"
+                      name="adm_icu_pm_conv"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_icu_per_1m]} == "" ? NULL(DT_R8) : (DT_R8)#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_icu_per_1m]}</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">weekly_admissions_icu_per_1m == "" ? NULL(DT_R8) : (DT_R8)weekly_admissions_icu_per_1m</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[adm_hosp_conv]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[adm_hosp_conv]"
+                      name="adm_hosp_conv"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_hosp]} == "" ? NULL(DT_R8) : (DT_R8)#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_hosp]}</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">weekly_admissions_hosp == "" ? NULL(DT_R8) : (DT_R8)weekly_admissions_hosp</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[adm_hosp_pm_conv]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[adm_hosp_pm_conv]"
+                      name="adm_hosp_pm_conv"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_hosp_per_1m]} == "" ? NULL(DT_R8) : (DT_R8)#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_hosp_per_1m]}</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">weekly_admissions_hosp_per_1m == "" ? NULL(DT_R8) : (DT_R8)weekly_admissions_hosp_per_1m</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\Load fact_hospitalization\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load fact_hospitalization\Flat File Source"
+              componentClassID="Microsoft.FlatFileSource"
+              contactInfo="Flat File Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+              description="Flat File Source"
+              localeId="1033"
+              name="Flat File Source"
+              usesDispositions="true"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Boolean"
+                  description="Specifies whether zero-length columns are treated as null."
+                  name="RetainNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of an output column containing the file name. If no name is specified, no output column containing the file name will be generated."
+                  name="FileNameColumnName"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load fact_hospitalization\Flat File Source.Connections[FlatFileConnection]"
+                  connectionManagerID="Package.ConnectionManagers[FF_Hospital]"
+                  connectionManagerRefId="Package.ConnectionManagers[FF_Hospital]"
+                  name="FlatFileConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output]"
+                  name="Flat File Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[country]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[country]"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[country]"
+                      name="country"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[country_code]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[country_code]"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[country_code]"
+                      name="country_code"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[date]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[date]"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[date]"
+                      name="date"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[daily_occupancy_icu]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[daily_occupancy_icu]"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[daily_occupancy_icu]"
+                      name="daily_occupancy_icu"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[daily_occupancy_icu_per_1m]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[daily_occupancy_icu_per_1m]"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[daily_occupancy_icu_per_1m]"
+                      name="daily_occupancy_icu_per_1m"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[daily_occupancy_hosp]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[daily_occupancy_hosp]"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[daily_occupancy_hosp]"
+                      name="daily_occupancy_hosp"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[daily_occupancy_hosp_per_1m]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[daily_occupancy_hosp_per_1m]"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[daily_occupancy_hosp_per_1m]"
+                      name="daily_occupancy_hosp_per_1m"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[weekly_admissions_icu]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[weekly_admissions_icu]"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[weekly_admissions_icu]"
+                      name="weekly_admissions_icu"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[weekly_admissions_icu_per_1m]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[weekly_admissions_icu_per_1m]"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[weekly_admissions_icu_per_1m]"
+                      name="weekly_admissions_icu_per_1m"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[weekly_admissions_hosp]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[weekly_admissions_hosp]"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[weekly_admissions_hosp]"
+                      name="weekly_admissions_hosp"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[weekly_admissions_hosp_per_1m]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[weekly_admissions_hosp_per_1m]"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[weekly_admissions_hosp_per_1m]"
+                      name="weekly_admissions_hosp_per_1m"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the data is in binary format."
+                          name="UseBinaryFormat">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[country]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="country" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[country_code]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="country_code" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[date]"
+                      dataType="dbDate"
+                      name="date" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[daily_occupancy_icu]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="daily_occupancy_icu" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[daily_occupancy_icu_per_1m]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="daily_occupancy_icu_per_1m" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[daily_occupancy_hosp]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="daily_occupancy_hosp" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[daily_occupancy_hosp_per_1m]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="daily_occupancy_hosp_per_1m" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[weekly_admissions_icu]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="weekly_admissions_icu" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[weekly_admissions_icu_per_1m]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="weekly_admissions_icu_per_1m" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[weekly_admissions_hosp]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="weekly_admissions_hosp" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].ExternalColumns[weekly_admissions_hosp_per_1m]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="weekly_admissions_hosp_per_1m" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Error Output]"
+                  isErrorOut="true"
+                  name="Flat File Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Error Output].Columns[Flat File Source Error Output Column]"
+                      codePage="1252"
+                      dataType="text"
+                      description="Flat File Source Error Output Column"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Error Output].Columns[Flat File Source Error Output Column]"
+                      name="Flat File Source Error Output Column" />
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load fact_hospitalization\Lookup"
+              componentClassID="Microsoft.Lookup"
+              contactInfo="Lookup;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;6"
+              description="Joins additional columns to the data flow by looking up values in a table. For example, join to the 'employee id' column the employees table to get 'hire date' and 'employee name'. We recommend this transformation when the lookup table can fit into memory."
+              name="Lookup"
+              usesDispositions="true"
+              version="6">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the SQL statement that generates the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select * from [dbo].[dim_location]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies a SQL statement that uses parameters to generate the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommandParam"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select * from (select * from [dbo].[dim_location]) [refTable]
+where [refTable].[code] = ?</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the type of connection used to access the reference dataset."
+                  name="ConnectionType"
+                  typeConverter="LookupConnectionType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the cache type of the lookup table."
+                  name="CacheType"
+                  typeConverter="CacheType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies how the Lookup transformation handles rows without matching entries in the reference data set."
+                  name="NoMatchBehavior"
+                  typeConverter="LookupNoMatchBehavior">1</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the percentage of the cache that is allocated for rows with no matching entries in the reference dataset."
+                  name="NoMatchCachePercentage">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Maximum Memory Usage for Reference Cache on a 32 bit platform."
+                  name="MaxMemoryUsage">25</property>
+                <property
+                  dataType="System.Int64"
+                  description="Maximum Memory Usage for Reference Cache on a 64 bit platform."
+                  name="MaxMemoryUsage64">25</property>
+                <property
+                  dataType="System.String"
+                  description="Indicates whether to reference metadata in an XML format."
+                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="location_id" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="country" dataType="DT_STR" length="100" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="code" dataType="DT_STR" length="10" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="continent" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="population" dataType="DT_I8" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="population_density" dataType="DT_R8" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="median_age" dataType="DT_R8" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="life_expectancy" dataType="DT_R8" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="gdp_per_capita" dataType="DT_R8" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="diabetes_prevalence" dataType="DT_R8" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="handwashing_facilities" dataType="DT_R8" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="hospital_beds_per_thousand" dataType="DT_R8" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property
+                  containsID="true"
+                  dataType="System.String"
+                  description="Specifies the list of lineage identifiers that map to the parameters that the SQL statement in the SQLCommand property uses. Entries in the list are separated by semicolons."
+                  name="ParameterMap">#{Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[country_code]};</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Determines whether duplicate keys in the reference data should be treated as errors when full cache mode is used."
+                  name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load fact_hospitalization\Lookup.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  connectionManagerRefId="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  description="Connection manager used to access lookup data."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load fact_hospitalization\Lookup.Inputs[Lookup Input]"
+                  name="Lookup Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Lookup.Inputs[Lookup Input].Columns[country_code]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="country_code"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[country_code]">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table that a column joins."
+                          name="JoinToReferenceColumn">code</property>
+                        <property
+                          dataType="System.Null"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load fact_hospitalization\Lookup.Outputs[Lookup Match Output]"
+                  errorOrTruncationOperation="Lookup"
+                  exclusionGroup="1"
+                  name="Lookup Match Output"
+                  synchronousInputId="Package\Load fact_hospitalization\Lookup.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Lookup.Outputs[Lookup Match Output].Columns[location_id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Copy Column"
+                      lineageId="Package\Load fact_hospitalization\Lookup.Outputs[Lookup Match Output].Columns[location_id]"
+                      name="location_id"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn">location_id</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load fact_hospitalization\Lookup.Outputs[Lookup No Match Output]"
+                  description="The Lookup output that handles rows with no matching entries in the reference dataset. Use this output when the NoMatchBehavior property is set to &quot;Send rows with no matching entries to the no match output.&quot;"
+                  exclusionGroup="1"
+                  name="Lookup No Match Output"
+                  synchronousInputId="Package\Load fact_hospitalization\Lookup.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load fact_hospitalization\Lookup.Outputs[Lookup Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Lookup Error Output"
+                  synchronousInputId="Package\Load fact_hospitalization\Lookup.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Lookup.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load fact_hospitalization\Lookup.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Lookup.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load fact_hospitalization\Lookup.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load fact_hospitalization\OLE DB Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[fact_hospitalization]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load fact_hospitalization\OLE DB Destination.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  connectionManagerRefId="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[record_year]"
+                      cachedDataType="i2"
+                      cachedName="record_year"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[record_year]"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[record_year]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[location_id]"
+                      cachedDataType="i4"
+                      cachedName="location_id"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[location_id]"
+                      lineageId="Package\Load fact_hospitalization\Lookup.Outputs[Lookup Match Output].Columns[location_id]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[date_id_conv]"
+                      cachedDataType="i4"
+                      cachedName="date_id_conv"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[date_id]"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[date_id_conv]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[occ_hosp_conv]"
+                      cachedDataType="r8"
+                      cachedName="occ_hosp_conv"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[daily_occupancy_hosp]"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[occ_hosp_conv]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[occ_hosp_pm_conv]"
+                      cachedDataType="r8"
+                      cachedName="occ_hosp_pm_conv"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[daily_occupancy_hosp_per_1m]"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[occ_hosp_pm_conv]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[occ_icu_conv]"
+                      cachedDataType="r8"
+                      cachedName="occ_icu_conv"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[daily_occupancy_icu]"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[occ_icu_conv]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[occ_icu_pm_conv]"
+                      cachedDataType="r8"
+                      cachedName="occ_icu_pm_conv"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[daily_occupancy_icu_per_1m]"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[occ_icu_pm_conv]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[adm_hosp_conv]"
+                      cachedDataType="r8"
+                      cachedName="adm_hosp_conv"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[weekly_admissions_hosp]"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[adm_hosp_conv]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[adm_hosp_pm_conv]"
+                      cachedDataType="r8"
+                      cachedName="adm_hosp_pm_conv"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[weekly_admissions_hosp_per_1m]"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[adm_hosp_pm_conv]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[adm_icu_conv]"
+                      cachedDataType="r8"
+                      cachedName="adm_icu_conv"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[weekly_admissions_icu]"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[adm_icu_conv]" />
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[adm_icu_pm_conv]"
+                      cachedDataType="r8"
+                      cachedName="adm_icu_pm_conv"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[weekly_admissions_icu_per_1m]"
+                      lineageId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output].Columns[adm_icu_pm_conv]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[hosp_id]"
+                      dataType="i8"
+                      name="hosp_id" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[record_year]"
+                      dataType="i2"
+                      name="record_year" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[location_id]"
+                      dataType="i4"
+                      name="location_id" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[date_id]"
+                      dataType="i4"
+                      name="date_id" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[daily_occupancy_hosp]"
+                      dataType="r8"
+                      name="daily_occupancy_hosp" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[daily_occupancy_hosp_per_1m]"
+                      dataType="r8"
+                      name="daily_occupancy_hosp_per_1m" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[daily_occupancy_icu]"
+                      dataType="r8"
+                      name="daily_occupancy_icu" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[daily_occupancy_icu_per_1m]"
+                      dataType="r8"
+                      name="daily_occupancy_icu_per_1m" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[weekly_admissions_hosp]"
+                      dataType="r8"
+                      name="weekly_admissions_hosp" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[weekly_admissions_hosp_per_1m]"
+                      dataType="r8"
+                      name="weekly_admissions_hosp_per_1m" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[weekly_admissions_icu]"
+                      dataType="r8"
+                      name="weekly_admissions_icu" />
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[weekly_admissions_icu_per_1m]"
+                      dataType="r8"
+                      name="weekly_admissions_icu_per_1m" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load fact_hospitalization\OLE DB Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load fact_hospitalization\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load fact_hospitalization\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load fact_hospitalization\Sort"
+              componentClassID="Microsoft.Sort"
+              contactInfo="Sort;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+              description="Sorts input data in ascending or descending order when it cannot be sorted at its source. For example, sort sales data by 'customer id' before it is written to a flat file and delivered to another department. Note: We do not recommend this transformation for large data flows."
+              name="Sort"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the Sort transformation removes rows with duplicate sort values."
+                  name="EliminateDuplicates">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the maximum number of threads to use for sorting."
+                  expressionType="Notify"
+                  name="MaximumThreads">-1</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\Load fact_hospitalization\Sort.Inputs[Sort Input]"
+                  name="Sort Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Inputs[Sort Input].Columns[country]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="country"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[country]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the comparison options for character data."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the sort order of the column."
+                          name="NewSortKeyPosition">1</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Inputs[Sort Input].Columns[country_code]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="country_code"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[country_code]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the comparison options for character data."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the sort order of the column."
+                          name="NewSortKeyPosition">0</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Inputs[Sort Input].Columns[date]"
+                      cachedDataType="dbDate"
+                      cachedName="date"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[date]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the comparison options for character data."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the sort order of the column."
+                          name="NewSortKeyPosition">2</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Inputs[Sort Input].Columns[daily_occupancy_icu]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="daily_occupancy_icu"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[daily_occupancy_icu]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the comparison options for character data."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the sort order of the column."
+                          name="NewSortKeyPosition">0</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Inputs[Sort Input].Columns[daily_occupancy_icu_per_1m]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="daily_occupancy_icu_per_1m"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[daily_occupancy_icu_per_1m]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the comparison options for character data."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the sort order of the column."
+                          name="NewSortKeyPosition">0</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Inputs[Sort Input].Columns[daily_occupancy_hosp]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="daily_occupancy_hosp"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[daily_occupancy_hosp]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the comparison options for character data."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the sort order of the column."
+                          name="NewSortKeyPosition">0</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Inputs[Sort Input].Columns[daily_occupancy_hosp_per_1m]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="daily_occupancy_hosp_per_1m"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[daily_occupancy_hosp_per_1m]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the comparison options for character data."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the sort order of the column."
+                          name="NewSortKeyPosition">0</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Inputs[Sort Input].Columns[weekly_admissions_icu]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="weekly_admissions_icu"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[weekly_admissions_icu]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the comparison options for character data."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the sort order of the column."
+                          name="NewSortKeyPosition">0</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Inputs[Sort Input].Columns[weekly_admissions_icu_per_1m]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="weekly_admissions_icu_per_1m"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[weekly_admissions_icu_per_1m]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the comparison options for character data."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the sort order of the column."
+                          name="NewSortKeyPosition">0</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Inputs[Sort Input].Columns[weekly_admissions_hosp]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="weekly_admissions_hosp"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[weekly_admissions_hosp]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the comparison options for character data."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the sort order of the column."
+                          name="NewSortKeyPosition">0</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Inputs[Sort Input].Columns[weekly_admissions_hosp_per_1m]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="weekly_admissions_hosp_per_1m"
+                      lineageId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[weekly_admissions_hosp_per_1m]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the comparison options for character data."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the sort order of the column."
+                          name="NewSortKeyPosition">0</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output]"
+                  isSorted="true"
+                  name="Sort Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[country]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[country]"
+                      name="country"
+                      sortKeyPosition="1">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the lineage identifier of the input column that is associated with this output column."
+                          name="SortColumnId">#{Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[country]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[country_code]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[country_code]"
+                      name="country_code">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the lineage identifier of the input column that is associated with this output column."
+                          name="SortColumnId">#{Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[country_code]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[date]"
+                      dataType="dbDate"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[date]"
+                      name="date"
+                      sortKeyPosition="2">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the lineage identifier of the input column that is associated with this output column."
+                          name="SortColumnId">#{Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[date]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_icu]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_icu]"
+                      name="daily_occupancy_icu">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the lineage identifier of the input column that is associated with this output column."
+                          name="SortColumnId">#{Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[daily_occupancy_icu]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_icu_per_1m]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_icu_per_1m]"
+                      name="daily_occupancy_icu_per_1m">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the lineage identifier of the input column that is associated with this output column."
+                          name="SortColumnId">#{Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[daily_occupancy_icu_per_1m]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_hosp]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_hosp]"
+                      name="daily_occupancy_hosp">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the lineage identifier of the input column that is associated with this output column."
+                          name="SortColumnId">#{Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[daily_occupancy_hosp]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_hosp_per_1m]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[daily_occupancy_hosp_per_1m]"
+                      name="daily_occupancy_hosp_per_1m">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the lineage identifier of the input column that is associated with this output column."
+                          name="SortColumnId">#{Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[daily_occupancy_hosp_per_1m]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_icu]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_icu]"
+                      name="weekly_admissions_icu">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the lineage identifier of the input column that is associated with this output column."
+                          name="SortColumnId">#{Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[weekly_admissions_icu]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_icu_per_1m]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_icu_per_1m]"
+                      name="weekly_admissions_icu_per_1m">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the lineage identifier of the input column that is associated with this output column."
+                          name="SortColumnId">#{Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[weekly_admissions_icu_per_1m]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_hosp]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_hosp]"
+                      name="weekly_admissions_hosp">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the lineage identifier of the input column that is associated with this output column."
+                          name="SortColumnId">#{Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[weekly_admissions_hosp]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_hosp_per_1m]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[weekly_admissions_hosp_per_1m]"
+                      name="weekly_admissions_hosp_per_1m">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the lineage identifier of the input column that is associated with this output column."
+                          name="SortColumnId">#{Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output].Columns[weekly_admissions_hosp_per_1m]}</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Load fact_hospitalization.Paths[Derived Column Output]"
+              endId="Package\Load fact_hospitalization\Lookup.Inputs[Lookup Input]"
+              name="Derived Column Output"
+              startId="Package\Load fact_hospitalization\Derived Column.Outputs[Derived Column Output]" />
+            <path
+              refId="Package\Load fact_hospitalization.Paths[Flat File Source Output]"
+              endId="Package\Load fact_hospitalization\Sort.Inputs[Sort Input]"
+              name="Flat File Source Output"
+              startId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output]" />
+            <path
+              refId="Package\Load fact_hospitalization.Paths[Lookup Match Output]"
+              endId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input]"
+              name="Lookup Match Output"
+              startId="Package\Load fact_hospitalization\Lookup.Outputs[Lookup Match Output]" />
+            <path
+              refId="Package\Load fact_hospitalization.Paths[Sort Output]"
+              endId="Package\Load fact_hospitalization\Derived Column.Inputs[Derived Column Input]"
+              name="Sort Output"
+              startId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
       DTS:refId="Package\Load fact_vaccination"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
@@ -14104,7 +15644,7 @@ where [refTable].[country] = ?</property>
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
           SQLTask:Connection="{B4D2B656-7381-45C9-B60C-6AAB9D7FC58B}"
-          SQLTask:SqlStatementSource="TRUNCATE TABLE dbo.fact_covid_cases;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          SQLTask:SqlStatementSource="TRUNCATE TABLE dbo.fact_covid_cases;&#xA;TRUNCATE TABLE dbo.fact_vaccination;&#xA;TRUNCATE TABLE dbo.fact_hospitalization;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
@@ -14139,6 +15679,23 @@ where [refTable].[country] = ?</property>
         <SQLTask:SqlTaskData
           SQLTask:Connection="{B4D2B656-7381-45C9-B60C-6AAB9D7FC58B}"
           SQLTask:SqlStatementSource="TRUNCATE TABLE dbo.fact_covid_cases;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate fact_hospitalization"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Truncate fact_hospitalization"
+      DTS:DTSID="{a6f5e99b-bf5f-4275-98a6-80a539298dc1}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate fact_hospitalization"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="2">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{B4D2B656-7381-45C9-B60C-6AAB9D7FC58B}"
+          SQLTask:SqlStatementSource="TRUNCATE TABLE dbo.fact_hospitalization;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
@@ -14224,6 +15781,22 @@ where [refTable].[country] = ?</property>
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 7"
       DTS:To="Package\Truncate dim_date" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 8]"
+      DTS:CreationName=""
+      DTS:DTSID="{3F9C9277-A5B8-4260-8A86-4BD44A497C9F}"
+      DTS:From="Package\Load dim_location"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 8"
+      DTS:To="Package\Truncate fact_hospitalization" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 9]"
+      DTS:CreationName=""
+      DTS:DTSID="{D76318A8-B186-48D0-A914-60ACBA14ECB2}"
+      DTS:From="Package\Truncate fact_hospitalization"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 9"
+      DTS:To="Package\Load fact_hospitalization" />
   </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
 <!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
@@ -14485,6 +16058,82 @@ where [refTable].[country] = ?</property>
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
+        <NodeLayout
+          Size="196.8,41.6"
+          Id="Package\Truncate fact_hospitalization"
+          TopLeft="619.166632836893,270.399998119672" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 8]"
+          TopLeft="459.566648135417,220.133332091834">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="257.999984701476,50.2666660278379"
+              Start="0,0"
+              End="257.999984701476,42.7666660278379">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,13.2943191799957" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,13.2943191799957"
+                    Point2="0,17.2943191799957"
+                    Point3="4,17.2943191799957" />
+                  <mssgle:LineSegment
+                    End="253.999984701476,17.2943191799957" />
+                  <mssgle:CubicBezierSegment
+                    Point1="253.999984701476,17.2943191799957"
+                    Point2="257.999984701476,17.2943191799957"
+                    Point3="257.999984701476,21.2943191799957" />
+                  <mssgle:LineSegment
+                    End="257.999984701476,42.7666660278379" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="192.8,41.6"
+          Id="Package\Load fact_hospitalization"
+          TopLeft="637.999965441725,365.16666416559" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 9]"
+          TopLeft="717.566632836893,311.999998119672">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="16.833332604832,53.1666660459173"
+              Start="0,0"
+              End="16.833332604832,45.6666660459173">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,22.5833330229587" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,22.5833330229587"
+                    Point2="0,26.5833330229587"
+                    Point3="4,26.5833330229587" />
+                  <mssgle:LineSegment
+                    End="12.833332604832,26.5833330229587" />
+                  <mssgle:CubicBezierSegment
+                    Point1="12.833332604832,26.5833330229587"
+                    Point2="16.833332604832,26.5833330229587"
+                    Point3="16.833332604832,30.5833330229587" />
+                  <mssgle:LineSegment
+                    End="16.833332604832,45.6666660459173" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </Package>
@@ -14512,7 +16161,7 @@ where [refTable].[country] = ?</property>
         <NodeLayout
           Size="151.2,41.6"
           Id="Package\Load dim_location\Flat File Source"
-          TopLeft="292.99999563396,182.999997273088" />
+          TopLeft="292.99999563396,181.999997287989" />
         <EdgeLayout
           Id="Package\Load dim_location.Paths[Good_Rows]"
           TopLeft="372.799995589256,299.599996155501">
@@ -14551,18 +16200,18 @@ where [refTable].[country] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Load dim_location.Paths[Flat File Source Output]"
-          TopLeft="370.699995611608,224.599997273087">
+          TopLeft="370.699995611608,223.599997287989">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,33.399998882413"
+              EndConnector="0,34.3999988675118"
               Start="0,0"
-              End="0,25.899998882413">
+              End="0,26.8999988675118">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,25.899998882413" />
+                    End="0,26.8999988675118" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -14884,25 +16533,25 @@ where [refTable].[country] = ?</property>
         <NodeLayout
           Size="151.2,41.6"
           Id="Package\Load fact_vaccination\Flat File Source"
-          TopLeft="332.49999512732,24.4999997168779" />
+          TopLeft="333.499995112419,25.4999997019768" />
         <NodeLayout
           Size="97.6,41.6"
           Id="Package\Load fact_vaccination\Sort"
           TopLeft="362.999994590879,107.999998390675" />
         <EdgeLayout
           Id="Package\Load fact_vaccination.Paths[Flat File Source Output]"
-          TopLeft="409.9499948591,66.0999997168779">
+          TopLeft="410.449994851649,67.0999997019768">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,41.8999986737967"
+              EndConnector="0,40.8999986886978"
               Start="0,0"
-              End="0,34.3999986737967">
+              End="0,33.3999986886978">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,34.3999986737967" />
+                    End="0,33.3999986886978" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -15031,6 +16680,184 @@ where [refTable].[country] = ?</property>
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
     design-time-name="Package\Load fact_vaccination\OLE DB Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Load fact_hospitalization">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="151.2,41.6"
+          Id="Package\Load fact_hospitalization\Flat File Source"
+          TopLeft="353.499994814396,44.4999994188547" />
+        <NodeLayout
+          Size="97.6,41.6"
+          Id="Package\Load fact_hospitalization\Sort"
+          TopLeft="374.999994412065,127.999998092651" />
+        <EdgeLayout
+          Id="Package\Load fact_hospitalization.Paths[Flat File Source Output]"
+          TopLeft="426.44999461323,86.0999994188547">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,41.8999986737967"
+              Start="0,0"
+              End="0,34.3999986737967">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,34.3999986737967" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="152.8,41.6"
+          Id="Package\Load fact_hospitalization\Derived Column"
+          TopLeft="358.499995186925,210.499997392297" />
+        <EdgeLayout
+          Id="Package\Load fact_hospitalization.Paths[Sort Output]"
+          TopLeft="423.799994412065,169.599998092651">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="11.1000007748605,40.8999992996454"
+              Start="0,0"
+              End="11.1000007748605,33.3999992996454">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,16.4499996498227" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,16.4499996498227"
+                    Point2="0,20.4499996498227"
+                    Point3="4,20.4499996498227" />
+                  <mssgle:LineSegment
+                    End="7.10000077486046,20.4499996498227" />
+                  <mssgle:CubicBezierSegment
+                    Point1="7.10000077486046,20.4499996498227"
+                    Point2="11.1000007748605,20.4499996498227"
+                    Point3="11.1000007748605,24.4499996498227" />
+                  <mssgle:LineSegment
+                    End="11.1000007748605,33.3999992996454" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="112.8,41.6"
+          Id="Package\Load fact_hospitalization\Lookup"
+          TopLeft="374.499995395541,296.499996557832" />
+        <EdgeLayout
+          Id="Package\Load fact_hospitalization.Paths[Derived Column Output]"
+          TopLeft="432.899995291233,252.099997392297">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44.399999165535"
+              Start="0,0"
+              End="0,36.899999165535">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.899999165535" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="171.2,41.6"
+          Id="Package\Load fact_hospitalization\OLE DB Destination"
+          TopLeft="371.999994456768,394.999994114041" />
+        <EdgeLayout
+          Id="Package\Load fact_hospitalization.Paths[Lookup Match Output]"
+          TopLeft="430.899995395541,338.099996557832">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="26.6999990612268,56.8999975562096"
+              Start="0,0"
+              End="26.6999990612268,49.3999975562096">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,24.4499987781048" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,24.4499987781048"
+                    Point2="0,28.4499987781048"
+                    Point3="4,28.4499987781048" />
+                  <mssgle:LineSegment
+                    End="22.6999990612268,28.4499987781048" />
+                  <mssgle:CubicBezierSegment
+                    Point1="22.6999990612268,28.4499987781048"
+                    Point2="26.6999990612268,28.4499987781048"
+                    Point3="26.6999990612268,32.4499987781048" />
+                  <mssgle:LineSegment
+                    End="26.6999990612268,49.3999975562096" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-34.8413871881366,33.4499987781048,96.3827734375,11.609375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load fact_hospitalization\Lookup">
+    <Properties>
+      <Property>
+        <Name>OverwriteParamsSQLProp</Name>
+        <Value
+          type="q2:boolean">false</Value>
+      </Property>
+      <Property>
+        <Name>UsedTableName</Name>
+        <Value
+          type="q3:string">[dbo].[dim_location]</Value>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q4:int">0</Value>
+      </Property>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load fact_hospitalization\OLE DB Destination">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>

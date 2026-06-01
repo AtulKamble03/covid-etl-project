@@ -173,17 +173,14 @@
 #### 3.6 — Build fact_hospitalization (Flow 5) [PARALLEL branch 3]
 | Task | Done? |
 |---|---|
-| Add Execute SQL Task (5a) — `TRUNCATE TABLE fact_hospitalization` | 🔲 |
-| Add Data Flow Task (5b) — source: `hospital.csv` | 🔲 |
-| Step 1: Row Count + Sort on (country_code, date), enable dedup | 🔲 |
-| Step 2: Data Conversion (string→DATE, string→FLOAT), cast error → redirect (DQ-CAST) | 🔲 |
-| Step 3: Derived Column — `record_year = YEAR([date])` | 🔲 |
-| Step 4: Conditional Split — DQ-01, DQ-02 only | 🔲 |
-| Step 5: Lookup `country_code` → `dim_location.code` → `location_id`, no-match → dq_rejected_rows | 🔲 |
-| Step 6: Lookup `date` → `dim_date.date` → `date_id`, no-match → dq_rejected_rows | 🔲 |
-| Step 7: Row Count Loaded + Row Count Rejected | 🔲 |
-| Step 8: OLE DB Destination → `fact_hospitalization` + OLE DB Destination → `dq_rejected_rows` | 🔲 |
-| Add Execute SQL Task (5c) — INSERT into `etl_run_log` | 🔲 |
+| Add Execute SQL Task (5a) — `TRUNCATE TABLE fact_hospitalization` | ✅ |
+| Add Data Flow Task (5b) — source: `hospital.csv` | ✅ |
+| Set Text Qualifier `"` and date=DT_DBDATE in FF_Hospital | ✅ |
+| Derived Column: date pass-through, record_year, date_id_conv (DATEDIFF), 8 metric null-safe conversions | ✅ |
+| No Conditional Split — no empty/future dates in hospital CSV | ✅ |
+| Lookup location_id → dim_location (join on country_code → code, ISO-3 — most reliable join) | ✅ |
+| date_id computed via DATEDIFF — same approach as fact_vaccination | ✅ |
+| Verify — 41,543 rows loaded, NULLs correct (~93% null as designed) | ✅ |
 
 #### 3.7 — Wire parallel branches + Post-Load Verification (Flow 6)
 | Task | Done? |
