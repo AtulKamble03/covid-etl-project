@@ -505,14 +505,20 @@ SELECT date INTO staging FROM date_series OPTION (MAXRECURSION 3000);
 **Step 1 — Row Count (Extracted) + Deduplication (Sort)**
 Place a Row Count component immediately after the Flat File Source and store the count in the package variable `@[User::RowsExtracted]`. Then sort on (`country`, `date`) ascending with "Remove rows with duplicate sort values" enabled. If two rows share the same country + date, the first row in sort order is kept. A UNIQUE constraint on (`location_id`, `date_id`) in the database acts as a second-line safety net.
 
+**FF_CompactCSV configuration required before this flow runs:**
+- **Text Qualifier**: set to `"` (double quote) — the CSV contains country names with commas (e.g. "World excl. China, South Korea, Japan and Singapore"). Without a text qualifier, SSIS splits on those commas and corrupts downstream columns.
+- **`date` column DataType**: set to `database date [DT_DBDATE]` in the Advanced tab — this avoids a Derived Column cast failure. SSIS's Flat File Source handles the "YYYY-MM-DD" → DT_DBDATE conversion reliably at the source level; casting DT_STR → DT_DBDATE inside a Derived Column expression fails at runtime.
+
 **Step 2 — Derived Column (all type conversions + record_year)**
 
-No Data Conversion component is used. A single Derived Column handles all conversions with explicit empty-string → NULL handling (learned from dim_location: Data Conversion fails on empty strings from CSV).
+No Data Conversion component is used. A single Derived Column handles all conversions.
+
+Since `date` is already DT_DBDATE from FF_CompactCSV, no casting is needed for date or record_year. Numeric metrics are still DT_STR from the source — use empty-string → NULL expressions.
 
 | Output Column | Expression | Target SQL Type |
 |---|---|---|
-| `date_conv` | `[date] == "" ? NULL(DT_DBDATE) : (DT_DBDATE)[date]` | DATE |
-| `record_year` | `[date] == "" ? (DT_I2)0 : (DT_I2)YEAR((DT_DBDATE)[date])` | SMALLINT — partition key |
+| `date_conv` | `[date]` | DATE — pass-through (already DT_DBDATE from FF_CompactCSV) |
+| `record_year` | `(DT_I2)YEAR([date])` | SMALLINT — partition key |
 | `new_cases_conv` | `[new_cases] == "" ? NULL(DT_R8) : (DT_R8)[new_cases]` | FLOAT |
 | `total_cases_conv` | `[total_cases] == "" ? NULL(DT_R8) : (DT_R8)[total_cases]` | FLOAT |
 | `new_cases_sm_conv` | `[new_cases_smoothed] == "" ? NULL(DT_R8) : (DT_R8)[new_cases_smoothed]` | FLOAT |
@@ -531,17 +537,17 @@ No Data Conversion component is used. A single Derived Column handles all conver
 
 **Step 3 — DQ Filter (Conditional Split)**
 
-Conditions operate on the typed `_conv` columns from Step 2. NULL comparisons (`NULL < 0`, `NULL > 1`) return false in SSIS — no `ISNULL` wrapper needed for value comparisons.
+> **Important:** In SSIS Conditional Split, `NULL < 0` evaluates to NULL (not false), and NULL is treated as an error — causing the component to fail. Any condition that compares a nullable column must include an explicit `!ISNULL()` guard. Only conditions 1 and 3 (`ISNULL()` checks) are naturally safe; conditions 4-7 require the guard.
 
 | Output Name | Order | Expression | DQ Rule |
 |---|---|---|---|
 | `Reject_NullDate` | 1 | `ISNULL([date_conv])` | DQ-01 |
 | `Reject_FutureDate` | 2 | `[date_conv] > (DT_DBDATE)GETDATE()` | DQ-02 |
 | `Reject_NullContinent` | 3 | `ISNULL([continent])` | DQ-03 |
-| `Reject_NegCases` | 4 | `[new_cases_conv] < 0` | DQ-04 |
-| `Reject_NegDeaths` | 5 | `[new_deaths_conv] < 0` | DQ-05 |
-| `Reject_BadPosRate` | 6 | `[pos_rate_conv] > 1` | DQ-09 |
-| `Reject_BadStringency` | 7 | `[stringency_conv] > 100` | DQ-10 |
+| `Reject_NegCases` | 4 | `!ISNULL([new_cases_conv]) && [new_cases_conv] < 0` | DQ-04 |
+| `Reject_NegDeaths` | 5 | `!ISNULL([new_deaths_conv]) && [new_deaths_conv] < 0` | DQ-05 |
+| `Reject_BadPosRate` | 6 | `!ISNULL([pos_rate_conv]) && [pos_rate_conv] > 1` | DQ-09 |
+| `Reject_BadStringency` | 7 | `!ISNULL([stringency_conv]) && [stringency_conv] > 100` | DQ-10 |
 | `Good_Rows` | default | all other rows | |
 
 **Step 4 — Lookup: resolve location_id**
@@ -553,10 +559,16 @@ Conditions operate on the typed `_conv` columns from Step 2. NULL comparisons (`
 
 **Step 5 — Lookup: resolve date_id**
 
-| Lookup Input | Lookup Table | Match Column | Output |
-|---|---|---|---|
-| `date_conv` | dim_date | `date` | `date_id` |
-| No match | → dq_rejected_rows with note "date not found in dim_date" | | |
+Use **SQL Query mode** in the Lookup Connection tab (not "Table or view") to cast the reference date column to DATETIME so it matches the DT_DBDATE input type:
+
+```sql
+SELECT date_id, CAST(date AS DATETIME) AS date FROM dbo.dim_date
+```
+
+| Lookup Input | Reference Column | Output |
+|---|---|---|
+| `date_conv` (DT_DBDATE) | `date` (DATETIME from query) | `date_id` |
+| No match | → dq_rejected_rows with note "date not found in dim_date" | |
 
 **Step 6 — Column Mapping (source → target)**
 
