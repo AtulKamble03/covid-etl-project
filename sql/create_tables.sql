@@ -22,9 +22,9 @@ GO
 -- Source: owid_covid_compact.csv | One row per country | Upsert by code (ISO-3)
 CREATE TABLE dbo.dim_location (
     location_id                INT IDENTITY(1,1) PRIMARY KEY,
-    country                    NVARCHAR(100) NOT NULL,
-    code                       CHAR(3)       NOT NULL UNIQUE,  -- ISO-3 — natural key for upsert
-    continent                  NVARCHAR(50)  NOT NULL,
+    country                    VARCHAR(100) NOT NULL,
+    code                       VARCHAR(10)  NOT NULL UNIQUE,  -- ISO-3 or OWID code (e.g. OWID_KOS for Kosovo)
+    continent                  VARCHAR(50)  NOT NULL,
     population                 BIGINT,
     population_density         FLOAT,
     median_age                 FLOAT,
