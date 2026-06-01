@@ -3,6 +3,12 @@ data/*.csv
 data/*.json
 data/*.parquet
 
+# SSIS build output — generated files, not source
+ssis/**/bin/
+ssis/**/obj/
+ssis/**/*.bak
+ssis/**/*.dtproj.user
+
 # VS Code
 .vscode/
 
