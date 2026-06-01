@@ -477,7 +477,7 @@ SELECT date INTO staging FROM date_series OPTION (MAXRECURSION 3000);
 | `is_weekend` | `CASE WHEN DATEPART(weekday,date) IN (1,7) THEN 1 ELSE 0 END` | 1 |
 
 **Step 2 — Load**
-Truncate and reload dim_date on every run — it is always generated fresh.
+`DELETE FROM dbo.dim_date` (not TRUNCATE) then reload every run. TRUNCATE is blocked by SQL Server when fact tables have FK references pointing to dim_date — even when those tables are empty. DELETE bypasses this restriction. dim_date has only ~2,344 rows so DELETE is equally fast.
 
 ---
 
@@ -831,8 +831,8 @@ Defines how each table is loaded on every package run, and whether the package i
 
 | Table | Load Mode | Idempotent | Notes |
 |---|---|---|---|
-| `dim_date` | Truncate + full reload | Yes | Generated fresh every run from 2020-01-01 to today |
-| `dim_location` | Upsert — INSERT if ISO-3 code not found, skip if exists | Yes | New countries added; existing countries not updated (SCD Type 1) |
+| `dim_date` | DELETE + full reload | Yes | Generated fresh every run. DELETE used instead of TRUNCATE — TRUNCATE is blocked by FK constraints from fact tables even when empty |
+| `dim_location` | DELETE + upsert — clear then INSERT if ISO-3 code not found | Yes | DELETE used instead of TRUNCATE for same FK constraint reason |
 | `fact_covid_cases` | Truncate + full reload | Yes | Execute SQL Task truncates before Data Flow inserts |
 | `fact_vaccination` | Truncate + full reload | Yes | Execute SQL Task truncates before Data Flow inserts |
 | `fact_hospitalization` | Truncate + full reload | Yes | Execute SQL Task truncates before Data Flow inserts |
