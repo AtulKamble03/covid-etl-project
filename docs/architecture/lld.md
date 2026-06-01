@@ -857,9 +857,9 @@ Single consolidated view of every field's origin — source file, source column,
 
 | Source File | Source Column | SSIS Transform | Target Column | Notes |
 |---|---|---|---|---|
-| owid_covid_compact.csv | `country` | Pass-through | `country` | |
+| owid_covid_compact.csv | `country` | Data Conversion: DT_STR → DT_WSTR(100) alias `country_wstr` | `country` | CSV column is named `country` (not `location`) |
 | owid_covid_compact.csv | `iso_code` | Pass-through | `code` | ISO-3 country code |
-| owid_covid_compact.csv | `continent` | Pass-through | `continent` | Null rows removed by DQ-03 before reaching this table |
+| owid_covid_compact.csv | `continent` | Data Conversion: DT_STR → DT_WSTR(50) alias `continent_wstr` | `continent` | Null rows removed by DQ-03 before reaching this table |
 | owid_covid_compact.csv | `population` | Data Conversion: float64 → BIGINT | `population` | |
 | owid_covid_compact.csv | `population_density` | Data Conversion: string → FLOAT | `population_density` | |
 | owid_covid_compact.csv | `median_age` | Data Conversion: string → FLOAT | `median_age` | |
