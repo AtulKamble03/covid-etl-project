@@ -185,28 +185,23 @@
 #### 3.7 — Wire parallel branches + Post-Load Verification (Flow 6)
 | Task | Done? |
 |---|---|
-| Draw green arrow from `Load dim_location` → `Truncate fact_covid_cases` (3a) | 🔲 |
-| Draw green arrow from `Load dim_location` → `Truncate fact_vaccination` (4a) | 🔲 |
-| Draw green arrow from `Load dim_location` → `Truncate fact_hospitalization` (5a) | 🔲 |
-| Draw green arrow from `Log counts (3c)` → `usp_verify_etl_load` | 🔲 |
-| Draw green arrow from `Log counts (4c)` → `usp_verify_etl_load` | 🔲 |
-| Draw green arrow from `Log counts (5c)` → `usp_verify_etl_load` | 🔲 |
-
-#### 3.8 — Post-Load Verification
-| Task | Done? |
-|---|---|
-| Add Execute SQL Task (Step 6) — `EXEC usp_verify_etl_load` | 🔲 |
-| Configure: On failure → fail the package | 🔲 |
+| Draw green arrow from `Load dim_location` → `Truncate fact_covid_cases` | ✅ |
+| Draw green arrow from `Load dim_location` → `Truncate fact_vaccination` | ✅ |
+| Draw green arrow from `Load dim_location` → `Truncate fact_hospitalization` | ✅ |
+| Add `Post-Load Verification` Execute SQL Task — `EXEC dbo.usp_verify_etl_load` | ✅ |
+| Wire 3 arrows from all fact loads → `Post-Load Verification` (AND convergence) | ✅ |
+| Deploy enhanced 12-check usp_verify_etl_load SP in SSMS | ✅ |
 
 #### 3.8 — Test and Validate
 | Task | Done? |
 |---|---|
-| Run full SSIS package end-to-end | 🔲 |
+| Run full SSIS package end-to-end — all tasks green ✅ | ✅ |
+| fact_covid_cases: 484,751 rows across 7 partitions | ✅ |
+| fact_vaccination: 197,657 rows | ✅ |
+| fact_hospitalization: 41,543 rows | ✅ |
+| dim_location: 248 countries, dim_date: 2,344 days | ✅ |
+| Post-Load Verification (12 checks) — run `EXEC usp_verify_etl_load` in SSMS | 🔲 |
 | Confirm all 6 critical checks PASS (2, 3, 4, 7, 8, 10) | 🔲 |
-| Review `etl_run_log` — check rows extracted / loaded / rejected per flow | 🔲 |
-| Review `dq_rejected_rows` — confirm only expected rejects (DQ-03 aggregate rows) | 🔲 |
-| Check partition row counts in SQL Server (use the inspection query in `create_tables.sql`) | 🔲 |
-| Record results in Pass/Fail Summary Template (`docs/testing.md`) | 🔲 |
 
 ---
 

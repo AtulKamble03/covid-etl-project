@@ -11,8 +11,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package"
   DTS:PackageType="5"
-  DTS:VersionBuild="88"
-  DTS:VersionGUID="{BB95C411-0EF6-4759-BEC6-1E6B6E4C6136}">
+  DTS:VersionBuild="89"
+  DTS:VersionGUID="{C3E4A8BD-D81B-40E6-8B18-6B6715799DC9}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -15631,6 +15631,23 @@ where [refTable].[country] = ?</property>
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
+      DTS:refId="Package\Post-Load Verification"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Post-Load Verification"
+      DTS:DTSID="{BA0926B1-00C7-461A-BB2E-83AEE3573BF4}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Post-Load Verification"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{B4D2B656-7381-45C9-B60C-6AAB9D7FC58B}"
+          SQLTask:SqlStatementSource="EXEC dbo.usp_verify_etl_load;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
       DTS:refId="Package\Truncate All Facts"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Truncate All Facts"
@@ -15673,7 +15690,7 @@ where [refTable].[country] = ?</property>
       DTS:LocaleID="-1"
       DTS:ObjectName="Truncate fact_covid_cases"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="1">
+      DTS:ThreadHint="0">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -15707,7 +15724,7 @@ where [refTable].[country] = ?</property>
       DTS:LocaleID="-1"
       DTS:ObjectName="Truncate fact_vaccination"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="0">
+      DTS:ThreadHint="1">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -15733,6 +15750,30 @@ where [refTable].[country] = ?</property>
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 1"
       DTS:To="Package\Delete dim_location" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 10]"
+      DTS:CreationName=""
+      DTS:DTSID="{F8EB522F-8592-4F15-95AE-97ABE7510583}"
+      DTS:From="Package\Load fact_covid_cases"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 10"
+      DTS:To="Package\Post-Load Verification" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 11]"
+      DTS:CreationName=""
+      DTS:DTSID="{B753D6DE-2CA8-4527-B154-802EE3BAAAA8}"
+      DTS:From="Package\Load fact_vaccination"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 11"
+      DTS:To="Package\Post-Load Verification" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 12]"
+      DTS:CreationName=""
+      DTS:DTSID="{5137ABC3-A490-4522-8960-75EB0F9A3D97}"
+      DTS:From="Package\Load fact_hospitalization"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 12"
+      DTS:To="Package\Post-Load Verification" />
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
       DTS:CreationName=""
@@ -15825,7 +15866,7 @@ where [refTable].[country] = ?</property>
         <NodeLayout
           Size="184,41.6"
           Id="Package\Load fact_covid_cases"
-          TopLeft="80.8333289167948,367.466664111349" />
+          TopLeft="79.7916623070423,369.633330762949" />
         <NodeLayout
           Size="164.8,41.6"
           Id="Package\Truncate dim_date"
@@ -15948,18 +15989,18 @@ where [refTable].[country] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 4]"
-          TopLeft="168.866662204597,315.466664762232">
+          TopLeft="168.34582889972,315.466664762232">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,51.9999993491171"
+              EndConnector="0,54.166666000717"
               Start="0,0"
-              End="0,44.4999993491171">
+              End="0,46.666666000717">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,44.4999993491171" />
+                    End="0,46.666666000717" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -15975,7 +16016,7 @@ where [refTable].[country] = ?</property>
         <NodeLayout
           Size="179.2,41.6"
           Id="Package\Load fact_vaccination"
-          TopLeft="360.83331361827,364.86666412943" />
+          TopLeft="360.83331361827,365.949997455229" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 5]"
           TopLeft="446.683314551662,220.133332091834">
@@ -16004,14 +16045,14 @@ where [refTable].[country] = ?</property>
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,49.3999993671973"
+              EndConnector="0,50.4833326929973"
               Start="0,0"
-              End="0,41.8999993671973">
+              End="0,42.9833326929973">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,41.8999993671973" />
+                    End="0,42.9833326929973" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -16099,33 +16140,127 @@ where [refTable].[country] = ?</property>
         <NodeLayout
           Size="192.8,41.6"
           Id="Package\Load fact_hospitalization"
-          TopLeft="637.999965441725,365.16666416559" />
+          TopLeft="641.124965270983,367.33333081719" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 9]"
           TopLeft="717.566632836893,311.999998119672">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="16.833332604832,53.1666660459173"
+              EndConnector="19.9583324340895,55.3333326975173"
               Start="0,0"
-              End="16.833332604832,45.6666660459173">
+              End="19.9583324340895,47.8333326975173">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,22.5833330229587" />
+                    End="0,23.6666663487586" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,22.5833330229587"
-                    Point2="0,26.5833330229587"
-                    Point3="4,26.5833330229587" />
+                    Point1="0,23.6666663487586"
+                    Point2="0,27.6666663487586"
+                    Point3="4,27.6666663487586" />
                   <mssgle:LineSegment
-                    End="12.833332604832,26.5833330229587" />
+                    End="15.9583324340895,27.6666663487586" />
                   <mssgle:CubicBezierSegment
-                    Point1="12.833332604832,26.5833330229587"
-                    Point2="16.833332604832,26.5833330229587"
-                    Point3="16.833332604832,30.5833330229587" />
+                    Point1="15.9583324340895,27.6666663487586"
+                    Point2="19.9583324340895,27.6666663487586"
+                    Point3="19.9583324340895,31.6666663487586" />
                   <mssgle:LineSegment
-                    End="16.833332604832,45.6666660459173" />
+                    End="19.9583324340895,47.8333326975173" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="180,41.6"
+          Id="Package\Post-Load Verification"
+          TopLeft="359.666647315854,559.083329483784" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 10]"
+          TopLeft="171.791662307042,411.233330762949">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="234.874985008812,147.849998720835"
+              Start="0,0"
+              End="234.874985008812,140.349998720835">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,93.1277363859501" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,93.1277363859501"
+                    Point2="0,97.1277363859501"
+                    Point3="4,97.1277363859501" />
+                  <mssgle:LineSegment
+                    End="230.874985008812,97.1277363859501" />
+                  <mssgle:CubicBezierSegment
+                    Point1="230.874985008812,97.1277363859501"
+                    Point2="234.874985008812,97.1277363859501"
+                    Point3="234.874985008812,101.12773638595" />
+                  <mssgle:LineSegment
+                    End="234.874985008812,140.349998720835" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 11]"
+          TopLeft="450.049980467062,407.54999745523">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,151.533332028555"
+              Start="0,0"
+              End="0,144.033332028555">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,144.033332028555" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 12]"
+          TopLeft="737.524965270983,408.93333081719">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-244.858317955129,150.149998666594"
+              Start="0,0"
+              End="-244.858317955129,142.649998666594">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,94.638685255427" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,94.638685255427"
+                    Point2="0,98.638685255427"
+                    Point3="-4,98.638685255427" />
+                  <mssgle:LineSegment
+                    End="-240.858317955129,98.638685255427" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-240.858317955129,98.638685255427"
+                    Point2="-244.858317955129,98.638685255427"
+                    Point3="-244.858317955129,102.638685255427" />
+                  <mssgle:LineSegment
+                    End="-244.858317955129,142.649998666594" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
