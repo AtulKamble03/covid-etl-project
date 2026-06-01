@@ -130,7 +130,7 @@
 | Add Flat File Source → `FF_CompactCSV` | ✅ |
 | Add Conditional Split — filter `continent IS NULL` (DQ-03) → `Reject_Aggregates` | ✅ |
 | Add Sort — sort by `code` ASC, enable "Remove rows with duplicate sort values" | ✅ |
-| Add Data Conversion — population (→DT_I8), all others (→DT_R8 float) | 🔲 |
+| Add Data Conversion — population (→DT_I8), all others (→DT_R8 double-precision float) | ✅ |
 | Add OLE DB Destination → `dbo.dim_location`, map converted columns | 🔲 |
 | Add OLE DB Destination → `dbo.dq_rejected_rows` for reject path | 🔲 |
 | Run and verify — check row count in dim_location in SSMS | 🔲 |
