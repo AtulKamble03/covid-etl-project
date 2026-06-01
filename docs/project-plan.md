@@ -129,7 +129,7 @@
 | Add Data Flow Task to Control Flow, connect from `Generate dim_date` | ✅ |
 | Add Flat File Source → `FF_CompactCSV` | ✅ |
 | Add Conditional Split — filter `continent IS NULL` (DQ-03) → `Reject_Aggregates` | ✅ |
-| Add Sort — sort by `iso_code` ASC, enable "Remove rows with duplicate sort values" | 🔲 |
+| Add Sort — sort by `code` ASC, enable "Remove rows with duplicate sort values" | ✅ |
 | Add Data Conversion — population (→DT_I8), all others (→DT_R8 float) | 🔲 |
 | Add OLE DB Destination → `dbo.dim_location`, map converted columns | 🔲 |
 | Add OLE DB Destination → `dbo.dq_rejected_rows` for reject path | 🔲 |
