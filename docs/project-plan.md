@@ -259,7 +259,7 @@
 | Enable SQL Server Agent (Agent XPs enabled) | ✅ |
 | Create SQL Server Agent Job `COVID ETL Daily Load` | ✅ |
 | Fix: Change job owner from AzureAD account to `sa` | ✅ |
-| Set job schedule — Daily at 06:00 AM | ✅ |
+| Set job schedule — Daily at 14:00 (2:00 PM) | ✅ |
 | Test run — 2 Success, 0 Error, 0 Warning ✅ | ✅ |
 
 ---
