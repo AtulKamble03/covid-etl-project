@@ -116,6 +116,32 @@ Agent would log this as a job failure, visible in job history.
 
 ---
 
+### Test 4 — Date Gap in dim_date (CHECK 8)
+**Date:** 2026-06-02
+
+**Setup:** Deleted all fact rows for 2022-06-15, then deleted that date from dim_date.
+
+**Result:**
+| Field | Value |
+|---|---|
+| Overall Status | **FAIL** |
+| Critical Failures | 1 |
+| fact_covid_cases rows | 484,599 (152 rows removed for that date) |
+| fact_vaccination rows | 197,440 (217 rows removed) |
+| fact_hospitalization rows | 41,509 (34 rows removed) |
+| dim_date days | 2,344 (was 2,345 — 1 missing) |
+| CHECK 8 — Date Coverage Check | **FAIL**, Count: 1 |
+| Notes | "1 missing dates in dim_date — Script Task may have used wrong start date or IDENTITY not reseeded" |
+| All other critical checks | PASS |
+
+**Additional observation:** CHECK 1 (Load Summary) also surfaced the row count drops across all
+3 fact tables — providing an early signal even before CHECK 8 fires.
+
+**Outcome:** ✅ Verification correctly detected the date gap and surfaced fact row count drops.
+**Cleanup:** Pipeline auto-resolved — dim_date fully regenerated, facts reloaded.
+
+---
+
 ## PART 1 — Build Issues Encountered and Fixed
 
 ---
