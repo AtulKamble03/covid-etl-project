@@ -23,7 +23,7 @@ WITH weekly_cases AS (
     FROM dbo.fact_covid_cases f
     JOIN dbo.dim_location l ON l.location_id = f.location_id
     JOIN dbo.dim_date     d ON d.date_id     = f.date_id
-    WHERE l.continent <> '' AND l.continent IS NOT NULL
+    WHERE l.continent IS NOT NULL  -- blank continents excluded at source (DQ-03) and by DB CHECK constraint
     GROUP BY l.continent, d.year, d.week_number
 ),
 wow AS (
@@ -68,7 +68,7 @@ SELECT
 FROM dbo.dim_location l
 LEFT JOIN dbo.fact_covid_cases f ON f.location_id = l.location_id
 LEFT JOIN dbo.fact_vaccination v ON v.location_id = l.location_id
-WHERE l.continent <> '' AND l.continent IS NOT NULL
+WHERE l.continent IS NOT NULL  -- blank continents excluded at source (DQ-03) and by DB CHECK constraint
 GROUP BY l.country, l.continent, l.code, l.population, l.gdp_per_capita, l.median_age
 ORDER BY MAX(f.total_cases) DESC;
 GO
@@ -95,7 +95,7 @@ SELECT
 FROM dbo.fact_covid_cases f
 JOIN dbo.dim_location l ON l.location_id = f.location_id
 JOIN dbo.dim_date     d ON d.date_id     = f.date_id
-WHERE l.continent <> '' AND l.continent IS NOT NULL
+WHERE l.continent IS NOT NULL  -- blank continents excluded at source (DQ-03) and by DB CHECK constraint
   AND f.new_cases IS NOT NULL
 ORDER BY l.country, d.date;
 GO
@@ -114,7 +114,7 @@ SELECT
     COUNT(DISTINCT l.country)          AS countries_reporting
 FROM dbo.fact_covid_cases f
 JOIN dbo.dim_location l ON l.location_id = f.location_id
-WHERE l.continent <> '' AND l.continent IS NOT NULL
+WHERE l.continent IS NOT NULL  -- blank continents excluded at source (DQ-03) and by DB CHECK constraint
 GROUP BY l.continent
 ORDER BY SUM(f.new_cases) DESC;
 GO
@@ -143,7 +143,7 @@ FROM dbo.fact_covid_cases f
 JOIN dbo.dim_location l  ON l.location_id  = f.location_id
 JOIN dbo.dim_date     d  ON d.date_id      = f.date_id
 JOIN latest           lt ON lt.location_id = f.location_id
-WHERE l.continent <> '' AND l.continent IS NOT NULL
+WHERE l.continent IS NOT NULL  -- blank continents excluded at source (DQ-03) and by DB CHECK constraint
 GROUP BY l.country, l.continent, lt.latest_date
 HAVING MAX(f.total_cases) > 10000
 ORDER BY MAX(f.total_deaths) DESC;
@@ -174,7 +174,7 @@ SELECT
     END                                                                AS supply_priority
 FROM dbo.fact_vaccination v
 JOIN dbo.dim_location l ON l.location_id = v.location_id
-WHERE l.continent <> '' AND l.continent IS NOT NULL
+WHERE l.continent IS NOT NULL  -- blank continents excluded at source (DQ-03) and by DB CHECK constraint
 GROUP BY l.country, l.continent, l.population
 ORDER BY MAX(v.people_fully_vaccinated_per_hundred) ASC;
 GO
@@ -206,7 +206,7 @@ FROM dbo.fact_hospitalization h
 JOIN dbo.dim_location l  ON l.location_id  = h.location_id
 JOIN dbo.dim_date     d  ON d.date_id      = h.date_id
 JOIN latest_hosp      lh ON lh.location_id = h.location_id
-WHERE l.continent <> '' AND l.continent IS NOT NULL
+WHERE l.continent IS NOT NULL  -- blank continents excluded at source (DQ-03) and by DB CHECK constraint
   AND d.date = lh.latest_date
 GROUP BY l.country, l.continent, l.population, lh.latest_date
 ORDER BY MAX(h.daily_occupancy_icu_per_1m) DESC;
@@ -234,7 +234,7 @@ SELECT
     END                                               AS risk_signal
 FROM dbo.fact_covid_cases f
 JOIN dbo.dim_location l ON l.location_id = f.location_id
-WHERE l.continent <> '' AND l.continent IS NOT NULL
+WHERE l.continent IS NOT NULL  -- blank continents excluded at source (DQ-03) and by DB CHECK constraint
   AND f.new_tests_smoothed IS NOT NULL
 GROUP BY l.country, l.continent
 HAVING COUNT(CASE WHEN f.new_tests_smoothed IS NOT NULL THEN 1 END) > 30
