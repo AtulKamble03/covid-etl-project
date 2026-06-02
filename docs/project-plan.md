@@ -233,6 +233,40 @@ Full dashboard build parked for future — SQL queries in SSMS are the deliverab
 
 ---
 
+### Phase 4.5 — AI-Assisted ETL Development (Parked — Future)
+**Status: 🔲 Parked — pending tool selection**
+
+**Context:** BimlExpress (the free Biml compiler for Visual Studio) is not compatible with
+VS 2022. Team is evaluating which tool to use for AI/code-generated SSIS development.
+
+**Goals when resumed:**
+1. **Create a new SSIS data flow using Biml/AI** — generate a complete Data Flow Task
+   from a code definition rather than the VS drag-and-drop UI
+2. **Enhance existing reject row handling** — modify current fact flows to properly
+   stamp rejected rows with `source_file` and `rule_id` before writing to `dq_rejected_rows`
+   (currently rejected rows are dropped without being logged)
+3. **Demonstrate code-based vs UI-based ETL development** — compare build time,
+   maintainability, and readability of both approaches
+
+**Tools being evaluated:**
+- BimlExpress (free) — VS 2019 compatible, VS 2022 support unclear
+- EzAPI (open source .NET) — programmatic SSIS package generation
+- Microsoft.SqlServer.Dts.Runtime (C# direct) — no external tool needed
+- BimlStudio (paid) — full commercial Biml IDE
+
+**Reference artifacts already created:**
+- `ssis/fact_vaccination.biml` — complete Biml definition of the fact_vaccination flow
+  (demonstrates what Biml code looks like, can be compiled when tool is available)
+
+| Task | Done? |
+|---|---|
+| Write Biml for fact_vaccination as reference artifact | ✅ |
+| Evaluate and select Biml/AI tool with team | 🔲 |
+| Generate new SSIS flow using selected tool | 🔲 |
+| Add reject row stamping to existing fact flows | 🔲 |
+
+---
+
 ### Phase 5 — Migrate to Snowflake
 **Status: 🔲 Not Started**
 
