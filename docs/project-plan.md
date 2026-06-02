@@ -249,14 +249,18 @@
 ---
 
 ### Phase 6 — Schedule and Deploy (Bonus)
-**Status: 🔲 Not Started**
+**Status: ✅ Complete**
 
 | Task | Done? |
 |---|---|
-| Create SQL Server Agent job to run SSIS package daily | 🔲 |
-| Set job schedule — e.g. 6:00 AM daily (OWID publishes updates overnight) | 🔲 |
-| Configure job failure alert (email or Windows Event Log) | 🔲 |
-| (Optional) Deploy to Azure — Azure Data Factory or Azure SSIS IR | 🔲 |
+| Build .ispac file from Visual Studio | ✅ |
+| Create SSISDB catalog in SSMS | ✅ |
+| Deploy covid_etl project to SSISDB (/SSISDB/covid_etl/covid_etl) | ✅ |
+| Enable SQL Server Agent (Agent XPs enabled) | ✅ |
+| Create SQL Server Agent Job `COVID ETL Daily Load` | ✅ |
+| Fix: Change job owner from AzureAD account to `sa` | ✅ |
+| Set job schedule — Daily at 06:00 AM | ✅ |
+| Test run — 2 Success, 0 Error, 0 Warning ✅ | ✅ |
 
 ---
 
