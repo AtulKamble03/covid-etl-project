@@ -168,6 +168,48 @@ threshold). Required a second INSERT using sys.all_objects CROSS JOIN to reach 2
 
 ---
 
+### Test 6 — Orphan FK / Referential Integrity (CHECK 4)
+**Date:** 2026-06-02
+
+**Setup:** Disabled FK constraints, deleted Chad from dim_location, re-enabled constraints.
+Chad's fact rows across all 3 fact tables became orphaned (pointing to non-existent location_id).
+
+**Result:**
+| Field | Value |
+|---|---|
+| Overall Status | **FAIL** |
+| Critical Failures | 1 |
+| dim_location countries | 247 (was 248 — Chad deleted, visible in CHECK 1) |
+| CHECK 4 — Referential Integrity | **FAIL**, Count: 3,178 |
+| Notes | "Orphan FK rows found — dims may have reloaded with new identity values" |
+| All other critical checks | PASS |
+
+**Two checks signalled the problem:**
+1. CHECK 1 (Load Summary, informational) — dim_location=247 countries, early indicator
+2. CHECK 4 (Critical) — 3,178 orphan rows across all 3 fact tables, pipeline failed
+
+**Outcome:** ✅ Both Load Summary and Referential Integrity check surfaced the deleted country.
+**Cleanup:** Pipeline auto-resolved — dim_location fully reloaded from CSV restoring Chad.
+
+---
+
+## PART 3 — Final Test Summary
+
+| # | Test | Check Triggered | Status | Manual Cleanup? |
+|---|---|---|---|---|
+| 1a | NULL location_id | DB NOT NULL constraint | Blocked at DB level | N/A |
+| 1b | Invalid location_id | CHECK 4 Referential Integrity | ✅ FAIL detected | No — pipeline fixed |
+| 2 | Duplicate country+date | CHECK 3 Duplicate Key | ✅ FAIL detected | Yes — restore constraint |
+| 3 | Negative new_cases | CHECK 7 Negative Value | ✅ FAIL detected | No — pipeline fixed |
+| 4 | Date gap in dim_date | CHECK 8 Date Coverage | ✅ FAIL detected | No — pipeline fixed |
+| 5 | Rejection threshold | CHECK 10 Rejection Threshold | ✅ FAIL detected | Yes — delete fake rejects |
+| 6 | Deleted dim_location row | CHECK 4 Referential Integrity | ✅ FAIL detected | No — pipeline fixed |
+
+**All 6 designed failure scenarios correctly detected by usp_verify_etl_load.**
+**Verification framework is production-ready.**
+
+---
+
 ## PART 1 — Build Issues Encountered and Fixed
 
 ---
