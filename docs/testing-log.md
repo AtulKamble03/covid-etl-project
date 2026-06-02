@@ -4,6 +4,71 @@ This document captures every error encountered during the SSIS package build,
 the root cause, the fix applied, and the lesson learned. Also includes the
 designed failure scenarios for ongoing verification testing.
 
+> **Note on screenshots:** Screenshots were captured during live testing sessions.
+> Results are documented in text form below since screenshots cannot be stored
+> as files in this repo. All test results are reproducible by running the SQL
+> provided in PART 2.
+
+---
+
+## PART 0 — Verification SP Baseline Results (Clean Run)
+
+**Date:** 2026-06-02 | **Run by:** Atul Kamble | **Environment:** PG04CRRX / covid_dw
+
+**Executive Summary (clean run — all data freshly loaded):**
+
+| Field | Value |
+|---|---|
+| Overall Status | **PASS** |
+| Critical Failures | 0 |
+| fact_covid_cases rows | 484,751 |
+| fact_vaccination rows | 197,657 |
+| fact_hospitalization rows | 41,543 |
+| dim_location countries | 248 |
+| dim_date days | 2,345 (2020-01-01 to 2026-06-02) |
+
+**Full check results (clean run):**
+
+| # | Check | Status | Count | Key Note |
+|---|---|---|---|---|
+| 1 | Load Summary | PASS | 0 | dim_location=248 \| dim_date=2345 days |
+| 2 | Null Foreign Key Check | PASS | 0 | All FK columns populated |
+| 3 | Duplicate Key Check | PASS | 0 | No duplicates |
+| 4 | Referential Integrity | PASS | 0 | All FK references valid |
+| 5 | Aggregate Sanity | PASS | 0 | SUM(new_cases)=2,225,774,937 |
+| 6 | DQ Reject Audit | PASS | 0 | Total rejected rows: 0 |
+| 7 | Negative Value Check | PASS | 0 | No negative values |
+| 8 | Date Coverage Check | PASS | 0 | 2020-01-01 to 2026-06-02 — no gaps |
+| 9 | Monotonic Totals Check | WARN | 77 | 77 OWID historical corrections (expected) |
+| 10 | Rejection Threshold | PASS | 0 | fact_covid_cases=0.0% \| vacc=0.0% \| hosp=0.0% |
+| 11 | Soft Outlier Detection | PASS | 820 | OL-01: 301 days new_cases>1M \| OL-03: 519 rows |
+| 12 | Partition Health | PASS | 0 | P1=65,554 \| P2=51,421 \| P3=70,044 \| P4=89,144 \| P5=88,798 \| P6=88,330 \| P7=31,460 |
+
+---
+
+## PART 0b — Failure Test Results
+
+### Test 1 — Null FK (modified to Referential Integrity test)
+**Date:** 2026-06-02
+
+**Note:** Original Test 1 (NULL location_id) was blocked by the database NOT NULL constraint.
+This confirmed the DB constraint is working correctly as Layer 1 defence.
+
+**Modified test:** Inserted row with invalid location_id=99999 (bypassing FK via NOCHECK CONSTRAINT)
+
+**Result:**
+| Field | Value |
+|---|---|
+| Overall Status | **FAIL** |
+| Critical Failures | 1 |
+| fact_covid_cases rows | 484,752 (1 extra bad row) |
+| CHECK 4 — Referential Integrity | **FAIL**, Count: 1 |
+| Notes | "Orphan FK rows found — dims may have reloaded with new identity values" |
+| All other critical checks | PASS |
+
+**Outcome:** ✅ Verification correctly detected the orphan FK row and marked package FAIL.
+**Cleanup:** Re-run pipeline — TRUNCATE removed the bad row automatically.
+
 ---
 
 ## PART 1 — Build Issues Encountered and Fixed
