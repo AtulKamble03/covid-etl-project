@@ -142,6 +142,32 @@ Agent would log this as a job failure, visible in job history.
 
 ---
 
+### Test 5 — Rejection Threshold (CHECK 10)
+**Date:** 2026-06-02
+
+**Setup:** Inserted 27,891 fake rows into dq_rejected_rows (two INSERT batches needed —
+first batch only inserted 12,891 from sys.all_columns which gave 2.6%, below the 5% threshold.
+Second batch pushed total to 27,891 = 5.4%, exceeding the threshold).
+
+**Result:**
+| Field | Value |
+|---|---|
+| Overall Status | **FAIL** |
+| Critical Failures | 1 |
+| fact_covid_cases rows | 484,751 (unchanged — rejects only affect dq_rejected_rows) |
+| CHECK 6 — DQ Reject Audit | PASS, Count: 27,891 total rejected rows (informational) |
+| CHECK 10 — Rejection Threshold | **FAIL**, Count: 27,891 |
+| Notes | "fact_covid_cases: 5.4% rejected (limit 5%)" |
+| All other critical checks | PASS |
+
+**Note on first attempt:** sys.all_columns only had 12,891 rows on this machine (2.6% — below
+threshold). Required a second INSERT using sys.all_objects CROSS JOIN to reach 27,891 rows.
+
+**Outcome:** ✅ Verification correctly detected the 5.4% rejection rate exceeding the 5% limit.
+**Cleanup required (manual):** `DELETE FROM dbo.dq_rejected_rows WHERE reject_reason = 'Simulated rejection for threshold test';` — pipeline does NOT clear this table automatically.
+
+---
+
 ## PART 1 — Build Issues Encountered and Fixed
 
 ---
