@@ -206,29 +206,30 @@
 ---
 
 ### Phase 4 — Analytics and Dashboard
-**Status: 🔲 Not Started**
+**Status: 🔧 In Progress**
 
-**Pre-requisite:** Phase 3 complete — all 6 critical verification checks passing.
+**Pre-requisite:** Phase 3 complete ✅
 
 #### 4.1 — SQL Queries (SSMS)
-| Task | Done? |
-|---|---|
-| Write Report 1 — weekly continental summary with WoW % change | 🔲 |
-| Write Report 2 — geographic map view (cases/deaths/vaccinations per country) | 🔲 |
-| Write Report 3 — cases over time (7d, 28d, cumulative) | 🔲 |
-| Write Report 4 — continental aggregates (total cases per continent) | 🔲 |
-| Write Report 5 — deaths (7d, 28d, CFR by country) | 🔲 |
-| Write Report 6 — vaccination coverage, supply gaps, rolling trends | 🔲 |
-| Write Report 7 — hospitalisation and ICU occupancy | 🔲 |
-| Write Report 8 — testing (positivity rate, 7d smoothed) | 🔲 |
-| Save all queries to `sql/analytical_queries.sql` | 🔲 |
+All 8 report queries written and saved to `sql/analytical_queries.sql`.
+Run directly in SSMS against `covid_dw`.
 
-#### 4.2 — Dashboard
 | Task | Done? |
 |---|---|
-| Connect Power BI (or SSRS) to `covid_dw` on local SQL Server | 🔲 |
-| Build one visual per report | 🔲 |
-| Add slicers — Country, Continent, Date range | 🔲 |
+| Write all 8 report SQL queries | ✅ |
+| Save to `sql/analytical_queries.sql` | ✅ |
+
+#### 4.2 — Power BI Dashboard (parked — future phase)
+Connected Power BI Desktop to covid_dw, star schema relationships auto-detected.
+Built Report 3 (Cases Over Time line chart with continent slicer) as proof of concept.
+Full dashboard build parked for future — SQL queries in SSMS are the deliverable for now.
+
+| Task | Done? |
+|---|---|
+| Connect Power BI Desktop to `covid_dw` | ✅ |
+| Verify star schema relationships (all 6 auto-detected) | ✅ |
+| Build Report 3 — Cases Over Time line chart (proof of concept) | ✅ |
+| Full dashboard (all 8 reports) | 🔲 Future |
 
 ---
 
