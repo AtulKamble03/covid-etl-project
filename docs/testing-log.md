@@ -71,6 +71,31 @@ This confirmed the DB constraint is working correctly as Layer 1 defence.
 
 ---
 
+### Test 2 — Duplicate Key (CHECK 3)
+**Date:** 2026-06-02
+
+**Setup:** Dropped UNIQUE constraint on (location_id, date_id, record_year), inserted
+duplicate row for Afghanistan 2022-01-01.
+
+**Result:**
+| Field | Value |
+|---|---|
+| Overall Status | **FAIL** |
+| Critical Failures | 1 |
+| fact_covid_cases rows | 484,752 (1 extra duplicate row) |
+| CHECK 3 — Duplicate Key Check | **FAIL**, Count: 1 |
+| Notes | "Duplicate (location_id, date_id) combinations found" |
+| All other critical checks | PASS |
+
+**SSIS behaviour:** Post-Load Verification task showed **red X** in Control Flow —
+RAISERROR fired and SSIS marked the task as Failed. In a scheduled job, SQL Server
+Agent would log this as a job failure, visible in job history.
+
+**Outcome:** ✅ Verification correctly detected the duplicate and failed the pipeline.
+**Cleanup required:** Restore UNIQUE constraint manually, then re-run pipeline.
+
+---
+
 ## PART 1 — Build Issues Encountered and Fixed
 
 ---
