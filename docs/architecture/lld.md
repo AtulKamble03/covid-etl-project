@@ -543,7 +543,7 @@ Since `date` is already DT_DBDATE from FF_CompactCSV, no casting is needed for d
 |---|---|---|---|
 | `Reject_NullDate` | 1 | `ISNULL([date_conv])` | DQ-01 |
 | `Reject_FutureDate` | 2 | `[date_conv] > (DT_DBDATE)GETDATE()` | DQ-02 |
-| `Reject_NullContinent` | 3 | `ISNULL([continent]) \|\| [continent] == ""` | DQ-03 — catches both NULL and blank string continent (OWID aggregate rows use empty string, not NULL) |
+| `Reject_NullContinent` | 3 | `ISNULL([continent])` | DQ-03 |
 | `Reject_NegCases` | 4 | `!ISNULL([new_cases_conv]) && [new_cases_conv] < 0` | DQ-04 |
 | `Reject_NegDeaths` | 5 | `!ISNULL([new_deaths_conv]) && [new_deaths_conv] < 0` | DQ-05 |
 | `Reject_BadPosRate` | 6 | `!ISNULL([pos_rate_conv]) && [pos_rate_conv] > 1` | DQ-09 |

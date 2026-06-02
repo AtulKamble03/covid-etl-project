@@ -17,7 +17,7 @@ Data Conversion runs before the DQ Filter so that all filter expressions (`date 
 | DQ-CAST | Source value cannot be cast to target type (e.g., `"N/A"` in a numeric column, malformed date string) | All columns in Data Conversion | Data Conversion error output | Redirect row → `dq_rejected_rows` |
 | DQ-01 | `date` must not be null | `date` (DATE) | Conditional Split | Redirect row → `dq_rejected_rows` |
 | DQ-02 | `date` must not be in the future (`date > GETDATE()`) | `date` (DATE) | Conditional Split | Redirect row → `dq_rejected_rows` |
-| DQ-03 | `continent` must not be null OR empty string — `ISNULL([continent]) \|\| [continent] == ""` | `continent` | Conditional Split | Redirect row — removes OWID aggregate rows. NULL and empty string `""` both rejected. DB-level CHECK constraint also enforces this. |
+| DQ-03 | `continent` must not be null | `continent` | Conditional Split | Redirect row — removes all aggregate/non-country rows automatically |
 | DQ-04 | `new_cases` must not be negative | `new_cases` (FLOAT) | Conditional Split | Redirect row → `dq_rejected_rows` |
 | DQ-05 | `new_deaths` must not be negative | `new_deaths` (FLOAT) | Conditional Split | Redirect row → `dq_rejected_rows` |
 | DQ-06 | `total_cases` must never decrease day over day | `total_cases` | Post-load check | Flag as anomaly, log warning in `etl_verification_log` |
