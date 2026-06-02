@@ -96,6 +96,26 @@ Agent would log this as a job failure, visible in job history.
 
 ---
 
+### Test 3 — Negative Value (CHECK 7)
+**Date:** 2026-06-02
+
+**Setup:** Updated one row in fact_covid_cases to new_cases = -500 (simulating DQ-04 bypass).
+
+**Result:**
+| Field | Value |
+|---|---|
+| Overall Status | **FAIL** |
+| Critical Failures | 1 |
+| fact_covid_cases rows | 484,751 (same — UPDATE not INSERT) |
+| CHECK 7 — Negative Value Check | **FAIL**, Count: 1 |
+| Notes | "Negative metric values found — DQ-04/DQ-05 Conditional Split may not have fired" |
+| All other critical checks | PASS |
+
+**Outcome:** ✅ Verification correctly detected the negative value.
+**Cleanup:** Pipeline TRUNCATE auto-resolved — no manual step needed.
+
+---
+
 ## PART 1 — Build Issues Encountered and Fixed
 
 ---
