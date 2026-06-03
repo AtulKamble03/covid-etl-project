@@ -15648,6 +15648,24 @@ where [refTable].[country] = ?</property>
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
+      DTS:refId="Package\Cleanup Old Rejects"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Cleanup Old Rejects"
+      DTS:DTSID="{0E4F6F6A-8CB6-4895-8E5E-CC0E4EEA34EB}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Cleanup Old Rejects"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{B4D2B656-7381-45C9-B60C-6AAB9D7FC58B}"
+          SQLTask:SqlStatementSource="-- v2 Enhancement: Purge reject rows older than 30 days&#xA;-- Prevents dq_rejected_rows growing indefinitely across daily runs&#xA;DELETE FROM dbo.dq_rejected_rows&#xA;WHERE load_timestamp &lt; DATEADD(DAY, -30, GETDATE());" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+
+    <DTS:Executable
       DTS:refId="Package\Truncate All Facts"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Truncate All Facts"
@@ -15838,7 +15856,15 @@ where [refTable].[country] = ?</property>
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 9"
       DTS:To="Package\Load fact_hospitalization" />
-  </DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+        DTS:refId="Package.PrecedenceConstraints[Constraint]"
+        DTS:CreationName=""
+        DTS:DTSID="{F2299B22-DB89-4DEC-B5AC-9B2CADD40325}"
+        DTS:From="Package\Post-Load Verification"
+        DTS:LogicalAnd="True"
+        DTS:ObjectName="Constraint"
+        DTS:To="Package\Cleanup Old Rejects" />
+</DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
 <!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
 <!--If you manually edit this section and make a mistake, you can delete it. -->
