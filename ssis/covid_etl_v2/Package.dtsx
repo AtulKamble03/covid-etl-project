@@ -11258,11 +11258,12 @@ where [refTable].[date] = ?</property>
               </outputs>
             </component>
           
+            
             <component
               refId="Package\Load fact_covid_cases\Log Reject NullDate"
               componentClassID="Microsoft.OLEDBCommand"
               contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
-              description="Log rejected row to dq_rejected_rows"
+              description="Insert actual rejected row data into dq_rejected_rows"
               name="Log Reject NullDate"
               usesDispositions="true"
               version="2">
@@ -11272,7 +11273,7 @@ where [refTable].[date] = ?</property>
                   name="CommandTimeout">0</property>
                 <property
                   dataType="System.String"
-                  name="SqlCommand">INSERT INTO dbo.dq_rejected_rows (source_file, rule_id, reject_reason, load_timestamp) VALUES ('owid_covid_compact.csv', 'DQ-01', 'date IS NULL', GETDATE())</property>
+                  name="SqlCommand">INSERT INTO dbo.dq_rejected_rows (source_file, rule_id, raw_country, load_timestamp) VALUES ('owid_covid_compact.csv', 'DQ-01', ?, GETDATE())</property>
                 <property
                   dataType="System.Int32"
                   name="DefaultCodePage">1252</property>
@@ -11295,6 +11296,25 @@ where [refTable].[date] = ?</property>
                   errorRowDisposition="FailComponent"
                   hasSideEffects="true"
                   name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load fact_covid_cases\Log Reject NullDate.Inputs[OLE DB Command Input].Columns[country]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="country"
+                      externalMetadataColumnId="Package\Load fact_covid_cases\Log Reject NullDate.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      lineageId="Package\Load fact_covid_cases\Sort.Outputs[Sort Output].Columns[country]"
+                      parameterName="Param_0" />
+                  </inputColumns>
+                  <externalMetadataColumns>
+                    <externalMetadataColumn
+                      refId="Package\Load fact_covid_cases\Log Reject NullDate.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="Param_0" />
+                  </externalMetadataColumns>
                 </input>
               </inputs>
               <outputs>
