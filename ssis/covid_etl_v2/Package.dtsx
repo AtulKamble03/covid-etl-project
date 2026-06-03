@@ -12863,6 +12863,51 @@ where [refTable].[code] = ?</property>
                 </output>
               </outputs>
             </component>
+          
+            <component
+              refId="Package\Load fact_hospitalization\Log Reject LocationNotFound"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Log rows where country_code not found in dim_location"
+              name="Log Reject LocationNotFound"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="SqlCommand">INSERT INTO dbo.dq_rejected_rows (source_file, rule_id, reject_reason, raw_country, load_timestamp) VALUES ('hospital.csv', 'LOOKUP-LOC', 'country_code not found in dim_location', ?, GETDATE())</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+              </properties>
+              <connections>
+                <connection refId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[PG04CRRX.covid_dw]" connectionManagerRefId="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Insert" errorRowDisposition="FailComponent"
+                  hasSideEffects="true" name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn refId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input].Columns[country]"
+                      cachedCodepage="1252" cachedDataType="str" cachedLength="100" cachedName="country"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[country]" parameterName="Param_0" />
+                  </inputColumns>
+                  <externalMetadataColumns>
+                    <externalMetadataColumn refId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      codePage="1252" dataType="str" length="100" name="Param_0" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Outputs[OLE DB Command Error Output]"
+                  description="OLE DB Command Error Output" exclusionGroup="1" isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input]">
+                </output>
+              </outputs>
+            </component>
           </components>
           <paths>
             <path
@@ -12885,6 +12930,12 @@ where [refTable].[code] = ?</property>
               endId="Package\Load fact_hospitalization\Derived Column.Inputs[Derived Column Input]"
               name="Sort Output"
               startId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output]" />
+          
+            <path
+              refId="Package\Load fact_hospitalization.Paths[Hosp_LookupNoMatch_to_Log]"
+              endId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input]"
+              name="Hosp_LookupNoMatch_to_Log"
+              startId="Package\Load fact_hospitalization\Lookup.Outputs[Lookup No Match Output]" />
           </paths>
         </pipeline>
       </DTS:ObjectData>
@@ -15659,6 +15710,53 @@ where [refTable].[country] = ?</property>
                 </output>
               </outputs>
             </component>
+          
+            <component
+              refId="Package\Load fact_vaccination\Log Reject LocationNotFound"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Log rows where country not found in dim_location"
+              name="Log Reject LocationNotFound"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="SqlCommand">INSERT INTO dbo.dq_rejected_rows (source_file, rule_id, reject_reason, raw_country, load_timestamp) VALUES ('vaccinations_global.csv', 'LOOKUP-LOC', 'Country not found in dim_location', ?, GETDATE())</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+              </properties>
+              <connections>
+                <connection refId="Package\Load fact_vaccination\Log Reject LocationNotFound.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  connectionManagerRefId="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input refId="Package\Load fact_vaccination\Log Reject LocationNotFound.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Insert" errorRowDisposition="FailComponent"
+                  hasSideEffects="true" name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn refId="Package\Load fact_vaccination\Log Reject LocationNotFound.Inputs[OLE DB Command Input].Columns[country]"
+                      cachedCodepage="1252" cachedDataType="str" cachedLength="100" cachedName="country"
+                      externalMetadataColumnId="Package\Load fact_vaccination\Log Reject LocationNotFound.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      lineageId="Package\Load fact_vaccination\Sort.Outputs[Sort Output].Columns[country]"
+                      parameterName="Param_0" />
+                  </inputColumns>
+                  <externalMetadataColumns>
+                    <externalMetadataColumn refId="Package\Load fact_vaccination\Log Reject LocationNotFound.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      codePage="1252" dataType="str" length="100" name="Param_0" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output refId="Package\Load fact_vaccination\Log Reject LocationNotFound.Outputs[OLE DB Command Error Output]"
+                  description="OLE DB Command Error Output" exclusionGroup="1" isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\Load fact_vaccination\Log Reject LocationNotFound.Inputs[OLE DB Command Input]">
+                </output>
+              </outputs>
+            </component>
           </components>
           <paths>
             <path
@@ -15681,6 +15779,12 @@ where [refTable].[country] = ?</property>
               endId="Package\Load fact_vaccination\Derived Column.Inputs[Derived Column Input]"
               name="Sort Output"
               startId="Package\Load fact_vaccination\Sort.Outputs[Sort Output]" />
+          
+            <path
+              refId="Package\Load fact_vaccination.Paths[Vacc_LookupNoMatch_to_Log]"
+              endId="Package\Load fact_vaccination\Log Reject LocationNotFound.Inputs[OLE DB Command Input]"
+              name="Vacc_LookupNoMatch_to_Log"
+              startId="Package\Load fact_vaccination\Lookup.Outputs[Lookup No Match Output]" />
           </paths>
         </pipeline>
       </DTS:ObjectData>
