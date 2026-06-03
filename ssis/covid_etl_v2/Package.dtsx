@@ -11257,6 +11257,57 @@ where [refTable].[date] = ?</property>
                 </output>
               </outputs>
             </component>
+          
+            <component
+              refId="Package\Load fact_covid_cases\Log Reject NullDate"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Log rejected row to dq_rejected_rows"
+              name="Log Reject NullDate"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  name="SqlCommand">INSERT INTO dbo.dq_rejected_rows (source_file, rule_id, reject_reason, load_timestamp) VALUES ('owid_covid_compact.csv', 'DQ-01', 'date IS NULL', GETDATE())</property>
+                <property
+                  dataType="System.Int32"
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  name="AlwaysUseDefaultCodePage">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load fact_covid_cases\Log Reject NullDate.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  connectionManagerRefId="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load fact_covid_cases\Log Reject NullDate.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Command Input">
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load fact_covid_cases\Log Reject NullDate.Outputs[OLE DB Command Error Output]"
+                  description="OLE DB Command Error Output"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\Load fact_covid_cases\Log Reject NullDate.Inputs[OLE DB Command Input]">
+                </output>
+              </outputs>
+            </component>
           </components>
           <paths>
             <path
@@ -11289,6 +11340,12 @@ where [refTable].[date] = ?</property>
               endId="Package\Load fact_covid_cases\Derived Column.Inputs[Derived Column Input]"
               name="Sort Output"
               startId="Package\Load fact_covid_cases\Sort.Outputs[Sort Output]" />
+          
+            <path
+              refId="Package\Load fact_covid_cases.Paths[Reject_NullDate_to_Log]"
+              endId="Package\Load fact_covid_cases\Log Reject NullDate.Inputs[OLE DB Command Input]"
+              name="Reject_NullDate_to_Log"
+              startId="Package\Load fact_covid_cases\Conditional Split.Outputs[Reject_NullDate]" />
           </paths>
         </pipeline>
       </DTS:ObjectData>
