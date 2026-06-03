@@ -233,8 +233,8 @@ Full dashboard build parked for future — SQL queries in SSMS are the deliverab
 
 ---
 
-### Phase 4.5 — AI-Assisted ETL Development (Parked — Future)
-**Status: 🔲 Parked — pending tool selection**
+### Phase 4.5 — Code-Based SSIS Modification (covid_etl_v2)
+**Status: ✅ Complete**
 
 **Context:** BimlExpress (the free Biml compiler for Visual Studio) is not compatible with
 VS 2022. Team is evaluating which tool to use for AI/code-generated SSIS development.
@@ -261,9 +261,13 @@ VS 2022. Team is evaluating which tool to use for AI/code-generated SSIS develop
 | Task | Done? |
 |---|---|
 | Write Biml for fact_vaccination as reference artifact | ✅ |
-| Evaluate and select Biml/AI tool with team | 🔲 |
-| Generate new SSIS flow using selected tool | 🔲 |
-| Add reject row stamping to existing fact flows | 🔲 |
+| Duplicate covid_etl → covid_etl_v2 (safe copy for experimentation) | ✅ |
+| Add Cleanup Old Rejects Execute SQL Task via XML code | ✅ |
+| Add Log Reject Summary Execute SQL Task via XML code | ✅ |
+| Add Log Reject NullContinent OLE DB Command to fact_covid_cases Data Flow via XML | ✅ |
+| Add Log Reject LocationNotFound to fact_vaccination via XML | ✅ |
+| Add Log Reject LocationNotFound to fact_hospitalization via XML | ✅ |
+| v2 runs successfully — all 3 fact tables load, reject logging active | ✅ |
 
 ---
 

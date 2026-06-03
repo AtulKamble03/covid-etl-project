@@ -11,8 +11,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package"
   DTS:PackageType="5"
-  DTS:VersionBuild="93"
-  DTS:VersionGUID="{E29E54A3-BCC3-4AAE-8B92-C5B70A86C575}">
+  DTS:VersionBuild="94"
+  DTS:VersionGUID="{D48D21AA-0793-4A89-96D2-CE68E76A8151}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -998,6 +998,23 @@
   <DTS:Variables />
   <DTS:Executables>
     <DTS:Executable
+      DTS:refId="Package\Cleanup Old Rejects"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Cleanup Old Rejects"
+      DTS:DTSID="{638B31DD-EE23-4E9F-9DF7-2C3D407AA9F1}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Cleanup Old Rejects"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{B4D2B656-7381-45C9-B60C-6AAB9D7FC58B}"
+          SQLTask:SqlStatementSource="DELETE FROM dbo.dq_rejected_rows WHERE load_timestamp &lt; DATEADD(DAY, -30, GETDATE());" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
       DTS:refId="Package\Delete dim_location"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Delete dim_location"
@@ -1031,14 +1048,35 @@
           VSTAMinorVersion="0"
           Language="CSharp">
           <ProjectItem
-            Name="Properties\Settings.settings"
-            Encoding="UTF8"><![CDATA[<?xml version='1.0' encoding='iso-8859-1'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
-</SettingsFile>]]></ProjectItem>
+            Name="Properties\AssemblyInfo.cs"
+            Encoding="UTF8"><![CDATA[using System.Reflection;
+using System.Runtime.CompilerServices;
+
+//
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+//
+[assembly: AssemblyTitle("ST_e3f2f33fb7b54f9dba01ee42d08e5483")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("ST_e3f2f33fb7b54f9dba01ee42d08e5483")]
+[assembly: AssemblyCopyright("Copyright @  2026")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+//
+// Version information for an assembly consists of the following four values:
+//
+//      Major Version
+//      Minor Version 
+//      Build Number
+//      Revision
+//
+// You can specify all the values or you can default the Revision and Build Numbers 
+// by using the '*' as shown below:
+
+[assembly: AssemblyVersion("1.0.*")]]]></ProjectItem>
           <ProjectItem
             Name="Properties\Resources.resx"
             Encoding="UTF8"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
@@ -1368,35 +1406,14 @@ namespace ST_e3f2f33fb7b54f9dba01ee42d08e5483.Properties {
     }
 }]]></ProjectItem>
           <ProjectItem
-            Name="Properties\AssemblyInfo.cs"
-            Encoding="UTF8"><![CDATA[using System.Reflection;
-using System.Runtime.CompilerServices;
-
-//
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-//
-[assembly: AssemblyTitle("ST_e3f2f33fb7b54f9dba01ee42d08e5483")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ST_e3f2f33fb7b54f9dba01ee42d08e5483")]
-[assembly: AssemblyCopyright("Copyright @  2026")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-//
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Revision and Build Numbers 
-// by using the '*' as shown below:
-
-[assembly: AssemblyVersion("1.0.*")]]]></ProjectItem>
+            Name="Properties\Settings.settings"
+            Encoding="UTF8"><![CDATA[<?xml version='1.0' encoding='iso-8859-1'?>
+<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
+  <Profiles>
+    <Profile Name="(Default)" />
+  </Profiles>
+  <Settings />
+</SettingsFile>]]></ProjectItem>
           <ProjectItem
             Name="Properties\Resources.Designer.cs"
             Encoding="UTF8"><![CDATA[//------------------------------------------------------------------------------
@@ -8624,6 +8641,75 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</BinaryItem>
               </outputs>
             </component>
             <component
+              refId="Package\Load fact_covid_cases\Log Reject NullContinent"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Log DQ-03 rejected rows to dq_rejected_rows"
+              name="Log Reject NullContinent"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  name="SqlCommand">INSERT INTO dbo.dq_rejected_rows (source_file, rule_id, reject_reason, raw_country, load_timestamp) VALUES ('owid_covid_compact.csv', 'DQ-03', 'continent IS NULL - OWID aggregate row', ?, GETDATE())</property>
+                <property
+                  dataType="System.Int32"
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  name="AlwaysUseDefaultCodePage">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load fact_covid_cases\Log Reject NullContinent.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  connectionManagerRefId="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load fact_covid_cases\Log Reject NullContinent.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load fact_covid_cases\Log Reject NullContinent.Inputs[OLE DB Command Input].Columns[country]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="country"
+                      externalMetadataColumnId="Package\Load fact_covid_cases\Log Reject NullContinent.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      lineageId="Package\Load fact_covid_cases\Sort.Outputs[Sort Output].Columns[country]" />
+                  </inputColumns>
+                  <externalMetadataColumns>
+                    <externalMetadataColumn
+                      refId="Package\Load fact_covid_cases\Log Reject NullContinent.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="Param_0" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load fact_covid_cases\Log Reject NullContinent.Outputs[OLE DB Command Error Output]"
+                  description="OLE DB Command Error Output"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\Load fact_covid_cases\Log Reject NullContinent.Inputs[OLE DB Command Input]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
               refId="Package\Load fact_covid_cases\Lookup"
               componentClassID="Microsoft.Lookup"
               contactInfo="Lookup;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;6"
@@ -11257,55 +11343,6 @@ where [refTable].[date] = ?</property>
                 </output>
               </outputs>
             </component>
-          
-            <component
-              refId="Package\Load fact_covid_cases\Log Reject NullContinent"
-              componentClassID="Microsoft.OLEDBCommand"
-              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
-              description="Log DQ-03 rejected rows to dq_rejected_rows"
-              name="Log Reject NullContinent"
-              usesDispositions="true"
-              version="2">
-              <properties>
-                <property dataType="System.Int32" name="CommandTimeout">0</property>
-                <property dataType="System.String" name="SqlCommand">INSERT INTO dbo.dq_rejected_rows (source_file, rule_id, reject_reason, raw_country, load_timestamp) VALUES ('owid_covid_compact.csv', 'DQ-03', 'continent IS NULL - OWID aggregate row', ?, GETDATE())</property>
-                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
-                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
-              </properties>
-              <connections>
-                <connection refId="Package\Load fact_covid_cases\Log Reject NullContinent.Connections[OleDbConnection]"
-                  connectionManagerID="Package.ConnectionManagers[PG04CRRX.covid_dw]"
-                  connectionManagerRefId="Package.ConnectionManagers[PG04CRRX.covid_dw]"
-                  description="The OLE DB runtime connection used to access the database."
-                  name="OleDbConnection" />
-              </connections>
-              <inputs>
-                <input refId="Package\Load fact_covid_cases\Log Reject NullContinent.Inputs[OLE DB Command Input]"
-                  errorOrTruncationOperation="Insert"
-                  errorRowDisposition="FailComponent"
-                  hasSideEffects="true"
-                  name="OLE DB Command Input">
-                  <inputColumns>
-                    <inputColumn refId="Package\Load fact_covid_cases\Log Reject NullContinent.Inputs[OLE DB Command Input].Columns[country]"
-                      cachedCodepage="1252" cachedDataType="str" cachedLength="100" cachedName="country"
-                      externalMetadataColumnId="Package\Load fact_covid_cases\Log Reject NullContinent.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
-                      lineageId="Package\Load fact_covid_cases\Sort.Outputs[Sort Output].Columns[country]"
-                      parameterName="Param_0" />
-                  </inputColumns>
-                  <externalMetadataColumns>
-                    <externalMetadataColumn refId="Package\Load fact_covid_cases\Log Reject NullContinent.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
-                      codePage="1252" dataType="str" length="100" name="Param_0" />
-                  </externalMetadataColumns>
-                </input>
-              </inputs>
-              <outputs>
-                <output refId="Package\Load fact_covid_cases\Log Reject NullContinent.Outputs[OLE DB Command Error Output]"
-                  description="OLE DB Command Error Output" exclusionGroup="1" isErrorOut="true"
-                  name="OLE DB Command Error Output"
-                  synchronousInputId="Package\Load fact_covid_cases\Log Reject NullContinent.Inputs[OLE DB Command Input]">
-                </output>
-              </outputs>
-            </component>
           </components>
           <paths>
             <path
@@ -11334,16 +11371,15 @@ where [refTable].[date] = ?</property>
               name="Lookup Match Output"
               startId="Package\Load fact_covid_cases\Lookup 1.Outputs[Lookup Match Output]" />
             <path
-              refId="Package\Load fact_covid_cases.Paths[Sort Output]"
-              endId="Package\Load fact_covid_cases\Derived Column.Inputs[Derived Column Input]"
-              name="Sort Output"
-              startId="Package\Load fact_covid_cases\Sort.Outputs[Sort Output]" />
-          
-            <path
               refId="Package\Load fact_covid_cases.Paths[Reject_NullContinent_to_Log]"
               endId="Package\Load fact_covid_cases\Log Reject NullContinent.Inputs[OLE DB Command Input]"
               name="Reject_NullContinent_to_Log"
               startId="Package\Load fact_covid_cases\Conditional Split.Outputs[Reject_NullContinent]" />
+            <path
+              refId="Package\Load fact_covid_cases.Paths[Sort Output]"
+              endId="Package\Load fact_covid_cases\Derived Column.Inputs[Derived Column Input]"
+              name="Sort Output"
+              startId="Package\Load fact_covid_cases\Sort.Outputs[Sort Output]" />
           </paths>
         </pipeline>
       </DTS:ObjectData>
@@ -12084,6 +12120,75 @@ where [refTable].[date] = ?</property>
                       name="ErrorColumn"
                       specialFlags="2" />
                   </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load fact_hospitalization\Log Reject LocationNotFound"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Log rows where country_code not found in dim_location"
+              name="Log Reject LocationNotFound"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  name="SqlCommand">INSERT INTO dbo.dq_rejected_rows (source_file, rule_id, reject_reason, raw_country, load_timestamp) VALUES ('hospital.csv', 'LOOKUP-LOC', 'country_code not found in dim_location', ?, GETDATE())</property>
+                <property
+                  dataType="System.Int32"
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  name="AlwaysUseDefaultCodePage">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  connectionManagerRefId="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input].Columns[country]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="country"
+                      externalMetadataColumnId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[country]" />
+                  </inputColumns>
+                  <externalMetadataColumns>
+                    <externalMetadataColumn
+                      refId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="Param_0" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Outputs[OLE DB Command Error Output]"
+                  description="OLE DB Command Error Output"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input]">
                   <externalMetadataColumns />
                 </output>
               </outputs>
@@ -12863,51 +12968,6 @@ where [refTable].[code] = ?</property>
                 </output>
               </outputs>
             </component>
-          
-            <component
-              refId="Package\Load fact_hospitalization\Log Reject LocationNotFound"
-              componentClassID="Microsoft.OLEDBCommand"
-              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
-              description="Log rows where country_code not found in dim_location"
-              name="Log Reject LocationNotFound"
-              usesDispositions="true"
-              version="2">
-              <properties>
-                <property dataType="System.Int32" name="CommandTimeout">0</property>
-                <property dataType="System.String" name="SqlCommand">INSERT INTO dbo.dq_rejected_rows (source_file, rule_id, reject_reason, raw_country, load_timestamp) VALUES ('hospital.csv', 'LOOKUP-LOC', 'country_code not found in dim_location', ?, GETDATE())</property>
-                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
-                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
-              </properties>
-              <connections>
-                <connection refId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Connections[OleDbConnection]"
-                  connectionManagerID="Package.ConnectionManagers[PG04CRRX.covid_dw]" connectionManagerRefId="Package.ConnectionManagers[PG04CRRX.covid_dw]"
-                  description="The OLE DB runtime connection used to access the database."
-                  name="OleDbConnection" />
-              </connections>
-              <inputs>
-                <input refId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input]"
-                  errorOrTruncationOperation="Insert" errorRowDisposition="FailComponent"
-                  hasSideEffects="true" name="OLE DB Command Input">
-                  <inputColumns>
-                    <inputColumn refId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input].Columns[country]"
-                      cachedCodepage="1252" cachedDataType="str" cachedLength="100" cachedName="country"
-                      externalMetadataColumnId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
-                      lineageId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output].Columns[country]" parameterName="Param_0" />
-                  </inputColumns>
-                  <externalMetadataColumns>
-                    <externalMetadataColumn refId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
-                      codePage="1252" dataType="str" length="100" name="Param_0" />
-                  </externalMetadataColumns>
-                </input>
-              </inputs>
-              <outputs>
-                <output refId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Outputs[OLE DB Command Error Output]"
-                  description="OLE DB Command Error Output" exclusionGroup="1" isErrorOut="true"
-                  name="OLE DB Command Error Output"
-                  synchronousInputId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input]">
-                </output>
-              </outputs>
-            </component>
           </components>
           <paths>
             <path
@@ -12921,6 +12981,11 @@ where [refTable].[code] = ?</property>
               name="Flat File Source Output"
               startId="Package\Load fact_hospitalization\Flat File Source.Outputs[Flat File Source Output]" />
             <path
+              refId="Package\Load fact_hospitalization.Paths[Hosp_LookupNoMatch_to_Log]"
+              endId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input]"
+              name="Hosp_LookupNoMatch_to_Log"
+              startId="Package\Load fact_hospitalization\Lookup.Outputs[Lookup No Match Output]" />
+            <path
               refId="Package\Load fact_hospitalization.Paths[Lookup Match Output]"
               endId="Package\Load fact_hospitalization\OLE DB Destination.Inputs[OLE DB Destination Input]"
               name="Lookup Match Output"
@@ -12930,12 +12995,6 @@ where [refTable].[code] = ?</property>
               endId="Package\Load fact_hospitalization\Derived Column.Inputs[Derived Column Input]"
               name="Sort Output"
               startId="Package\Load fact_hospitalization\Sort.Outputs[Sort Output]" />
-          
-            <path
-              refId="Package\Load fact_hospitalization.Paths[Hosp_LookupNoMatch_to_Log]"
-              endId="Package\Load fact_hospitalization\Log Reject LocationNotFound.Inputs[OLE DB Command Input]"
-              name="Hosp_LookupNoMatch_to_Log"
-              startId="Package\Load fact_hospitalization\Lookup.Outputs[Lookup No Match Output]" />
           </paths>
         </pipeline>
       </DTS:ObjectData>
@@ -14296,6 +14355,75 @@ where [refTable].[code] = ?</property>
                       name="ErrorColumn"
                       specialFlags="2" />
                   </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load fact_vaccination\Log Reject LocationNotFound"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Log rows where country not found in dim_location"
+              name="Log Reject LocationNotFound"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  name="SqlCommand">INSERT INTO dbo.dq_rejected_rows (source_file, rule_id, reject_reason, raw_country, load_timestamp) VALUES ('vaccinations_global.csv', 'LOOKUP-LOC', 'Country not found in dim_location', ?, GETDATE())</property>
+                <property
+                  dataType="System.Int32"
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  name="AlwaysUseDefaultCodePage">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load fact_vaccination\Log Reject LocationNotFound.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  connectionManagerRefId="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load fact_vaccination\Log Reject LocationNotFound.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load fact_vaccination\Log Reject LocationNotFound.Inputs[OLE DB Command Input].Columns[country]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="country"
+                      externalMetadataColumnId="Package\Load fact_vaccination\Log Reject LocationNotFound.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      lineageId="Package\Load fact_vaccination\Sort.Outputs[Sort Output].Columns[country]" />
+                  </inputColumns>
+                  <externalMetadataColumns>
+                    <externalMetadataColumn
+                      refId="Package\Load fact_vaccination\Log Reject LocationNotFound.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="Param_0" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load fact_vaccination\Log Reject LocationNotFound.Outputs[OLE DB Command Error Output]"
+                  description="OLE DB Command Error Output"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\Load fact_vaccination\Log Reject LocationNotFound.Inputs[OLE DB Command Input]">
                   <externalMetadataColumns />
                 </output>
               </outputs>
@@ -15710,53 +15838,6 @@ where [refTable].[country] = ?</property>
                 </output>
               </outputs>
             </component>
-          
-            <component
-              refId="Package\Load fact_vaccination\Log Reject LocationNotFound"
-              componentClassID="Microsoft.OLEDBCommand"
-              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
-              description="Log rows where country not found in dim_location"
-              name="Log Reject LocationNotFound"
-              usesDispositions="true"
-              version="2">
-              <properties>
-                <property dataType="System.Int32" name="CommandTimeout">0</property>
-                <property dataType="System.String" name="SqlCommand">INSERT INTO dbo.dq_rejected_rows (source_file, rule_id, reject_reason, raw_country, load_timestamp) VALUES ('vaccinations_global.csv', 'LOOKUP-LOC', 'Country not found in dim_location', ?, GETDATE())</property>
-                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
-                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
-              </properties>
-              <connections>
-                <connection refId="Package\Load fact_vaccination\Log Reject LocationNotFound.Connections[OleDbConnection]"
-                  connectionManagerID="Package.ConnectionManagers[PG04CRRX.covid_dw]"
-                  connectionManagerRefId="Package.ConnectionManagers[PG04CRRX.covid_dw]"
-                  description="The OLE DB runtime connection used to access the database."
-                  name="OleDbConnection" />
-              </connections>
-              <inputs>
-                <input refId="Package\Load fact_vaccination\Log Reject LocationNotFound.Inputs[OLE DB Command Input]"
-                  errorOrTruncationOperation="Insert" errorRowDisposition="FailComponent"
-                  hasSideEffects="true" name="OLE DB Command Input">
-                  <inputColumns>
-                    <inputColumn refId="Package\Load fact_vaccination\Log Reject LocationNotFound.Inputs[OLE DB Command Input].Columns[country]"
-                      cachedCodepage="1252" cachedDataType="str" cachedLength="100" cachedName="country"
-                      externalMetadataColumnId="Package\Load fact_vaccination\Log Reject LocationNotFound.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
-                      lineageId="Package\Load fact_vaccination\Sort.Outputs[Sort Output].Columns[country]"
-                      parameterName="Param_0" />
-                  </inputColumns>
-                  <externalMetadataColumns>
-                    <externalMetadataColumn refId="Package\Load fact_vaccination\Log Reject LocationNotFound.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
-                      codePage="1252" dataType="str" length="100" name="Param_0" />
-                  </externalMetadataColumns>
-                </input>
-              </inputs>
-              <outputs>
-                <output refId="Package\Load fact_vaccination\Log Reject LocationNotFound.Outputs[OLE DB Command Error Output]"
-                  description="OLE DB Command Error Output" exclusionGroup="1" isErrorOut="true"
-                  name="OLE DB Command Error Output"
-                  synchronousInputId="Package\Load fact_vaccination\Log Reject LocationNotFound.Inputs[OLE DB Command Input]">
-                </output>
-              </outputs>
-            </component>
           </components>
           <paths>
             <path
@@ -15779,7 +15860,6 @@ where [refTable].[country] = ?</property>
               endId="Package\Load fact_vaccination\Derived Column.Inputs[Derived Column Input]"
               name="Sort Output"
               startId="Package\Load fact_vaccination\Sort.Outputs[Sort Output]" />
-          
             <path
               refId="Package\Load fact_vaccination.Paths[Vacc_LookupNoMatch_to_Log]"
               endId="Package\Load fact_vaccination\Log Reject LocationNotFound.Inputs[OLE DB Command Input]"
@@ -15787,40 +15867,6 @@ where [refTable].[country] = ?</property>
               startId="Package\Load fact_vaccination\Lookup.Outputs[Lookup No Match Output]" />
           </paths>
         </pipeline>
-      </DTS:ObjectData>
-    </DTS:Executable>
-    <DTS:Executable
-      DTS:refId="Package\Post-Load Verification"
-      DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Post-Load Verification"
-      DTS:DTSID="{BA0926B1-00C7-461A-BB2E-83AEE3573BF4}"
-      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-      DTS:LocaleID="-1"
-      DTS:ObjectName="Post-Load Verification"
-      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="0">
-      <DTS:Variables />
-      <DTS:ObjectData>
-        <SQLTask:SqlTaskData
-          SQLTask:Connection="{B4D2B656-7381-45C9-B60C-6AAB9D7FC58B}"
-          SQLTask:SqlStatementSource="EXEC dbo.usp_verify_etl_load;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
-      </DTS:ObjectData>
-    </DTS:Executable>
-    <DTS:Executable
-      DTS:refId="Package\Cleanup Old Rejects"
-      DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Cleanup Old Rejects"
-      DTS:DTSID="{638B31DD-EE23-4E9F-9DF7-2C3D407AA9F1}"
-      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-      DTS:LocaleID="-1"
-      DTS:ObjectName="Cleanup Old Rejects"
-      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="0">
-      <DTS:Variables />
-      <DTS:ObjectData>
-        <SQLTask:SqlTaskData
-          SQLTask:Connection="{B4D2B656-7381-45C9-B60C-6AAB9D7FC58B}"
-          SQLTask:SqlStatementSource="DELETE FROM dbo.dq_rejected_rows WHERE load_timestamp &lt; DATEADD(DAY, -30, GETDATE());" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
@@ -15838,6 +15884,23 @@ where [refTable].[country] = ?</property>
         <SQLTask:SqlTaskData
           SQLTask:Connection="{B4D2B656-7381-45C9-B60C-6AAB9D7FC58B}"
           SQLTask:SqlStatementSource="INSERT INTO dbo.etl_verification_log (check_id, check_name, status, failure_count, notes) SELECT 99, 'Reject Row Summary', 'INFO', COUNT(*), CONCAT('Rejected rows today: ', CAST(COUNT(*) AS NVARCHAR(20))) FROM dbo.dq_rejected_rows WHERE CAST(load_timestamp AS DATE) = CAST(GETDATE() AS DATE);" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Post-Load Verification"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Post-Load Verification"
+      DTS:DTSID="{BA0926B1-00C7-461A-BB2E-83AEE3573BF4}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Post-Load Verification"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{B4D2B656-7381-45C9-B60C-6AAB9D7FC58B}"
+          SQLTask:SqlStatementSource="EXEC dbo.usp_verify_etl_load;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
@@ -15883,7 +15946,7 @@ where [refTable].[country] = ?</property>
       DTS:LocaleID="-1"
       DTS:ObjectName="Truncate fact_covid_cases"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="0">
+      DTS:ThreadHint="2">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -15900,7 +15963,7 @@ where [refTable].[country] = ?</property>
       DTS:LocaleID="-1"
       DTS:ObjectName="Truncate fact_hospitalization"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="1">
+      DTS:ThreadHint="0">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -15917,7 +15980,7 @@ where [refTable].[country] = ?</property>
       DTS:LocaleID="-1"
       DTS:ObjectName="Truncate fact_vaccination"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="2">
+      DTS:ThreadHint="1">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -15927,6 +15990,14 @@ where [refTable].[country] = ?</property>
     </DTS:Executable>
   </DTS:Executables>
   <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Cleanup_to_Log]"
+      DTS:CreationName=""
+      DTS:DTSID="{48F290CF-E07D-4652-9D28-D14F424A525A}"
+      DTS:From="Package\Cleanup Old Rejects"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Cleanup_to_Log"
+      DTS:To="Package\Log Reject Summary" />
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint]"
       DTS:CreationName=""
@@ -16031,23 +16102,15 @@ where [refTable].[country] = ?</property>
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 9"
       DTS:To="Package\Load fact_hospitalization" />
-        <DTS:PrecedenceConstraint
-        DTS:refId="Package.PrecedenceConstraints[PLV_to_Cleanup]"
-        DTS:CreationName=""
-        DTS:DTSID="{A566D607-B4C0-4A66-BD8A-F7CD21E1A7D9}"
-        DTS:From="Package\Post-Load Verification"
-        DTS:LogicalAnd="True"
-        DTS:ObjectName="PLV_to_Cleanup"
-        DTS:To="Package\Cleanup Old Rejects" />
-      <DTS:PrecedenceConstraint
-        DTS:refId="Package.PrecedenceConstraints[Cleanup_to_Log]"
-        DTS:CreationName=""
-        DTS:DTSID="{48F290CF-E07D-4652-9D28-D14F424A525A}"
-        DTS:From="Package\Cleanup Old Rejects"
-        DTS:LogicalAnd="True"
-        DTS:ObjectName="Cleanup_to_Log"
-        DTS:To="Package\Log Reject Summary" />
-</DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[PLV_to_Cleanup]"
+      DTS:CreationName=""
+      DTS:DTSID="{A566D607-B4C0-4A66-BD8A-F7CD21E1A7D9}"
+      DTS:From="Package\Post-Load Verification"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="PLV_to_Cleanup"
+      DTS:To="Package\Cleanup Old Rejects" />
+  </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
 <!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
 <!--If you manually edit this section and make a mistake, you can delete it. -->
@@ -16061,67 +16124,75 @@ where [refTable].[country] = ?</property>
       <GraphLayout
         Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
+          Size="173.6,41.6"
+          Id="Package\Cleanup Old Rejects"
+          TopLeft="252.7,818.299999999999" />
+        <NodeLayout
           Size="164.8,41.6"
           Id="Package\Delete dim_location"
-          TopLeft="114.666660702063,177.966665467355" />
+          TopLeft="256.1,310.3" />
         <NodeLayout
           Size="167.2,41.6"
           Id="Package\Generate dim_date"
-          TopLeft="359.999980330468,77.9999994575978" />
+          TopLeft="254.9,208.7" />
         <NodeLayout
           Size="163.2,41.6"
           Id="Package\Load dim_location"
-          TopLeft="339.166648135417,178.533332091834" />
+          TopLeft="256.9,411.9" />
         <NodeLayout
           Size="184,41.6"
           Id="Package\Load fact_covid_cases"
-          TopLeft="79.7916623070423,369.633330762949" />
+          TopLeft="5.50000000000011,615.1" />
         <NodeLayout
           Size="192.8,41.6"
           Id="Package\Load fact_hospitalization"
-          TopLeft="641.124965270983,367.33333081719" />
+          TopLeft="490.1,615.099999999999" />
         <NodeLayout
           Size="179.2,41.6"
           Id="Package\Load fact_vaccination"
-          TopLeft="360.83331361827,365.949997455229" />
+          TopLeft="249.9,615.099999999999" />
+        <NodeLayout
+          Size="175.2,41.6"
+          Id="Package\Log Reject Summary"
+          TopLeft="251.9,919.899999999999" />
         <NodeLayout
           Size="180,41.6"
           Id="Package\Post-Load Verification"
-          TopLeft="362.16664717926,559.083329483784" />
+          TopLeft="249.5,716.699999999999" />
         <NodeLayout
           Size="164.8,41.6"
           Id="Package\Truncate All Facts"
-          TopLeft="88.8333287802009,8.09999998191992" />
+          TopLeft="256.1,5.49999999999995" />
         <NodeLayout
           Size="164.8,41.6"
           Id="Package\Truncate dim_date"
-          TopLeft="106.666660838657,76.2666661363178" />
+          TopLeft="256.1,107.1" />
         <NodeLayout
           Size="164.8,41.6"
           Id="Package\Truncate fact_covid_cases"
-          TopLeft="84.1666620680026,273.866664762232" />
+          TopLeft="15.1000000000001,513.5" />
         <NodeLayout
           Size="196.8,41.6"
           Id="Package\Truncate fact_hospitalization"
-          TopLeft="619.166632836893,270.399998119672" />
+          TopLeft="497.1,513.5" />
         <NodeLayout
           Size="196.8,41.6"
           Id="Package\Truncate fact_vaccination"
-          TopLeft="348.33331430124,273.866664762232" />
+          TopLeft="240.1,513.5" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint]"
-          TopLeft="271.466660838657,97.9333327969578">
+          TopLeft="338.5,148.7">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="88.5333194918111,0"
+              EndConnector="0,59.9999999999999"
               Start="0,0"
-              End="81.0333194918111,0">
+              End="0,52.4999999999999">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="81.0333194918111,0" />
+                    End="0,52.4999999999999" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -16132,30 +16203,18 @@ where [refTable].[country] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 1]"
-          TopLeft="443.599980330468,119.599999457598">
+          TopLeft="338.5,250.3">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-246.533319628405,58.3666660097572"
+              EndConnector="0,59.9999999999999"
               Start="0,0"
-              End="-246.533319628405,50.8666660097572">
+              End="0,52.4999999999999">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,25.1833330048786" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,25.1833330048786"
-                    Point2="0,29.1833330048786"
-                    Point3="-4,29.1833330048786" />
-                  <mssgle:LineSegment
-                    End="-242.533319628405,29.1833330048786" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-242.533319628405,29.1833330048786"
-                    Point2="-246.533319628405,29.1833330048786"
-                    Point3="-246.533319628405,33.1833330048786" />
-                  <mssgle:LineSegment
-                    End="-246.533319628405,50.8666660097572" />
+                    End="0,52.4999999999999" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -16166,30 +16225,30 @@ where [refTable].[country] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 10]"
-          TopLeft="171.791662307042,411.233330762949">
+          TopLeft="97.5000000000001,656.7">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="237.374984872218,147.849998720835"
+              EndConnector="199,59.9999999999998"
               Start="0,0"
-              End="237.374984872218,140.349998720835">
+              End="199,52.4999999999998">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,93.12773638595" />
+                    End="0,35.4160583941604" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,93.12773638595"
-                    Point2="0,97.12773638595"
-                    Point3="4,97.12773638595" />
+                    Point1="0,35.4160583941604"
+                    Point2="0,39.4160583941604"
+                    Point3="4,39.4160583941604" />
                   <mssgle:LineSegment
-                    End="233.374984872218,97.12773638595" />
+                    End="195,39.4160583941604" />
                   <mssgle:CubicBezierSegment
-                    Point1="233.374984872218,97.12773638595"
-                    Point2="237.374984872218,97.12773638595"
-                    Point3="237.374984872218,101.12773638595" />
+                    Point1="195,39.4160583941604"
+                    Point2="199,39.4160583941604"
+                    Point3="199,43.4160583941604" />
                   <mssgle:LineSegment
-                    End="237.374984872218,140.349998720835" />
+                    End="199,52.4999999999998" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -16200,18 +16259,18 @@ where [refTable].[country] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 11]"
-          TopLeft="451.299980398765,407.549997455229">
+          TopLeft="339.5,656.699999999999">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,151.533332028555"
+              EndConnector="0,59.9999999999999"
               Start="0,0"
-              End="0,144.033332028555">
+              End="0,52.4999999999999">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,144.033332028555" />
+                    End="0,52.4999999999999" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -16222,30 +16281,30 @@ where [refTable].[country] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 12]"
-          TopLeft="737.524965270983,408.93333081719">
+          TopLeft="586.5,656.699999999999">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-242.358318091723,150.149998666594"
+              EndConnector="-204,59.9999999999999"
               Start="0,0"
-              End="-242.358318091723,142.649998666594">
+              End="-204,52.4999999999999">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,94.6386852554267" />
+                    End="0,35.4160583941605" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,94.6386852554267"
-                    Point2="0,98.6386852554267"
-                    Point3="-4,98.6386852554267" />
+                    Point1="0,35.4160583941605"
+                    Point2="0,39.4160583941605"
+                    Point3="-4,39.4160583941605" />
                   <mssgle:LineSegment
-                    End="-238.358318091723,98.6386852554267" />
+                    End="-200,39.4160583941605" />
                   <mssgle:CubicBezierSegment
-                    Point1="-238.358318091723,98.6386852554267"
-                    Point2="-242.358318091723,98.6386852554267"
-                    Point3="-242.358318091723,102.638685255427" />
+                    Point1="-200,39.4160583941605"
+                    Point2="-204,39.4160583941605"
+                    Point3="-204,43.4160583941605" />
                   <mssgle:LineSegment
-                    End="-242.358318091723,142.649998666594" />
+                    End="-204,52.4999999999999" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -16256,18 +16315,18 @@ where [refTable].[country] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 2]"
-          TopLeft="279.466660702063,199.049998779594">
+          TopLeft="338.5,351.9">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="59.6999874333547,0"
+              EndConnector="0,59.9999999999999"
               Start="0,0"
-              End="52.1999874333547,0">
+              End="0,52.4999999999999">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="52.1999874333547,0" />
+                    End="0,52.4999999999999" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -16278,30 +16337,30 @@ where [refTable].[country] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 3]"
-          TopLeft="381.966648135417,220.133332091834">
+          TopLeft="299.7,453.5">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-215.399986067414,53.7333326703979"
+              EndConnector="-202.2,60.0000000000001"
               Start="0,0"
-              End="-215.399986067414,46.2333326703979">
+              End="-202.2,52.5000000000001">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,14.4870308544456" />
+                    End="0,16.6430868167203" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,14.4870308544456"
-                    Point2="0,18.4870308544456"
-                    Point3="-4,18.4870308544456" />
+                    Point1="0,16.6430868167203"
+                    Point2="0,20.6430868167203"
+                    Point3="-4,20.6430868167203" />
                   <mssgle:LineSegment
-                    End="-211.399986067414,18.4870308544456" />
+                    End="-198.2,20.6430868167203" />
                   <mssgle:CubicBezierSegment
-                    Point1="-211.399986067414,18.4870308544456"
-                    Point2="-215.399986067414,18.4870308544456"
-                    Point3="-215.399986067414,22.4870308544456" />
+                    Point1="-198.2,20.6430868167203"
+                    Point2="-202.2,20.6430868167203"
+                    Point3="-202.2,24.6430868167203" />
                   <mssgle:LineSegment
-                    End="-215.399986067414,46.2333326703979" />
+                    End="-202.2,52.5000000000001" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -16312,18 +16371,18 @@ where [refTable].[country] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 4]"
-          TopLeft="169.179162187522,315.466664762232">
+          TopLeft="97.5000000000001,555.1">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,54.166666000717"
+              EndConnector="0,59.9999999999999"
               Start="0,0"
-              End="0,46.666666000717">
+              End="0,52.4999999999999">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,46.666666000717" />
+                    End="0,52.4999999999999" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -16334,18 +16393,18 @@ where [refTable].[country] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 5]"
-          TopLeft="446.683314551662,220.133332091834">
+          TopLeft="338.5,453.5">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,53.7333326703977"
+              EndConnector="0,59.9999999999999"
               Start="0,0"
-              End="0,46.2333326703977">
+              End="0,52.4999999999999">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,46.2333326703977" />
+                    End="0,52.4999999999999" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -16356,18 +16415,18 @@ where [refTable].[country] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 6]"
-          TopLeft="448.583313959755,315.466664762232">
+          TopLeft="339,555.1">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,50.4833326929973"
+              EndConnector="0,59.9999999999999"
               Start="0,0"
-              End="0,42.9833326929973">
+              End="0,52.4999999999999">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,42.9833326929973" />
+                    End="0,52.4999999999999" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -16378,30 +16437,18 @@ where [refTable].[country] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 7]"
-          TopLeft="171.233328780201,49.6999999819199">
+          TopLeft="338.5,47.1">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="17.8333320584562,26.5666661543978"
+              EndConnector="0,59.9999999999999"
               Start="0,0"
-              End="17.8333320584562,19.0666661543978">
+              End="0,52.4999999999999">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,9.28333307719892" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,9.28333307719892"
-                    Point2="0,13.2833330771989"
-                    Point3="4,13.2833330771989" />
-                  <mssgle:LineSegment
-                    End="13.8333320584562,13.2833330771989" />
-                  <mssgle:CubicBezierSegment
-                    Point1="13.8333320584562,13.2833330771989"
-                    Point2="17.8333320584562,13.2833330771989"
-                    Point3="17.8333320584562,17.2833330771989" />
-                  <mssgle:LineSegment
-                    End="17.8333320584562,19.0666661543978" />
+                    End="0,52.4999999999999" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -16412,30 +16459,30 @@ where [refTable].[country] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 8]"
-          TopLeft="459.566648135417,220.133332091834">
+          TopLeft="377.3,453.5">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="257.999984701476,50.2666660278379"
+              EndConnector="218.2,59.9999999999999"
               Start="0,0"
-              End="257.999984701476,42.7666660278379">
+              End="218.2,52.4999999999999">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,13.2943191799957" />
+                    End="0,16.6430868167203" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,13.2943191799957"
-                    Point2="0,17.2943191799957"
-                    Point3="4,17.2943191799957" />
+                    Point1="0,16.6430868167203"
+                    Point2="0,20.6430868167203"
+                    Point3="4,20.6430868167203" />
                   <mssgle:LineSegment
-                    End="253.999984701476,17.2943191799957" />
+                    End="214.2,20.6430868167203" />
                   <mssgle:CubicBezierSegment
-                    Point1="253.999984701476,17.2943191799957"
-                    Point2="257.999984701476,17.2943191799957"
-                    Point3="257.999984701476,21.2943191799957" />
+                    Point1="214.2,20.6430868167203"
+                    Point2="218.2,20.6430868167203"
+                    Point3="218.2,24.6430868167203" />
                   <mssgle:LineSegment
-                    End="257.999984701476,42.7666660278379" />
+                    End="218.2,52.4999999999999" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -16446,30 +16493,74 @@ where [refTable].[country] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 9]"
-          TopLeft="717.566632836893,311.999998119672">
+          TopLeft="595.5,555.1">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="19.9583324340895,55.3333326975173"
+              EndConnector="-9,59.9999999999999"
               Start="0,0"
-              End="19.9583324340895,47.8333326975173">
+              End="-9,52.4999999999999">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,23.6666663487586" />
+                    End="0,25.9999999999999" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,23.6666663487586"
-                    Point2="0,27.6666663487586"
-                    Point3="4,27.6666663487586" />
+                    Point1="0,25.9999999999999"
+                    Point2="0,29.9999999999999"
+                    Point3="-4,29.9999999999999" />
                   <mssgle:LineSegment
-                    End="15.9583324340895,27.6666663487586" />
+                    End="-5,29.9999999999999" />
                   <mssgle:CubicBezierSegment
-                    Point1="15.9583324340895,27.6666663487586"
-                    Point2="19.9583324340895,27.6666663487586"
-                    Point3="19.9583324340895,31.6666663487586" />
+                    Point1="-5,29.9999999999999"
+                    Point2="-9,29.9999999999999"
+                    Point3="-9,33.9999999999999" />
                   <mssgle:LineSegment
-                    End="19.9583324340895,47.8333326975173" />
+                    End="-9,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[PLV_to_Cleanup]"
+          TopLeft="339.5,758.299999999999">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Cleanup_to_Log]"
+          TopLeft="339.5,859.899999999999">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -17018,6 +17109,19 @@ where [refTable].[country] = ?</property>
     </LayoutInfo>
   </TaskHost>
   <PipelineComponentMetadata
+    design-time-name="Package\Load fact_hospitalization\OLE DB Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
     design-time-name="Package\Load fact_hospitalization\Lookup">
     <Properties>
       <Property>
@@ -17040,19 +17144,6 @@ where [refTable].[country] = ?</property>
       </Property>
     </Properties>
   </PipelineComponentMetadata>
-  <PipelineComponentMetadata
-    design-time-name="Package\Load fact_hospitalization\OLE DB Destination">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q2:string">Table</Value>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
   <TaskHost
     design-time-name="Package\Load fact_vaccination">
     <LayoutInfo>
@@ -17061,129 +17152,163 @@ where [refTable].[country] = ?</property>
         <NodeLayout
           Size="151.2,41.6"
           Id="Package\Load fact_vaccination\Flat File Source"
-          TopLeft="333.499995112419,25.4999997019768" />
+          TopLeft="291.9,5.49999999999995" />
         <NodeLayout
           Size="171.2,41.6"
           Id="Package\Load fact_vaccination\OLE DB Destination"
-          TopLeft="340.999994918704,418.999993756413" />
+          TopLeft="281.9,411.9" />
         <NodeLayout
           Size="97.6,41.6"
           Id="Package\Load fact_vaccination\Sort"
-          TopLeft="362.999994590879,107.999998390675" />
+          TopLeft="318.7,107.1" />
+        <NodeLayout
+          Size="216,41.6"
+          Id="Package\Load fact_vaccination\Log Reject LocationNotFound"
+          TopLeft="5.50000000000006,414.49999998192" />
         <NodeLayout
           Size="112.8,41.6"
           Id="Package\Load fact_vaccination\Lookup"
-          TopLeft="347.999994814396,315.999995291233" />
+          TopLeft="311.1,310.3" />
         <NodeLayout
           Size="152.8,41.6"
           Id="Package\Load fact_vaccination\Derived Column"
-          TopLeft="331.999995052815,197.99999704957" />
+          TopLeft="291.1,208.7" />
         <EdgeLayout
-          Id="Package\Load fact_vaccination.Paths[Sort Output]"
-          TopLeft="410.099994821847,149.599998390675">
+          Id="Package\Load fact_vaccination.Paths[Derived Column Output]"
+          TopLeft="367.5,250.3">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,48.3999986588954"
+              EndConnector="0,59.9999999999999"
               Start="0,0"
-              End="0,40.8999986588954">
+              End="0,52.4999999999999">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,40.8999986588954" />
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load fact_vaccination.Paths[Vacc_LookupNoMatch_to_Log]"
+          TopLeft="350.033333333333,351.9">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-236.533333333333,62.59999998192"
+              Start="0,0"
+              End="-236.533333333333,55.09999998192">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,21.565314677931" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,21.565314677931"
+                    Point2="0,25.565314677931"
+                    Point3="-4,25.565314677931" />
+                  <mssgle:LineSegment
+                    End="-232.533333333333,25.565314677931" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-232.533333333333,25.565314677931"
+                    Point2="-236.533333333333,25.565314677931"
+                    Point3="-236.533333333333,29.565314677931" />
+                  <mssgle:LineSegment
+                    End="-236.533333333333,55.09999998192" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
+              BoundingBox="-174.073053385417,30.565314677931,111.6127734375,11.609375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Load fact_vaccination.Paths[Lookup Match Output]"
-          TopLeft="404.399994814396,357.599995291233">
+          Id="Package\Load fact_vaccination.Paths[Sort Output]"
+          TopLeft="367.5,148.7">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="22.2000001043081,61.3999984651803"
+              EndConnector="0,59.9999999999999"
               Start="0,0"
-              End="22.2000001043081,53.8999984651803">
+              End="0,52.4999999999999">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,26.6999992325901" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,26.6999992325901"
-                    Point2="0,30.6999992325901"
-                    Point3="4,30.6999992325901" />
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load fact_vaccination.Paths[Lookup Match Output]"
+          TopLeft="384.966666666667,351.9">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-17.4666666666666,60"
+              Start="0,0"
+              End="-17.4666666666666,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
                   <mssgle:LineSegment
-                    End="18.2000001043081,30.6999992325901" />
+                    End="0,20.5034965034965" />
                   <mssgle:CubicBezierSegment
-                    Point1="18.2000001043081,30.6999992325901"
-                    Point2="22.2000001043081,30.6999992325901"
-                    Point3="22.2000001043081,34.6999992325901" />
+                    Point1="0,20.5034965034965"
+                    Point2="0,24.5034965034965"
+                    Point3="-4,24.5034965034965" />
                   <mssgle:LineSegment
-                    End="22.2000001043081,53.8999984651803" />
+                    End="-13.4666666666666,24.5034965034965" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-13.4666666666666,24.5034965034965"
+                    Point2="-17.4666666666666,24.5034965034965"
+                    Point3="-17.4666666666666,28.5034965034965" />
+                  <mssgle:LineSegment
+                    End="-17.4666666666666,52.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="-37.0913866665959,35.6999992325901,96.3827734375,11.609375"
+              BoundingBox="-56.9247200520833,29.5034965034965,96.3827734375,11.609375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Load fact_vaccination.Paths[Flat File Source Output]"
-          TopLeft="410.449994851649,67.0999997019768">
+          TopLeft="367.5,47.1">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,40.8999986886978"
+              EndConnector="0,59.9999999999999"
               Start="0,0"
-              End="0,33.3999986886978">
+              End="0,52.4999999999999">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,33.3999986886978" />
+                    End="0,52.4999999999999" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Load fact_vaccination.Paths[Derived Column Output]"
-          TopLeft="406.399994933605,239.59999704957">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,76.3999982416632"
-              Start="0,0"
-              End="0,68.8999982416632">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,68.8999982416632" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
