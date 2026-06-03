@@ -15651,7 +15651,7 @@ where [refTable].[country] = ?</property>
       DTS:refId="Package\Cleanup Old Rejects"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Cleanup Old Rejects"
-      DTS:DTSID="{3174BFD9-9DD8-4210-8DD8-4A5D3EE9C115}"
+      DTS:DTSID="{540695BA-5997-4FAE-B98B-F6F1A454CBD2}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
       DTS:ObjectName="Cleanup Old Rejects"
@@ -15668,7 +15668,7 @@ where [refTable].[country] = ?</property>
       DTS:refId="Package\Log Reject Summary"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Log Reject Summary"
-      DTS:DTSID="{3174BFD9-9DD8-4210-8DD8-4A5D3EE9C115}"
+      DTS:DTSID="{4389E3B4-7A5E-4E9B-BD1E-696E851EFC80}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
       DTS:ObjectName="Log Reject Summary"
@@ -15678,7 +15678,7 @@ where [refTable].[country] = ?</property>
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
           SQLTask:Connection="{B4D2B656-7381-45C9-B60C-6AAB9D7FC58B}"
-          SQLTask:SqlStatementSource="INSERT INTO dbo.etl_verification_log (check_id, check_name, status, failure_count, notes) SELECT 99, 'Reject Row Summary', 'INFO', COUNT(*), CONCAT('Rejected rows this run: ', CAST(COUNT(*) AS NVARCHAR(20))) FROM dbo.dq_rejected_rows WHERE CAST(load_timestamp AS DATE) = CAST(GETDATE() AS DATE);" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          SQLTask:SqlStatementSource="INSERT INTO dbo.etl_verification_log (check_id, check_name, status, failure_count, notes) SELECT 99, 'Reject Row Summary', 'INFO', COUNT(*), CONCAT('Rejected rows today: ', CAST(COUNT(*) AS NVARCHAR(20))) FROM dbo.dq_rejected_rows WHERE CAST(load_timestamp AS DATE) = CAST(GETDATE() AS DATE);" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
@@ -15873,20 +15873,20 @@ where [refTable].[country] = ?</property>
       DTS:ObjectName="Constraint 9"
       DTS:To="Package\Load fact_hospitalization" />
         <DTS:PrecedenceConstraint
-        DTS:refId="Package.PrecedenceConstraints[Constraint_PLV_Cleanup]"
+        DTS:refId="Package.PrecedenceConstraints[PLV_to_Cleanup]"
         DTS:CreationName=""
-        DTS:DTSID="{D9A24B1E-9862-4FF1-83D7-2F3067548062}"
+        DTS:DTSID="{F8443A69-D8CC-455C-BC14-1CBAC2E58C54}"
         DTS:From="Package\Post-Load Verification"
         DTS:LogicalAnd="True"
-        DTS:ObjectName="Constraint_PLV_Cleanup"
+        DTS:ObjectName="PLV_to_Cleanup"
         DTS:To="Package\Cleanup Old Rejects" />
       <DTS:PrecedenceConstraint
-        DTS:refId="Package.PrecedenceConstraints[Constraint_COR_LRS]"
+        DTS:refId="Package.PrecedenceConstraints[Cleanup_to_Log]"
         DTS:CreationName=""
-        DTS:DTSID="{8BE21B95-C33A-4A3E-9E04-7987BC29C587}"
+        DTS:DTSID="{D27ACF42-847D-4003-90C7-B399C6AF731A}"
         DTS:From="Package\Cleanup Old Rejects"
         DTS:LogicalAnd="True"
-        DTS:ObjectName="Constraint_COR_LRS"
+        DTS:ObjectName="Cleanup_to_Log"
         DTS:To="Package\Log Reject Summary" />
 </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
