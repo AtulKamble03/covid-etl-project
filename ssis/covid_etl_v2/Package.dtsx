@@ -11343,6 +11343,190 @@ where [refTable].[date] = ?</property>
                 </output>
               </outputs>
             </component>
+          
+            <component
+              refId="Package\Load fact_covid_cases\Log Reject NullContinent"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Log rejected row - DQ-03"
+              name="Log Reject NullContinent"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="SqlCommand">INSERT INTO dbo.dq_rejected_rows (source_file, rule_id, reject_reason, raw_country, load_timestamp) VALUES ('owid_covid_compact.csv', 'DQ-03', 'continent IS NULL or empty - OWID aggregate row', ?, GETDATE())</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load fact_covid_cases\Log Reject NullContinent.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  connectionManagerRefId="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load fact_covid_cases\Log Reject NullContinent.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load fact_covid_cases\Log Reject NullContinent.Inputs[OLE DB Command Input].Columns[country]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="country"
+                      externalMetadataColumnId="Package\Load fact_covid_cases\Log Reject NullContinent.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      lineageId="Package\Load fact_covid_cases\Sort.Outputs[Sort Output].Columns[country]"
+                      parameterName="Param_0" />
+                  </inputColumns>
+                  <externalMetadataColumns>
+                    <externalMetadataColumn
+                      refId="Package\Load fact_covid_cases\Log Reject NullContinent.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="Param_0" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load fact_covid_cases\Log Reject NullContinent.Outputs[OLE DB Command Error Output]"
+                  description="OLE DB Command Error Output"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\Load fact_covid_cases\Log Reject NullContinent.Inputs[OLE DB Command Input]">
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load fact_covid_cases\Log Reject NegCases"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Log rejected row - DQ-04"
+              name="Log Reject NegCases"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="SqlCommand">INSERT INTO dbo.dq_rejected_rows (source_file, rule_id, reject_reason, raw_country, load_timestamp) VALUES ('owid_covid_compact.csv', 'DQ-04', 'new_cases < 0', ?, GETDATE())</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load fact_covid_cases\Log Reject NegCases.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  connectionManagerRefId="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load fact_covid_cases\Log Reject NegCases.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load fact_covid_cases\Log Reject NegCases.Inputs[OLE DB Command Input].Columns[country]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="country"
+                      externalMetadataColumnId="Package\Load fact_covid_cases\Log Reject NegCases.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      lineageId="Package\Load fact_covid_cases\Sort.Outputs[Sort Output].Columns[country]"
+                      parameterName="Param_0" />
+                  </inputColumns>
+                  <externalMetadataColumns>
+                    <externalMetadataColumn
+                      refId="Package\Load fact_covid_cases\Log Reject NegCases.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="Param_0" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load fact_covid_cases\Log Reject NegCases.Outputs[OLE DB Command Error Output]"
+                  description="OLE DB Command Error Output"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\Load fact_covid_cases\Log Reject NegCases.Inputs[OLE DB Command Input]">
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load fact_covid_cases\Log Reject NegDeaths"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Log rejected row - DQ-05"
+              name="Log Reject NegDeaths"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property dataType="System.Int32" name="CommandTimeout">0</property>
+                <property dataType="System.String" name="SqlCommand">INSERT INTO dbo.dq_rejected_rows (source_file, rule_id, reject_reason, raw_country, load_timestamp) VALUES ('owid_covid_compact.csv', 'DQ-05', 'new_deaths < 0', ?, GETDATE())</property>
+                <property dataType="System.Int32" name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" name="AlwaysUseDefaultCodePage">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load fact_covid_cases\Log Reject NegDeaths.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  connectionManagerRefId="Package.ConnectionManagers[PG04CRRX.covid_dw]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load fact_covid_cases\Log Reject NegDeaths.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load fact_covid_cases\Log Reject NegDeaths.Inputs[OLE DB Command Input].Columns[country]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="country"
+                      externalMetadataColumnId="Package\Load fact_covid_cases\Log Reject NegDeaths.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      lineageId="Package\Load fact_covid_cases\Sort.Outputs[Sort Output].Columns[country]"
+                      parameterName="Param_0" />
+                  </inputColumns>
+                  <externalMetadataColumns>
+                    <externalMetadataColumn
+                      refId="Package\Load fact_covid_cases\Log Reject NegDeaths.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="Param_0" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load fact_covid_cases\Log Reject NegDeaths.Outputs[OLE DB Command Error Output]"
+                  description="OLE DB Command Error Output"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\Load fact_covid_cases\Log Reject NegDeaths.Inputs[OLE DB Command Input]">
+                </output>
+              </outputs>
+            </component>
           </components>
           <paths>
             <path
@@ -11380,6 +11564,22 @@ where [refTable].[date] = ?</property>
               endId="Package\Load fact_covid_cases\Derived Column.Inputs[Derived Column Input]"
               name="Sort Output"
               startId="Package\Load fact_covid_cases\Sort.Outputs[Sort Output]" />
+          
+            <path
+              refId="Package\Load fact_covid_cases.Paths[Reject_NullContinent_to_Log]"
+              endId="Package\Load fact_covid_cases\Log Reject NullContinent.Inputs[OLE DB Command Input]"
+              name="Reject_NullContinent_to_Log"
+              startId="Package\Load fact_covid_cases\Conditional Split.Outputs[Reject_NullContinent]" />
+            <path
+              refId="Package\Load fact_covid_cases.Paths[Reject_NegCases_to_Log]"
+              endId="Package\Load fact_covid_cases\Log Reject NegCases.Inputs[OLE DB Command Input]"
+              name="Reject_NegCases_to_Log"
+              startId="Package\Load fact_covid_cases\Conditional Split.Outputs[Reject_NegCases]" />
+            <path
+              refId="Package\Load fact_covid_cases.Paths[Reject_NegDeaths_to_Log]"
+              endId="Package\Load fact_covid_cases\Log Reject NegDeaths.Inputs[OLE DB Command Input]"
+              name="Reject_NegDeaths_to_Log"
+              startId="Package\Load fact_covid_cases\Conditional Split.Outputs[Reject_NegDeaths]" />
           </paths>
         </pipeline>
       </DTS:ObjectData>

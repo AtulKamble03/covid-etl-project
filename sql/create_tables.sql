@@ -181,11 +181,11 @@ GO
 --   LOOKUP-DATE  : date not found in dim_date
 CREATE TABLE dbo.dq_rejected_rows (
     reject_id      INT IDENTITY(1,1) PRIMARY KEY,
-    source_file    NVARCHAR(100) NOT NULL,
-    rule_id        VARCHAR(15)   NOT NULL,
-    reject_reason  NVARCHAR(500),
-    raw_country    NVARCHAR(100),
-    raw_date       NVARCHAR(50),
+    source_file    VARCHAR(100)  NULL,   -- nullable: altered from NOT NULL for test scenarios
+    rule_id        VARCHAR(15)   NULL,   -- nullable: altered from NOT NULL for test scenarios
+    reject_reason  VARCHAR(500),
+    raw_country    VARCHAR(100),         -- VARCHAR: matches DT_STR from Flat File Source
+    raw_date       VARCHAR(50),          -- VARCHAR: matches DT_STR from Flat File Source
     raw_new_cases  NVARCHAR(50),
     raw_new_deaths NVARCHAR(50),
     load_timestamp DATETIME2     NOT NULL DEFAULT GETDATE()
