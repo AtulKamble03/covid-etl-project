@@ -15651,7 +15651,7 @@ where [refTable].[country] = ?</property>
       DTS:refId="Package\Cleanup Old Rejects"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Cleanup Old Rejects"
-      DTS:DTSID="{0E4F6F6A-8CB6-4895-8E5E-CC0E4EEA34EB}"
+      DTS:DTSID="{3174BFD9-9DD8-4210-8DD8-4A5D3EE9C115}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
       DTS:ObjectName="Cleanup Old Rejects"
@@ -15661,10 +15661,9 @@ where [refTable].[country] = ?</property>
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
           SQLTask:Connection="{B4D2B656-7381-45C9-B60C-6AAB9D7FC58B}"
-          SQLTask:SqlStatementSource="-- v2 Enhancement: Purge reject rows older than 30 days&#xA;-- Prevents dq_rejected_rows growing indefinitely across daily runs&#xA;DELETE FROM dbo.dq_rejected_rows&#xA;WHERE load_timestamp &lt; DATEADD(DAY, -30, GETDATE());" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          SQLTask:SqlStatementSource="DELETE FROM dbo.dq_rejected_rows WHERE load_timestamp &lt; DATEADD(DAY, -30, GETDATE());" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
-
     <DTS:Executable
       DTS:refId="Package\Truncate All Facts"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
@@ -15857,12 +15856,12 @@ where [refTable].[country] = ?</property>
       DTS:ObjectName="Constraint 9"
       DTS:To="Package\Load fact_hospitalization" />
         <DTS:PrecedenceConstraint
-        DTS:refId="Package.PrecedenceConstraints[Constraint]"
+        DTS:refId="Package.PrecedenceConstraints[Constraint_PLV_Cleanup]"
         DTS:CreationName=""
-        DTS:DTSID="{F2299B22-DB89-4DEC-B5AC-9B2CADD40325}"
+        DTS:DTSID="{D9A24B1E-9862-4FF1-83D7-2F3067548062}"
         DTS:From="Package\Post-Load Verification"
         DTS:LogicalAnd="True"
-        DTS:ObjectName="Constraint"
+        DTS:ObjectName="Constraint_PLV_Cleanup"
         DTS:To="Package\Cleanup Old Rejects" />
 </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
