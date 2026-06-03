@@ -15665,6 +15665,23 @@ where [refTable].[country] = ?</property>
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
+      DTS:refId="Package\Log Reject Summary"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Log Reject Summary"
+      DTS:DTSID="{3174BFD9-9DD8-4210-8DD8-4A5D3EE9C115}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Log Reject Summary"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{B4D2B656-7381-45C9-B60C-6AAB9D7FC58B}"
+          SQLTask:SqlStatementSource="INSERT INTO dbo.etl_verification_log (check_id, check_name, status, failure_count, notes) SELECT 99, 'Reject Row Summary', 'INFO', COUNT(*), CONCAT('Rejected rows this run: ', CAST(COUNT(*) AS NVARCHAR(20))) FROM dbo.dq_rejected_rows WHERE CAST(load_timestamp AS DATE) = CAST(GETDATE() AS DATE);" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
       DTS:refId="Package\Truncate All Facts"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Truncate All Facts"
@@ -15863,6 +15880,14 @@ where [refTable].[country] = ?</property>
         DTS:LogicalAnd="True"
         DTS:ObjectName="Constraint_PLV_Cleanup"
         DTS:To="Package\Cleanup Old Rejects" />
+      <DTS:PrecedenceConstraint
+        DTS:refId="Package.PrecedenceConstraints[Constraint_COR_LRS]"
+        DTS:CreationName=""
+        DTS:DTSID="{8BE21B95-C33A-4A3E-9E04-7987BC29C587}"
+        DTS:From="Package\Cleanup Old Rejects"
+        DTS:LogicalAnd="True"
+        DTS:ObjectName="Constraint_COR_LRS"
+        DTS:To="Package\Log Reject Summary" />
 </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
 <!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
