@@ -11310,8 +11310,7 @@ where [refTable].[date] = ?</property>
                   <externalMetadataColumns>
                     <externalMetadataColumn
                       refId="Package\Load fact_covid_cases\Log Reject NullDate.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
-                      codePage="1252"
-                      dataType="str"
+                      dataType="wstr"
                       length="100"
                       name="Param_0" />
                   </externalMetadataColumns>
